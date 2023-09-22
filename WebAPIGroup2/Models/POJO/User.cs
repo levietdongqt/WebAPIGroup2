@@ -5,7 +5,7 @@ namespace WebAPIGroup2.Models.POJO;
 
 public partial class User
 {
-    public string Id { get; set; } = null!;
+    public int Id { get; set; }
 
     public string? UserName { get; set; }
 
@@ -23,7 +23,7 @@ public partial class User
 
     public string? PhoneNumber { get; set; }
 
-    public string? Status { get; set; }
+    public string? Role { get; set; }
 
-    public virtual ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
+    public string? Status { get; set; }
 }

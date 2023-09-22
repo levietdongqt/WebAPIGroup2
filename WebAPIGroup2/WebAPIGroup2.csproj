@@ -23,6 +23,7 @@
   <ItemGroup>
     <Folder Include="Controllers\AdminModule\" />
     <Folder Include="Image\" />
+    <Folder Include="Models\POJO\" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -33,6 +35,44 @@ namespace WebAPIGroup2.Controllers
             }
             var token = _loginService.GenerateToken(user);
             response = new ResponseDTO<UserDTO>(HttpStatusCode.OK,"Success", token, user);
+            return response;
+        }
+        [HttpGet("login-google")]
+        public IActionResult LoginWithGoogle()
+        {
+            var authenticationProperties = new AuthenticationProperties
+            {
+                RedirectUri = Url.Action(nameof(HandleGoogleResponse))
+            };
+
+            return Challenge(authenticationProperties, GoogleDefaults.AuthenticationScheme);
+        }
+
+        [HttpGet("handle-google-response")]
+        public async Task<ResponseDTO<UserDTO>> HandleGoogleResponse()
+        {
+            ResponseDTO<UserDTO> response;
+            // Xử lý phản hồi từ Google và lấy thông tin người dùng
+            var authenticateResult = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
+
+            // Lấy thông tin người dùng từ Principal
+            var userPrincipal = authenticateResult.Principal;
+
+            // Lấy tên người dùng
+            var userName = userPrincipal.FindFirst(ClaimTypes.Name)?.Value;
+
+            // Lấy địa chỉ email
+            var userEmail = userPrincipal.FindFirst(ClaimTypes.Email)?.Value;
+
+            await HttpContext.SignOutAsync("Cookies");
+
+            var userLogged =await _loginService.checkLoggedByGoogle(userEmail);
+            if (userLogged == null)
+            {
+               userLogged =  await _loginService.CreateUser(userName, userEmail);
+            }
+            var token = _loginService.GenerateToken(userLogged);
+            response = new ResponseDTO<UserDTO>(HttpStatusCode.OK, "Success", token, userLogged);
             return response;
         }
     }

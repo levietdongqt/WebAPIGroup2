@@ -3,7 +3,6 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using WebAPIGroup2.Models;
-using WebAPIGroup2.Models.POJO;
 using WebAPIGroup2.Respository;
 using WebAPIGroup2.Respository.Implement;
 using WebAPIGroup2.Respository.Inteface;
