@@ -20,7 +20,6 @@ namespace WebAPIGroup2.Respository.Implement
         {
            return await _repository.DeleteAsync(entity);
         }
-
         public async Task<bool> DeleteAllAsync(List<User> list)
         {
             return await _repository.DeleteAllAsync(list);  
@@ -31,7 +30,7 @@ namespace WebAPIGroup2.Respository.Implement
             return await _repository.GetAllAsync();
         }
 
-        public Task<User?> GetByIDAsync(string id)
+        public Task<User?> GetByIDAsync(int id)
         {
             throw new NotImplementedException();
         }
@@ -61,6 +60,11 @@ namespace WebAPIGroup2.Respository.Implement
             var user = await _context.Users.FirstOrDefaultAsync(t => t.UserName.Equals(userDTO.UserName) && t.Password
             .Equals(userDTO.Password));
             return user;
+        }
+
+        public async Task<User> GetUserByEmail(string? userEmail)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.Email.Equals(userEmail));
         }
     }
 }

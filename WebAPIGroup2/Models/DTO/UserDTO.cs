@@ -4,7 +4,7 @@ namespace WebAPIGroup2.Models.DTO
 {
     public class UserDTO
     {
-        public string Id { get; set; } = null!;
+        public int Id { get; set; }
 
         public string? UserName { get; set; }
 
@@ -22,7 +22,7 @@ namespace WebAPIGroup2.Models.DTO
         public string? PhoneNumber { get; set; }
 
         public string? Status { get; set; }
+        public string? Role { get; set; }
 
-        public virtual ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
     }
 }

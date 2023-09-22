@@ -5,6 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Claims;
 using System.Text;
+using WebAPIGroup2.Models;
 using WebAPIGroup2.Models.DTO;
 using WebAPIGroup2.Models.POJO;
 using WebAPIGroup2.Respository.Inteface;
@@ -17,11 +18,24 @@ namespace WebAPIGroup2.Service.Implement
         private readonly IConfiguration _config;
         private readonly IUserRepo _userRepo;
         private readonly IMapper _mapper;
-        public LoginService(IConfiguration config,IUserRepo userRepo,IMapper mapper)
+        public LoginService(IConfiguration config, IUserRepo userRepo, IMapper mapper)
         {
             _config = config;
             _userRepo = userRepo;
             _mapper = mapper;
+        }
+
+        public async Task<UserDTO> checkLoggedByGoogle(string? userEmail)
+        {
+            User user = await _userRepo.GetUserByEmail(userEmail);
+            if (user != null)
+            {
+                return _mapper.Map<UserDTO>(user);
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public async Task<UserDTO> checkUser(string userName, string password)
@@ -30,8 +44,20 @@ namespace WebAPIGroup2.Service.Implement
             userDTO.UserName = userName;
             userDTO.Password = password;
             var user = await _userRepo.GetUser(userDTO);
-            return  _mapper.Map<UserDTO>(user);
-            
+            return _mapper.Map<UserDTO>(user);
+
+        }
+
+        public async Task<UserDTO> CreateUser(string? userName, string? userEmail)
+        {
+            User user = new User();
+            user.FullName = userName;
+            user.Email = userEmail;
+            user.EmailConfirmed = true;
+            user.Status = UserStatus.Enabled;
+            await _userRepo.InsertAsync(user);
+            var userSaved = await _userRepo.GetUserByEmail(userEmail);
+            return _mapper.Map<UserDTO>(userSaved);
         }
 
         public string GenerateToken(UserDTO user)
@@ -40,8 +66,8 @@ namespace WebAPIGroup2.Service.Implement
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             var claims = new[]
                         {
-                new Claim(ClaimTypes.NameIdentifier,user.UserName),
-                new Claim(ClaimTypes.Role,"normal")
+                new Claim(ClaimTypes.Email,user.Email),
+                new Claim(ClaimTypes.Role,user.Role)
             };
             var token = new JwtSecurityToken(_config["Jwt:Issuer"],
                 _config["Jwt:Audience"],

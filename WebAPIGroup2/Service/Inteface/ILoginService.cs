@@ -8,6 +8,8 @@ namespace WebAPIGroup2.Service.Inteface
     {
         public string GenerateToken(UserDTO user);
         public Task<UserDTO> checkUser(string userName, string password);
+        public Task<UserDTO> checkLoggedByGoogle(string? userEmail);
+        Task<UserDTO> CreateUser(string? userName, string? userEmail);
     }
 }
  
