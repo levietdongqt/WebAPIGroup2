@@ -22,9 +22,9 @@ builder.Services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
 builder.Services.AddDbContext<Dbsem3G2Context>();
 builder.Services.AddAuthentication(options =>
 {
-    options.DefaultScheme = "Cookies"; // Middleware đăng nhập mặc định
-    options.DefaultChallengeScheme = "Google"; // Middleware đăng nhập Google
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    //options.DefaultScheme = "Cookies"; // Middleware đăng nhập mặc định
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;  // Middleware đăng nhập Google
+    options.DefaultAuthenticateScheme = "Google";
 })
     .AddCookie("Cookies", options =>
     {
