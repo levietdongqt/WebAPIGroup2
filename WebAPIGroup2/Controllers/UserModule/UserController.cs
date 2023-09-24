@@ -15,7 +15,7 @@ namespace WebAPIGroup2.Controllers.UserModule
     {
         [HttpGet]
         [Route("admins")]
-        [Authorize(Roles = "normal")]
+        [Authorize(Roles ="admin")]
         public IActionResult AdminEndPoint()
         {
            // var currentUser = GetCurrentUser();
