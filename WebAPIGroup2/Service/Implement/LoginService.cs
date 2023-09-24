@@ -38,21 +38,19 @@ namespace WebAPIGroup2.Service.Implement
             }
         }
 
-        public async Task<UserDTO> checkUser(string userName, string password)
+        public async Task<UserDTO> checkUser(LoginRequestDTO loginRequest)
         {
-            var userDTO = new UserDTO();
-            userDTO.UserName = userName;
-            userDTO.Password = password;
-            var user = await _userRepo.GetUser(userDTO);
+            var user = await _userRepo.GetUser(loginRequest);
             return _mapper.Map<UserDTO>(user);
 
         }
 
-        public async Task<UserDTO> CreateUser(string? userName, string? userEmail)
+        public async Task<UserDTO> CreateUser(string? fullName, string? userEmail)
         {
             User user = new User();
-            user.FullName = userName;
+            user.FullName = fullName;
             user.Email = userEmail;
+            user.UserName = userEmail;
             user.EmailConfirmed = true;
             user.Status = UserStatus.Enabled;
             await _userRepo.InsertAsync(user);
@@ -66,7 +64,7 @@ namespace WebAPIGroup2.Service.Implement
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             var claims = new[]
                         {
-                new Claim(ClaimTypes.Email,user.Email),
+                new Claim(ClaimTypes.Name,user.UserName),
                 new Claim(ClaimTypes.Role,user.Role)
             };
             var token = new JwtSecurityToken(_config["Jwt:Issuer"],

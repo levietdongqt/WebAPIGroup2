@@ -55,13 +55,12 @@ namespace WebAPIGroup2.Respository.Implement
             return await _repository.UpdateAllAsync(list);
         }
 
-        public async Task<User?>  GetUser(UserDTO userDTO)
+        public async Task<User?>  GetUser(LoginRequestDTO loginRequest)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(t => t.UserName.Equals(userDTO.UserName) && t.Password
-            .Equals(userDTO.Password));
+            var user = await _context.Users.FirstOrDefaultAsync(t => t.UserName.Equals(loginRequest.userName) && t.Password
+            .Equals(loginRequest.password));
             return user;
         }
-
         public async Task<User> GetUserByEmail(string? userEmail)
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.Email.Equals(userEmail));

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using WebAPIGroup2.Models;
@@ -18,17 +19,27 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
-
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder =>
+    {
+        builder.WithOrigins(new[] { "http://localhost:3000" })
+               .AllowAnyHeader()
+               .AllowAnyMethod()
+               .AllowCredentials();
+    });
+});
 builder.Services.AddDbContext<Dbsem3G2Context>();
 builder.Services.AddAuthentication(options =>
 {
-    //options.DefaultScheme = "Cookies"; // Middleware đăng nhập mặc định
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;  // Middleware đăng nhập Google
-    options.DefaultAuthenticateScheme = "Google";
+    options.DefaultScheme = "Cookies"; // Middleware đăng nhập mặc định
+    options.DefaultChallengeScheme = "Google"; // Middleware đăng nhập Google
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
 })
     .AddCookie("Cookies", options =>
     {
-        options.LoginPath = "/api/User/login-google"; // Đặt đường dẫn trang đăng nhập của bạn
+        options.Cookie.HttpOnly = true;
+        // options.LoginPath = "/api/User/login-google"; // Đặt đường dẫn trang đăng nhập của bạn
     })
     .AddGoogle(options =>
     {
@@ -64,17 +75,17 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(
             Path.Combine(Directory.GetCurrentDirectory(), "Image")), // Đường dẫn tương đối đến thư mục "Image"
     RequestPath = "/Image" // Đường dẫn URL sẽ được sử dụng để truy cập các tệp trong thư mục "Image"
 });
+app.UseCors();
 app.UseHttpsRedirection();
-
+app.UseAuthentication();
+app.UseCookiePolicy();
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();
