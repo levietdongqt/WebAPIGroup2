@@ -45,13 +45,16 @@ namespace WebAPIGroup2.Controllers
             //});
             return new JsonResult(response);
         }
-        [HttpGet("login-google")]
+        [HttpGet("signin-google")]
         public IActionResult LoginWithGoogle()
         {
+            //Response.Headers.Add("Access-Control-Allow-Origin", "http://localhost:3000"); // Thay localhost:3000 bằng nguồn gốc của client
             var authenticationProperties = new AuthenticationProperties
             {
+
                 RedirectUri = Url.Action(nameof(HandleGoogleResponse))
             };
+       
 
             return Challenge(authenticationProperties, GoogleDefaults.AuthenticationScheme);
         }

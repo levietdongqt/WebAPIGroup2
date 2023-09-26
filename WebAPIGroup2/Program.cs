@@ -25,8 +25,7 @@ builder.Services.AddCors(options =>
     {
         builder.WithOrigins(new[] { "http://localhost:3000" })
                .AllowAnyHeader()
-               .AllowAnyMethod()
-               .AllowCredentials();
+               .AllowAnyMethod();
     });
 });
 builder.Services.AddDbContext<Dbsem3G2Context>();

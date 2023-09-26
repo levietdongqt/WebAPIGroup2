@@ -40,6 +40,8 @@ namespace WebAPIGroup2.Service.Implement
 
         public async Task<UserDTO> checkUser(LoginRequestDTO loginRequest)
         {
+            //var passwordHash = BCrypt.Net.BCrypt.HashPassword(loginRequest.password);
+            //loginRequest.password = passwordHash;
             var user = await _userRepo.GetUser(loginRequest);
             return _mapper.Map<UserDTO>(user);
 
