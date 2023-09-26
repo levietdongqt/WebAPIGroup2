@@ -63,6 +63,7 @@ builder.Services.AddAuthentication(options =>
 
 //DI Repositoty
 builder.Services.AddScoped(typeof(GenericRepository<>));
+builder.Services.AddScoped<IUserService, UserService>();    
 builder.Services.AddTransient<IUserRepo, UserRepo>();
 
 //DI Service
