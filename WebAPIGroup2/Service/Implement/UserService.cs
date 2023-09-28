@@ -42,14 +42,19 @@ namespace WebAPIGroup2.Service.Implement
 
 
 
-        public async Task<bool> CreateUser(UserDTO userDTO)
+        public async Task<UserDTO> CreateUser(UserDTO userDTO)
         {
             var user = _mapper.Map<User>(userDTO);
             user.Status = UserStatus.Pending;
             var passwordHash = BCrypt.Net.BCrypt.HashPassword(userDTO.Password);
             user.Password = passwordHash;
             var success = await _useRepo.InsertAsync(user);
-            return success;
+            if (success)
+            {
+                var createdUserDTO = _mapper.Map<UserDTO>(user);
+                return createdUserDTO;
+            }
+            return null;
 
         }
 
@@ -94,6 +99,31 @@ namespace WebAPIGroup2.Service.Implement
             return list;
         }
 
+        public async Task<UserDTO> GetUserByIDAsync(int id)
+        {
+            var user = await _useRepo.GetByIDAsync(id);
+            var userDTO = _mapper.Map<UserDTO>(user);
+            return userDTO;
+        }
+
+        public async Task<UserDTO> UpdateConfirmEmailAsync(UserDTO userDTO)
+        {
+            var existingUser = await _context.Users.SingleOrDefaultAsync(u => u.Id == userDTO.Id);
+            if (existingUser == null)
+            {
+                return null;
+            }
+            existingUser.Status = UserStatus.Enabled;
+            existingUser.EmailConfirmed = true;
+            var updated = await _useRepo.UpdateAsync(existingUser);
+            if (!updated)
+            {
+                return null;
+            }
+            return _mapper.Map<UserDTO>(existingUser);
+
+
+        }
 
 
 
