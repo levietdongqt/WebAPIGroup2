@@ -25,8 +25,9 @@ namespace WebAPIGroup2.Service.Implement
 
         public async Task<bool> ChangePassword(UserDTO userDTO, string oldPassword)
         {
+            //var passwordHash = BCrypt.Net.BCrypt.HashPassword(userDTO.Password);
+            //oldPassword = passwordHash;
             var existingUser = await _context.Users.SingleOrDefaultAsync(u => u.Id == userDTO.Id && u.Password == oldPassword);
-
             if (existingUser == null)
             {
                 return false; 
@@ -45,7 +46,8 @@ namespace WebAPIGroup2.Service.Implement
         {
             var user = _mapper.Map<User>(userDTO);
             user.Status = UserStatus.Pending;
-            user.Password = userDTO.Password;
+            var passwordHash = BCrypt.Net.BCrypt.HashPassword(userDTO.Password);
+            user.Password = passwordHash;
             var success = await _useRepo.InsertAsync(user);
             if (success)
             {
@@ -59,24 +61,42 @@ namespace WebAPIGroup2.Service.Implement
 
 
 
-
-        public async Task<IEnumerable<UserDTO>?> GetAllAsync(string? search)
+        public async Task<IEnumerable<UserDTO>?> GetAllAsync(string? search, string? st, int page, int pageSize)
         {
             List<UserDTO> list = new List<UserDTO>();
             var users = await _useRepo.GetAllAsync();
+
             if (users != null)
             {
-
-                if (!string.IsNullOrEmpty(search))
+                if (!string.IsNullOrEmpty(st) && !string.IsNullOrEmpty(search))
                 {
-                    users = users.Where(sd => sd.Email.Contains(search) || sd.PhoneNumber.Contains(search));
+                    search = search.ToLower();
+
+                    users = users.Where(sd =>
+                        (sd.Status == st) &&
+                        ((sd.Email != null && sd.Email.ToLower().Contains(search)) ||
+                        (sd.PhoneNumber != null && sd.PhoneNumber.Contains(search))));
                 }
-          
+                else if (!string.IsNullOrEmpty(st))
+                {
+                    users = users.Where(sd => sd.Status == st);
+                }
+                else if (!string.IsNullOrEmpty(search))
+                {
+                    search = search.ToLower();
+
+                    users = users.Where(sd =>
+                        (sd.Email != null && sd.Email.ToLower().Contains(search)) ||
+                        (sd.PhoneNumber != null && sd.PhoneNumber.Contains(search)));
+                }
+
+                // Phân trang
+                users = users.Skip((page - 1) * pageSize).Take(pageSize);
+
                 list = _mapper.Map<List<UserDTO>>(users);
             }
 
             return list;
-
         }
 
         public async Task<UserDTO> GetUserByIDAsync(int id)
@@ -104,6 +124,8 @@ namespace WebAPIGroup2.Service.Implement
 
 
         }
+
+
 
         public async Task<bool> UpdateUser(UserDTO userDTO)
         {

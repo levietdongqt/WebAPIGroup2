@@ -9,6 +9,7 @@
         public const string Pending = "Pending";
         public const string Enabled = "Enabled";
         public const string Disabled = "Disabled";
+
     }
 
     public static class PurchaseStatus
