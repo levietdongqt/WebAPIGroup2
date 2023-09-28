@@ -19,7 +19,7 @@ public partial class Dbsem3G2Context : DbContext
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("server=DESKTOP-9KMLCE8;Database=DBSem3G2;User ID=sa;Password=123456;Trusted_Connection=true;MultipleActiveResultSets=true;TrustServerCertificate=true");
+        => optionsBuilder.UseSqlServer("server=DESKTOP-3FQ63QJ;Database=DBSem3G2;User ID=sa;Password=thuhuy;Trusted_Connection=true;MultipleActiveResultSets=true;TrustServerCertificate=true");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -1,16 +1,21 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using Azure;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using System.Data;
 using System.Net;
 using System.Security.Claims;
+using System.Text;
+using System.Text.Encodings.Web;
 using WebAPIGroup2.Models;
 using WebAPIGroup2.Models.DTO;
 using WebAPIGroup2.Models.POJO;
 using WebAPIGroup2.Respository.Inteface;
 using WebAPIGroup2.Service.Inteface;
+using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
 
 namespace WebAPIGroup2.Controllers.UserModule
 {
@@ -20,11 +25,15 @@ namespace WebAPIGroup2.Controllers.UserModule
     {
         private readonly Dbsem3G2Context _context;
         private readonly IUserService _userService;
+        private readonly IUtilService _utilService;
+        private readonly ILoginService _loginService;
 
-        public UserController(Dbsem3G2Context context , IUserService userService) 
+        public UserController(Dbsem3G2Context context , IUserService userService,IUtilService utilService,ILoginService loginService) 
         { 
             _context = context;
             _userService = userService;
+            _utilService = utilService;
+            _loginService = loginService;
         }
 
         [HttpGet]
@@ -52,6 +61,7 @@ namespace WebAPIGroup2.Controllers.UserModule
         //}
 
         [HttpGet("GetAll")]
+        [Authorize(Roles ="user")]
         public async Task<IActionResult> GetAll(string search)
         {
             var users = await _userService.GetAllAsync(search);
@@ -82,11 +92,22 @@ namespace WebAPIGroup2.Controllers.UserModule
         [HttpPost("create")]
         public async Task<IActionResult> Create(UserDTO userDTO)
         {
-            bool success = await _userService.CreateUser(userDTO);
+            var createdUserDTO = await _userService.CreateUser(userDTO);
 
-            if (success)
+            if (createdUserDTO != null)
             {
-                return Ok(new ResponseDTO<UserDTO>(HttpStatusCode.Created, "Create ok", null, userDTO));
+                var userId = createdUserDTO.Id;
+                var code = _loginService.GenerateToken(createdUserDTO);              
+                code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                var callbackUrl = Url.Action(nameof(ConfirmEmail),"User",new { userId = userId, code = code },Request.Scheme);
+                var mailContent = new MailContent(userDTO.Email, "Confirm your email", $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
+                var mailContented = await _utilService.SendEmailAsync(mailContent);
+                if(mailContented == null) 
+                {
+                    return BadRequest(new ResponseDTO<string>(HttpStatusCode.BadRequest, "Failed to Send Mail To User", null, "Failed"));
+                }
+                return Ok(new ResponseDTO<UserDTO>(HttpStatusCode.Created, "Create Ok", null, userDTO));
             }
             else
             {
@@ -120,9 +141,45 @@ namespace WebAPIGroup2.Controllers.UserModule
             {
                 return BadRequest(new ResponseDTO<string>(HttpStatusCode.BadRequest, "Failed to create user", null, "Failed"));
             }
-        }    
+        }
+        [HttpGet("ConfirmEmail")]
+        public async Task<IActionResult> ConfirmEmail(int userId, string code)
+        {
+            if(code == null)
+            {
+                return BadRequest(new ResponseDTO<string>(HttpStatusCode.BadRequest, "Failed to Confirm mail", null, "Failed"));
+            }
+            var userDTO = await _userService.GetUserByIDAsync(userId);
+            if (userDTO == null)
+            {
+                return NotFound(new ResponseDTO<string>(HttpStatusCode.NotFound, "Failed to Confirm mail", null, "Failed"));
+            }
+            code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
+            var result = await _utilService.ValidateCodeAsync(code, userDTO);
+
+            if (result == null)
+            {
+                return BadRequest(new ResponseDTO<string>(HttpStatusCode.BadRequest, "Failed to Confirm mail", null, "Failed"));
+            }
+            var updatedUser = await _userService.UpdateConfirmEmailAsync(userDTO);
+            if (updatedUser == null)
+            {
+                return BadRequest(new ResponseDTO<string>(HttpStatusCode.BadRequest, "Failed in update user", null, "Failed"));
+            }
+            var response = new ResponseDTO<UserDTO>(HttpStatusCode.OK, "Success", code, updatedUser);
+            return Ok(response);
 
 
+        }
+
+        [HttpGet]
+        [Route("{id:int}")]
+        public async Task<IActionResult> GetByID([FromRoute] int id)
+        {
+            var userDTO = await _userService.GetUserByIDAsync(id);
+            var response = new ResponseDTO<UserDTO>(HttpStatusCode.OK, "Success",null,userDTO);
+            return Ok(response);
+        }
 
     }
 

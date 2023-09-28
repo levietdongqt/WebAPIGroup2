@@ -30,9 +30,14 @@ namespace WebAPIGroup2.Respository.Implement
             return await _repository.GetAllAsync();
         }
 
-        public Task<User?> GetByIDAsync(int id)
+        public async Task<User?> GetByIDAsync(int id)
         {
-            throw new NotImplementedException();
+            var user = await _context.Users.FirstOrDefaultAsync(user => user.Id == id);
+            if(user == null)
+            {
+                return null;
+            }
+            return user;
         }
 
         public async Task<bool> InsertAsync(User entity)

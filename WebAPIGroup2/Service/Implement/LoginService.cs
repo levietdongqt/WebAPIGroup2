@@ -65,7 +65,8 @@ namespace WebAPIGroup2.Service.Implement
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             var claims = new[]
-                        {
+            {
+                new Claim(JwtRegisteredClaimNames.Jti,user.Email),
                 new Claim(ClaimTypes.Name,user.UserName),
                 new Claim(ClaimTypes.Role,user.Role)
             };
@@ -79,5 +80,7 @@ namespace WebAPIGroup2.Service.Implement
             return new JwtSecurityTokenHandler().WriteToken(token);
 
         }
+
+        
     }
 }
