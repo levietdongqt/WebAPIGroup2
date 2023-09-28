@@ -52,9 +52,9 @@ namespace WebAPIGroup2.Controllers.UserModule
         //}
 
         [HttpGet("GetAll")]
-        public async Task<IActionResult> GetAll(string search)
+        public async Task<IActionResult> GetAll(string? search , string? st, int page, int pageSize)
         {
-            var users = await _userService.GetAllAsync(search);
+            var users = await _userService.GetAllAsync(search,st, page, pageSize);
 
             if (users != null)
             {
