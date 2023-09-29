@@ -23,12 +23,12 @@ namespace WebAPIGroup2.Controllers.UserModule
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly Dbsem3G2Context _context;
+        private readonly MyImageContext _context;
         private readonly IUserService _userService;
         private readonly IUtilService _utilService;
         private readonly ILoginService _loginService;
 
-        public UserController(Dbsem3G2Context context , IUserService userService,IUtilService utilService,ILoginService loginService) 
+        public UserController(MyImageContext context , IUserService userService,IUtilService utilService,ILoginService loginService) 
         { 
             _context = context;
             _userService = userService;

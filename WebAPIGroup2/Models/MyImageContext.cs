@@ -1,0 +1,166 @@
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
+using WebAPIGroup2.Models.POJO;
+
+namespace WebAPIGroup2.Models;
+
+public partial class MyImageContext : DbContext
+{
+    public MyImageContext()
+    {
+    }
+
+    public MyImageContext(DbContextOptions<MyImageContext> options)
+        : base(options)
+    {
+    }
+
+    public virtual DbSet<Category> Categories { get; set; }
+
+    public virtual DbSet<CategoryTemplate> CategoryTemplates { get; set; }
+
+    public virtual DbSet<ContentEmail> ContentEmails { get; set; }
+
+    public virtual DbSet<DeliveryInfo> DeliveryInfos { get; set; }
+
+    public virtual DbSet<DescriptionTemplate> DescriptionTemplates { get; set; }
+
+    public virtual DbSet<FeedBack> FeedBacks { get; set; }
+
+    public virtual DbSet<MaterialPage> MaterialPages { get; set; }
+
+    public virtual DbSet<MonthlySpending> MonthlySpendings { get; set; }
+
+    public virtual DbSet<PrintSize> PrintSizes { get; set; }
+
+    public virtual DbSet<ProductDetail> ProductDetails { get; set; }
+
+    public virtual DbSet<PurchaseOrder> PurchaseOrders { get; set; }
+
+    public virtual DbSet<RefeshToken> RefeshTokens { get; set; }
+
+    public virtual DbSet<Review> Reviews { get; set; }
+
+    public virtual DbSet<Template> Templates { get; set; }
+
+    public virtual DbSet<TemplateImage> TemplateImages { get; set; }
+
+    public virtual DbSet<TemplateSize> TemplateSizes { get; set; }
+
+    public virtual DbSet<UploadImage> UploadImages { get; set; }
+
+    public virtual DbSet<User> Users { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Server=tcp:myimages.database.windows.net,1433;Initial Catalog=MyImage;Persist Security Info=False;User ID=finsr8280-admin;Password=Tiennam123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<CategoryTemplate>(entity =>
+        {
+            entity.HasOne(d => d.Category).WithMany(p => p.CategoryTemplates).HasConstraintName("FK_CategoryTemplate_Category");
+
+            entity.HasOne(d => d.Template).WithMany(p => p.CategoryTemplates).HasConstraintName("FK_CategoryTemplate_Template");
+        });
+
+        modelBuilder.Entity<ContentEmail>(entity =>
+        {
+            entity.HasOne(d => d.DeliveryInfo).WithMany(p => p.ContentEmails).HasConstraintName("FK_ContentEmail_DeliveryInfo");
+        });
+
+        modelBuilder.Entity<DeliveryInfo>(entity =>
+        {
+            entity.HasOne(d => d.User).WithMany(p => p.DeliveryInfos).HasConstraintName("FK_DeliveryInfo_User");
+        });
+
+        modelBuilder.Entity<DescriptionTemplate>(entity =>
+        {
+            entity.HasOne(d => d.Template).WithMany(p => p.DescriptionTemplates).HasConstraintName("Fk_Description_Template");
+        });
+
+        modelBuilder.Entity<FeedBack>(entity =>
+        {
+            entity.HasOne(d => d.User).WithMany(p => p.FeedBacks).HasConstraintName("FK_FeedBack_User");
+        });
+
+        modelBuilder.Entity<MaterialPage>(entity =>
+        {
+            entity.Property(e => e.Status).HasDefaultValueSql("((1))");
+        });
+
+        modelBuilder.Entity<MonthlySpending>(entity =>
+        {
+            entity.HasOne(d => d.User).WithMany(p => p.MonthlySpendings).HasConstraintName("FK_MonthlySpending_User");
+        });
+
+        modelBuilder.Entity<ProductDetail>(entity =>
+        {
+            entity.Property(e => e.Status).HasDefaultValueSql("((1))");
+
+            entity.HasOne(d => d.MaterialPage).WithMany(p => p.ProductDetails).HasConstraintName("FK_ProductDetail_MaterialPage");
+
+            entity.HasOne(d => d.PurchaseOrder).WithMany(p => p.ProductDetails).HasConstraintName("FK_ProductDetail_PurchaseOrder");
+
+            entity.HasOne(d => d.Template).WithMany(p => p.ProductDetails).HasConstraintName("FK_ProductDetail_Template");
+        });
+
+        modelBuilder.Entity<PurchaseOrder>(entity =>
+        {
+            entity.Property(e => e.Status).HasDefaultValueSql("('Pending')");
+
+            entity.HasOne(d => d.DeliveryInfo).WithMany(p => p.PurchaseOrders).HasConstraintName("FK_PurchaseOrder_Delivery");
+
+            entity.HasOne(d => d.User).WithMany(p => p.PurchaseOrders).HasConstraintName("FK_PurchaseOrder_User");
+        });
+
+        modelBuilder.Entity<RefeshToken>(entity =>
+        {
+            entity.Property(e => e.IsRevoked).HasDefaultValueSql("((1))");
+            entity.Property(e => e.IsUsed).HasDefaultValueSql("((1))");
+
+            entity.HasOne(d => d.User).WithMany(p => p.RefeshTokens).HasConstraintName("Fk_RefeshToken_User");
+        });
+
+        modelBuilder.Entity<Review>(entity =>
+        {
+            entity.HasOne(d => d.Template).WithMany(p => p.Reviews).HasConstraintName("FK_Review_Detail");
+        });
+
+        modelBuilder.Entity<Template>(entity =>
+        {
+            entity.Property(e => e.Status).HasDefaultValueSql("((1))");
+        });
+
+        modelBuilder.Entity<TemplateImage>(entity =>
+        {
+            entity.HasOne(d => d.Template).WithMany(p => p.TemplateImages).HasConstraintName("Fk_Template_Image");
+        });
+
+        modelBuilder.Entity<TemplateSize>(entity =>
+        {
+            entity.HasOne(d => d.PrintSize).WithMany(p => p.TemplateSizes).HasConstraintName("FK_TemplateSize_PrintSize");
+
+            entity.HasOne(d => d.Template).WithMany(p => p.TemplateSizes).HasConstraintName("FK_TemplateSize_Template");
+        });
+
+        modelBuilder.Entity<UploadImage>(entity =>
+        {
+            entity.Property(e => e.Status).HasDefaultValueSql("((1))");
+
+            entity.HasOne(d => d.ProductDetail).WithMany(p => p.UploadImages).HasConstraintName("Fk_Product_Detail");
+        });
+
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.Property(e => e.EmailConfirmed).HasDefaultValueSql("((0))");
+            entity.Property(e => e.Role).HasDefaultValueSql("('user')");
+            entity.Property(e => e.Status).HasDefaultValueSql("('Pending')");
+        });
+
+        OnModelCreatingPartial(modelBuilder);
+    }
+
+    partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+}
