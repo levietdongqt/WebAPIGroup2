@@ -8,9 +8,9 @@ namespace WebAPIGroup2.Respository.Implement
 {
     public class UserRepo : GenericRepository<User>, IUserRepo
     {
-        private readonly Dbsem3G2Context _context;
+        private readonly MyImageContext _context;
         private readonly GenericRepository<User> _repository;
-        public UserRepo(Dbsem3G2Context context,GenericRepository<User> genericRepository) : base(context)
+        public UserRepo(MyImageContext context,GenericRepository<User> genericRepository) : base(context)
         {
             _context = context;
             _repository = genericRepository;
@@ -62,7 +62,7 @@ namespace WebAPIGroup2.Respository.Implement
 
         public async Task<User?>  GetUser(LoginRequestDTO loginRequest)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(t => t.UserName.Equals(loginRequest.userName) && t.Password
+            var user = await _context.Users.FirstOrDefaultAsync(t => t.Email.Equals(loginRequest.email) && t.Password
             .Equals(loginRequest.password));
             return user;
         }

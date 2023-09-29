@@ -29,7 +29,7 @@ builder.Services.AddCors(options =>
                .AllowAnyMethod();
     });
 });
-builder.Services.AddDbContext<Dbsem3G2Context>();
+builder.Services.AddDbContext<MyImageContext>();
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultScheme = "Cookies"; // Middleware đăng nhập mặc định

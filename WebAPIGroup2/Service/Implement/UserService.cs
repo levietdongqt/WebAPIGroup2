@@ -13,10 +13,10 @@ namespace WebAPIGroup2.Service.Implement
     public class UserService : IUserService
     {
         private readonly IUserRepo _useRepo;
-        private readonly Dbsem3G2Context _context;
+        private readonly MyImageContext _context;
         private readonly IMapper _mapper;
 
-        public UserService(Dbsem3G2Context context, IUserRepo userRepo, IMapper mapper)
+        public UserService(MyImageContext context, IUserRepo userRepo, IMapper mapper)
         {
             _context = context;
             _useRepo = userRepo;
@@ -75,7 +75,7 @@ namespace WebAPIGroup2.Service.Implement
                     users = users.Where(sd =>
                         (sd.Status == st) &&
                         ((sd.Email != null && sd.Email.ToLower().Contains(search)) ||
-                        (sd.PhoneNumber != null && sd.PhoneNumber.Contains(search))));
+                        (sd.Phone != null && sd.Phone.Contains(search))));
                 }
                 else if (!string.IsNullOrEmpty(st))
                 {
@@ -87,7 +87,7 @@ namespace WebAPIGroup2.Service.Implement
 
                     users = users.Where(sd =>
                         (sd.Email != null && sd.Email.ToLower().Contains(search)) ||
-                        (sd.PhoneNumber != null && sd.PhoneNumber.Contains(search)));
+                        (sd.Phone != null && sd.Phone.Contains(search)));
                 }
 
                 // Phân trang
@@ -134,7 +134,7 @@ namespace WebAPIGroup2.Service.Implement
             if (existingUser != null)
             {
                 existingUser.Address = userDTO.Address;
-                existingUser.PhoneNumber = userDTO.PhoneNumber;
+                existingUser.Phone = userDTO.Phone;
                 existingUser.Role = userDTO.Role;
                 existingUser.DateOfBirth = userDTO.DateOfBirth;
                 existingUser.Status = userDTO.Status;
