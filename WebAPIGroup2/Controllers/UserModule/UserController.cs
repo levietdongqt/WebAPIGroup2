@@ -1,21 +1,12 @@
-﻿using Azure;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Google;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
-using System.Data;
 using System.Net;
-using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
 using WebAPIGroup2.Models;
 using WebAPIGroup2.Models.DTO;
-using WebAPIGroup2.Models.POJO;
-using WebAPIGroup2.Respository.Inteface;
 using WebAPIGroup2.Service.Inteface;
-using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
 
 namespace WebAPIGroup2.Controllers.UserModule
 {
