@@ -27,6 +27,7 @@ namespace WebAPIGroup2.Models
             CreateMap<TemplateDTO,TemplateWithCategoryDTO>()
                 .ReverseMap();
             CreateMap<CategoryTemplate, CategoryDTO>().ReverseMap();
+            CreateMap<PrintSize,SizeDTO>().ReverseMap();
         }
     }
 }
