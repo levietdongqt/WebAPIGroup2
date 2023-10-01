@@ -13,13 +13,13 @@ namespace WebAPIGroup2.Models.DTO
             Status = status;
             Message = message;
             Token = token;
-            this.data = data;
+            this.Result = data;
         }
 
         public HttpStatusCode Status { get; set; }
         public string? Message { get; set; }
         public string? Token { get; set; }
 
-        public T? data { get; set; }
+        public T? Result { get; set; }
     }
 }

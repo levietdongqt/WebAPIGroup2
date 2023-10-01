@@ -12,6 +12,9 @@ using WebAPIGroup2.Models.DTO;
 using WebAPIGroup2.Models.POJO;
 using WebAPIGroup2.Service.Inteface;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Identity;
+using Google.Apis.Auth;
+using Azure.Core;
 
 namespace WebAPIGroup2.Controllers
 {
@@ -19,8 +22,14 @@ namespace WebAPIGroup2.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
+        private class GoogleResponse
+        {
+            public string Email { get; set; }
+            public string Name { get; set; }
+            public string Picture { get; set; }
+        }
         private readonly ILoginService _loginService;
-        public AuthController( ILoginService loginService)
+        public AuthController(ILoginService loginService)
         {
             _loginService = loginService;
         }
@@ -31,11 +40,11 @@ namespace WebAPIGroup2.Controllers
             ResponseDTO<UserDTO> response;
             if (user == null)
             {
-                response = new ResponseDTO<UserDTO>(HttpStatusCode.BadRequest, "Fail", null , null);
+                response = new ResponseDTO<UserDTO>(HttpStatusCode.BadRequest, "Fail", null, null);
                 return new JsonResult(response);
             }
             var token = _loginService.GenerateToken(user);
-            response = new ResponseDTO<UserDTO>(HttpStatusCode.OK,"Success", token, user);
+            response = new ResponseDTO<UserDTO>(HttpStatusCode.OK, "Success", token, user);
             //Response.Cookies.Append("access_token", token, new CookieOptions
             //{
             //    HttpOnly = true,
@@ -46,7 +55,7 @@ namespace WebAPIGroup2.Controllers
             return new JsonResult(response);
         }
         [HttpGet("signin-google")]
-        public IActionResult LoginWithGoogle()
+        public IActionResult LoginWithGoogle(string token)
         {
             //Response.Headers.Add("Access-Control-Allow-Origin", "http://localhost:3000"); // Thay localhost:3000 bằng nguồn gốc của client
             var authenticationProperties = new AuthenticationProperties
@@ -54,44 +63,44 @@ namespace WebAPIGroup2.Controllers
 
                 RedirectUri = Url.Action(nameof(HandleGoogleResponse))
             };
-       
 
             return Challenge(authenticationProperties, GoogleDefaults.AuthenticationScheme);
         }
 
-        [HttpGet("handle-google-response")]
-        public async Task<ResponseDTO<UserDTO>> HandleGoogleResponse()
+        [HttpPost("handle-google-response")]
+        public async Task<ResponseDTO<UserDTO>> HandleGoogleResponse([FromBody] LoginRequestDTO loginRequest)
         {
-            ResponseDTO<UserDTO> response;
-            // Xử lý phản hồi từ Google và lấy thông tin người dùng
-            var authenticateResult = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
+            ResponseDTO<UserDTO> response = null;
 
-            // Lấy thông tin người dùng từ Principal
-            var userPrincipal = authenticateResult.Principal;
+            var httpClient = new HttpClient();
+            string userInfoUrl = "https://www.googleapis.com/oauth2/v1/userinfo";
 
-            // Lấy tên người dùng
-            var fullName = userPrincipal.FindFirst(ClaimTypes.Name)?.Value;
 
-            // Lấy địa chỉ email
-            var userEmail = userPrincipal.FindFirst(ClaimTypes.Email)?.Value;
+            // Gửi yêu cầu kiểm tra access token
+            httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {loginRequest.email}");
+            var responseGoogle = await httpClient.GetAsync(userInfoUrl);
 
-            await HttpContext.SignOutAsync("Cookies");
-
-            var userLogged =await _loginService.checkLoggedByGoogle(userEmail);
-            if (userLogged == null)
+            if (responseGoogle.IsSuccessStatusCode)
             {
-               userLogged =  await _loginService.CreateUser(fullName, userEmail);
+                var userInfoJson = await responseGoogle.Content.ReadAsStringAsync();
+                GoogleResponse userInfo = Newtonsoft.Json.JsonConvert.DeserializeObject<GoogleResponse>(userInfoJson);
+
+                var userLogged = await _loginService.checkLoggedByGoogle(userInfo.Email);
+                if (userLogged == null)
+                {
+                    userLogged = await _loginService.CreateUser(userInfo.Name, userInfo.Email);
+                }
+                var token = _loginService.GenerateToken(userLogged);
+                response = new ResponseDTO<UserDTO>(HttpStatusCode.OK, "Success", token, userLogged);
             }
-            var token = _loginService.GenerateToken(userLogged);
-            response = new ResponseDTO<UserDTO>(HttpStatusCode.OK, "Success", token, userLogged);
             return response;
         }
         [HttpGet("AccessDenied")]
         public async Task<JsonResult> AccessDenied()
         {
-            ResponseDTO<String> response = new ResponseDTO<string>(HttpStatusCode.Forbidden, "AccessDenied",null,null);
+            ResponseDTO<String> response = new ResponseDTO<string>(HttpStatusCode.Forbidden, "AccessDenied", null, null);
 
-            return new JsonResult(response);    
+            return new JsonResult(response);
         }
     }
 }

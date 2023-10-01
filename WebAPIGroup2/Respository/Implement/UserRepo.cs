@@ -57,7 +57,7 @@ namespace WebAPIGroup2.Respository.Implement
 
         public async Task<User?>  GetUser(LoginRequestDTO loginRequest)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(t => t.UserName.Equals(loginRequest.userName) && t.Password
+            var user = await _context.Users.FirstOrDefaultAsync(t => t.Email.Equals(loginRequest.email) && t.Password
             .Equals(loginRequest.password));
             return user;
         }

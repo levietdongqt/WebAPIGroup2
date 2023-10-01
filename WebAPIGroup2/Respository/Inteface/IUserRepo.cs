@@ -7,5 +7,7 @@ namespace WebAPIGroup2.Respository.Inteface
     {
         public Task<User> GetUser(LoginRequestDTO loginRequest);
         Task<User> GetUserByEmail(string? userEmail);
+
+
     }
 }
