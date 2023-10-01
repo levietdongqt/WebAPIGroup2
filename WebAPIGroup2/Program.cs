@@ -26,7 +26,7 @@ builder.Services.AddCors(options =>
     {
         builder.WithOrigins(new[] { "http://localhost:3000" })
                .AllowAnyHeader()
-               .AllowAnyMethod();
+               .AllowAnyMethod();   
     });
 });
 builder.Services.AddDbContext<MyImageContext>();
@@ -68,11 +68,14 @@ builder.Services.Configure<MailSetting>(mailSettings);
 builder.Services.AddScoped(typeof(GenericRepository<>));
 builder.Services.AddScoped<IUserService, UserService>();    
 builder.Services.AddTransient<IUserRepo, UserRepo>();
-
+builder.Services.AddTransient<ICategoryRepo, CategoryRepo>();
+builder.Services.AddTransient<ICategoryService, CategoryService>();
+builder.Services.AddTransient<ITemplateRepo, TemplateRepo>();
+builder.Services.AddTransient<ITemplateService, TemplateSerivce>();
+builder.Services.AddTransient<ICategoryTemplateRepo,CategoryTemplateRepo>();
 //DI Service
 builder.Services.AddTransient<ILoginService, LoginService>();
 builder.Services.AddSingleton<IUtilService, UtilService>();
-
 
 var app = builder.Build();
 // Configure the HTTP request pipeline.
