@@ -8,9 +8,9 @@ namespace WebAPIGroup2.Respository.Implement
 {
     public class UserRepo : GenericRepository<User>, IUserRepo
     {
-        private readonly Dbsem3G2Context _context;
+        private readonly MyImageContext _context;
         private readonly GenericRepository<User> _repository;
-        public UserRepo(Dbsem3G2Context context,GenericRepository<User> genericRepository) : base(context)
+        public UserRepo(MyImageContext context,GenericRepository<User> genericRepository) : base(context)
         {
             _context = context;
             _repository = genericRepository;
@@ -30,9 +30,14 @@ namespace WebAPIGroup2.Respository.Implement
             return await _repository.GetAllAsync();
         }
 
-        public Task<User?> GetByIDAsync(int id)
+        public async Task<User?> GetByIDAsync(int id)
         {
-            throw new NotImplementedException();
+            var user = await _context.Users.FirstOrDefaultAsync(user => user.Id == id);
+            if(user == null)
+            {
+                return null;
+            }
+            return user;
         }
 
         public async Task<bool> InsertAsync(User entity)

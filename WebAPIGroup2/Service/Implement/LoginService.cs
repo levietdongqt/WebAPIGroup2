@@ -52,7 +52,6 @@ namespace WebAPIGroup2.Service.Implement
             User user = new User();
             user.FullName = fullName;
             user.Email = userEmail;
-            user.UserName = userEmail;
             user.EmailConfirmed = true;
             user.Status = UserStatus.Enabled;
             await _userRepo.InsertAsync(user);
@@ -65,8 +64,9 @@ namespace WebAPIGroup2.Service.Implement
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             var claims = new[]
-                        {
-                new Claim(ClaimTypes.Name,user.UserName),
+            {
+                new Claim(JwtRegisteredClaimNames.Jti,user.Email),
+                new Claim(ClaimTypes.Name,user.Email),
                 new Claim(ClaimTypes.Role,user.Role)
             };
             var token = new JwtSecurityToken(_config["Jwt:Issuer"],
@@ -79,5 +79,7 @@ namespace WebAPIGroup2.Service.Implement
             return new JwtSecurityTokenHandler().WriteToken(token);
 
         }
+
+        
     }
 }

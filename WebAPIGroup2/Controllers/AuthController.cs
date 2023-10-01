@@ -13,7 +13,6 @@ using WebAPIGroup2.Models.POJO;
 using WebAPIGroup2.Service.Inteface;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
-using Google.Apis.Auth;
 using Azure.Core;
 
 namespace WebAPIGroup2.Controllers

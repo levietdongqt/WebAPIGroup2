@@ -3,6 +3,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using TestEmail.Services;
 using WebAPIGroup2.Models;
 using WebAPIGroup2.Respository;
 using WebAPIGroup2.Respository.Implement;
@@ -28,7 +29,7 @@ builder.Services.AddCors(options =>
                .AllowAnyMethod();
     });
 });
-builder.Services.AddDbContext<Dbsem3G2Context>();
+builder.Services.AddDbContext<MyImageContext>();
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultScheme = "Cookies"; // Middleware đăng nhập mặc định
@@ -59,6 +60,9 @@ builder.Services.AddAuthentication(options =>
             ClockSkew = TimeSpan.Zero
         };
     });
+//Mail option appsetting.json
+var mailSettings = builder.Configuration.GetSection("MailSettings");
+builder.Services.Configure<MailSetting>(mailSettings);
 
 //DI Repositoty
 builder.Services.AddScoped(typeof(GenericRepository<>));
@@ -67,6 +71,8 @@ builder.Services.AddTransient<IUserRepo, UserRepo>();
 
 //DI Service
 builder.Services.AddTransient<ILoginService, LoginService>();
+builder.Services.AddSingleton<IUtilService, UtilService>();
+
 
 var app = builder.Build();
 // Configure the HTTP request pipeline.

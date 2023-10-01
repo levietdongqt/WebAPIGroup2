@@ -13,10 +13,10 @@ namespace WebAPIGroup2.Service.Implement
     public class UserService : IUserService
     {
         private readonly IUserRepo _useRepo;
-        private readonly Dbsem3G2Context _context;
+        private readonly MyImageContext _context;
         private readonly IMapper _mapper;
 
-        public UserService(Dbsem3G2Context context, IUserRepo userRepo, IMapper mapper)
+        public UserService(MyImageContext context, IUserRepo userRepo, IMapper mapper)
         {
             _context = context;
             _useRepo = userRepo;
@@ -25,8 +25,9 @@ namespace WebAPIGroup2.Service.Implement
 
         public async Task<bool> ChangePassword(UserDTO userDTO, string oldPassword)
         {
+            //var passwordHash = BCrypt.Net.BCrypt.HashPassword(userDTO.Password);
+            //oldPassword = passwordHash;
             var existingUser = await _context.Users.SingleOrDefaultAsync(u => u.Id == userDTO.Id && u.Password == oldPassword);
-
             if (existingUser == null)
             {
                 return false; 
@@ -41,38 +42,89 @@ namespace WebAPIGroup2.Service.Implement
 
 
 
-        public async Task<bool> CreateUser(UserDTO userDTO)
+        public async Task<UserDTO> CreateUser(UserDTO userDTO)
         {
             var user = _mapper.Map<User>(userDTO);
             user.Status = UserStatus.Pending;
-            user.Password = userDTO.Password;
+            var passwordHash = BCrypt.Net.BCrypt.HashPassword(userDTO.Password);
+            user.Password = passwordHash;
             var success = await _useRepo.InsertAsync(user);
-            return success;
+            if (success)
+            {
+                var createdUserDTO = _mapper.Map<UserDTO>(user);
+                return createdUserDTO;
+            }
+            return null;
 
         }
 
 
 
 
-
-        public async Task<IEnumerable<UserDTO>?> GetAllAsync(string? search)
+        public async Task<IEnumerable<UserDTO>?> GetAllAsync(string? search, string? st, int page, int pageSize)
         {
             List<UserDTO> list = new List<UserDTO>();
             var users = await _useRepo.GetAllAsync();
+
             if (users != null)
             {
-
-                if (!string.IsNullOrEmpty(search))
+                if (!string.IsNullOrEmpty(st) && !string.IsNullOrEmpty(search))
                 {
-                    users = users.Where(sd => sd.Email.Contains(search) || sd.PhoneNumber.Contains(search));
+                    search = search.ToLower();
+
+                    users = users.Where(sd =>
+                        (sd.Status == st) &&
+                        ((sd.Email != null && sd.Email.ToLower().Contains(search)) ||
+                        (sd.Phone != null && sd.Phone.Contains(search))));
                 }
-          
+                else if (!string.IsNullOrEmpty(st))
+                {
+                    users = users.Where(sd => sd.Status == st);
+                }
+                else if (!string.IsNullOrEmpty(search))
+                {
+                    search = search.ToLower();
+
+                    users = users.Where(sd =>
+                        (sd.Email != null && sd.Email.ToLower().Contains(search)) ||
+                        (sd.Phone != null && sd.Phone.Contains(search)));
+                }
+
+                // Phân trang
+                users = users.Skip((page - 1) * pageSize).Take(pageSize);
+
                 list = _mapper.Map<List<UserDTO>>(users);
             }
 
             return list;
+        }
+
+        public async Task<UserDTO> GetUserByIDAsync(int id)
+        {
+            var user = await _useRepo.GetByIDAsync(id);
+            var userDTO = _mapper.Map<UserDTO>(user);
+            return userDTO;
+        }
+
+        public async Task<UserDTO> UpdateConfirmEmailAsync(UserDTO userDTO)
+        {
+            var existingUser = await _context.Users.SingleOrDefaultAsync(u => u.Id == userDTO.Id);
+            if (existingUser == null)
+            {
+                return null;
+            }
+            existingUser.Status = UserStatus.Enabled;
+            existingUser.EmailConfirmed = true;
+            var updated = await _useRepo.UpdateAsync(existingUser);
+            if (!updated)
+            {
+                return null;
+            }
+            return _mapper.Map<UserDTO>(existingUser);
+
 
         }
+
 
 
         public async Task<bool> UpdateUser(UserDTO userDTO)
@@ -82,7 +134,7 @@ namespace WebAPIGroup2.Service.Implement
             if (existingUser != null)
             {
                 existingUser.Address = userDTO.Address;
-                existingUser.PhoneNumber = userDTO.PhoneNumber;
+                existingUser.Phone = userDTO.Phone;
                 existingUser.Role = userDTO.Role;
                 existingUser.DateOfBirth = userDTO.DateOfBirth;
                 existingUser.Status = userDTO.Status;

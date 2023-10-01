@@ -9,7 +9,7 @@ namespace WebAPIGroup2.Models
         public AutoMapperProfile()
         {
             CreateMap<User, UserDTO>()
-                .ForMember(t => t.Password, option => option.Ignore());
+                .ForMember(t => t.Password, option => option.Ignore()).ReverseMap();
         }
     }
 }
