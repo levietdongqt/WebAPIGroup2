@@ -43,28 +43,33 @@ namespace WebAPIGroup2.Controllers.TemplateModule
         public async Task<JsonResult> Create([FromForm] AddTemplateDTO addTemplateDTO)
         {
             var templateDTO = await templateService.CreateAsync(addTemplateDTO);
-            var response = new ResponseDTO<TemplateDTO>(HttpStatusCode.Created,"Add success",null, templateDTO);
+            var response = new ResponseDTO<TemplateDTO>(HttpStatusCode.Created, "Add success", null, templateDTO);
             return new JsonResult(response);
         }
 
         [HttpPut]
-        public async Task<JsonResult> Update(int id, [FromBody] AddTemplateDTO updateTemplateDTO)
+        [Route("{id:int}")]
+        public async Task<JsonResult> Update([FromRoute] int id, [FromBody] AddTemplateDTO updateTemplateDTO)
         {
             var templateDTO = await templateService.UpdateAsync(id, updateTemplateDTO);
-            if(templateDTO == null)
+            if (templateDTO == null)
             {
                 return new JsonResult(new ResponseDTO<TemplateDTO>(HttpStatusCode.NotFound, "Template is null", null, null));
             }
-            var response = new ResponseDTO<TemplateDTO>(HttpStatusCode.Created, "Update success", null, templateDTO);
+            var response = new ResponseDTO<TemplateDTO>(HttpStatusCode.OK, "Update success", null, templateDTO);
             return new JsonResult(response);
         }
-        [HttpPost]
-        [Route("Test")]
-        public async Task<IActionResult> Test([FromForm] Test test)
+        [HttpDelete]
+        [Route("{id:int}")]
+        public async Task<JsonResult> Delete([FromRoute] int id)
         {
-            List<string> a = await utilService.UploadMany(test.formFile);
-            return Ok(a);
+            var templateDTO = await templateService.UpdateStatusAsync(id);
+            if (templateDTO == null)
+            {
+                return new JsonResult(new ResponseDTO<TemplateDTO>(HttpStatusCode.NotFound, "Template is null", null, null));
+            }
+            var response = new ResponseDTO<TemplateDTO>(HttpStatusCode.OK, "Delete success", null, templateDTO);
+            return new JsonResult(response);
         }
-
     }
 }

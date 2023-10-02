@@ -11,5 +11,7 @@ namespace WebAPIGroup2.Service.Inteface
         Task<TemplateDTO> UpdateAsync(int id,AddTemplateDTO updateTemplateDTO);
 
         Task<TemplateDTO> GetByIDAsync(int id);
+
+        Task<TemplateDTO> UpdateStatusAsync(int id);
     }
 }

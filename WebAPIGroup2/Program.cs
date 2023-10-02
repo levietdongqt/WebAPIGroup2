@@ -26,7 +26,7 @@ builder.Services.AddCors(options =>
     {
         builder.WithOrigins(new[] { "http://localhost:3000" })
                .AllowAnyHeader()
-               .AllowAnyMethod();
+               .AllowAnyMethod();   
     });
 });
 builder.Services.AddDbContext<MyImageContext>();
@@ -75,6 +75,17 @@ builder.Services.AddTransient<ILoginService, LoginService>();
 builder.Services.AddSingleton<IUtilService, UtilService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITemplateService, TemplateService>();
+builder.Services.AddTransient<ICategoryRepo, CategoryRepo>();
+builder.Services.AddTransient<ICategoryService, CategoryService>();
+builder.Services.AddTransient<ITemplateRepo, TemplateRepo>();
+//builder.Services.AddTransient<ITemplateService, TemplateSerivce>();
+builder.Services.AddTransient<ICategoryTemplateRepo,CategoryTemplateRepo>();
+builder.Services.AddTransient<ISizeRepo, SizeRepo>();
+builder.Services.AddTransient<ISizeService,SizeService>();
+//DI Service
+builder.Services.AddTransient<ILoginService, LoginService>();
+builder.Services.AddSingleton<IUtilService, UtilService>();
+
 
 var app = builder.Build();
 // Configure the HTTP request pipeline.

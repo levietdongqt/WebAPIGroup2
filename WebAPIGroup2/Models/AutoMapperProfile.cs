@@ -22,6 +22,11 @@ namespace WebAPIGroup2.Models
 
             //Template Image
             CreateMap<TemplateImage,TemplateImageDTO>().ReverseMap();
+            
+            CreateMap<CategoryTemplate, CategoryTemplateDTO>().ReverseMap();
+            CreateMap<Category, CategoryDTO>().ReverseMap();
+            CreateMap<PrintSize, SizeDTO>().ReverseMap();
+            CreateMap<TemplateSize,TemplateSizeDTO>().ReverseMap();
         }
     }
 }
