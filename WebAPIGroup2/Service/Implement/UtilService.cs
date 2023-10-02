@@ -19,15 +19,18 @@ namespace TestEmail.Services
 
         private readonly IConfiguration _configuration;
 
+        private readonly IWebHostEnvironment _webHostEnvironment;
+
 
         // mailSetting được Inject qua dịch vụ hệ thống
         // Có inject Logger để xuất log
-        public UtilService(IOptions<MailSetting> _mailSettings, ILogger<UtilService> _logger, IConfiguration configuration)
+        public UtilService(IOptions<MailSetting> _mailSettings, ILogger<UtilService> _logger, IConfiguration configuration, IWebHostEnvironment _webHostEnvironment)
         {
             mailSettings = _mailSettings.Value;
             logger = _logger;
             logger.LogInformation("Create SendMailService");
             _configuration = configuration;
+            this._webHostEnvironment = _webHostEnvironment;
         }
 
         // Gửi email, theo nội dung trong mailContent
@@ -70,6 +73,48 @@ namespace TestEmail.Services
 
             logger.LogInformation("Send mail to "+ mailContent.Email );
             return mailContent;
+        }
+
+        //Dung de upload file
+        public async Task<string> Upload(IFormFile formFile)
+        {
+            var fileName = formFile.FileName;
+
+            //Upload
+            var localFilePath = Path.Combine(_webHostEnvironment.ContentRootPath, "Image", fileName);
+
+            var stream = new FileStream(localFilePath, FileMode.Create);
+
+            await formFile.CopyToAsync(stream);
+
+            //Set URL Static
+
+            var urlFilePath = $"/Image/{fileName}";
+
+            return urlFilePath;
+        }
+
+        //DUng de upload nhieu file
+        public async Task<List<string>> UploadMany(IFormFile[] formFile)
+        {
+            List<string> urlFilePathList = new List<string>();
+            foreach(var f in formFile)
+            {
+                var fileName = f.FileName;
+
+                //Upload
+                var localFilePath = Path.Combine(_webHostEnvironment.ContentRootPath, "Image", fileName);
+
+                var stream = new FileStream(localFilePath, FileMode.Create);
+
+                await f.CopyToAsync(stream);
+
+                //Set URL Static
+
+                var urlFilePath = $"/Image/{fileName}";
+                urlFilePathList.Add(urlFilePath);
+            }
+            return urlFilePathList;
         }
 
         //Validate token when ConfirmEmail

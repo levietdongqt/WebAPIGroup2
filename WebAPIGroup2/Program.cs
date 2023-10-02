@@ -26,7 +26,7 @@ builder.Services.AddCors(options =>
     {
         builder.WithOrigins(new[] { "http://localhost:3000" })
                .AllowAnyHeader()
-               .AllowAnyMethod();
+               .AllowAnyMethod();   
     });
 });
 builder.Services.AddDbContext<MyImageContext>();
@@ -65,10 +65,23 @@ var mailSettings = builder.Configuration.GetSection("MailSettings");
 builder.Services.Configure<MailSetting>(mailSettings);
 
 //DI Repositoty
-builder.Services.AddScoped(typeof(GenericRepository<>));
-builder.Services.AddScoped<IUserService, UserService>();    
+builder.Services.AddScoped(typeof(GenericRepository<>));   
 builder.Services.AddTransient<IUserRepo, UserRepo>();
-
+builder.Services.AddTransient<ITemplateRepo, TemplateRepo>();
+builder.Services.AddTransient<IDescriptionTemplateRepo, DescriptionTemplateRepo>();
+builder.Services.AddTransient<ITemplateImageRepo, TemplateImageRepo>();
+//DI Service
+builder.Services.AddTransient<ILoginService, LoginService>();
+builder.Services.AddSingleton<IUtilService, UtilService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ITemplateService, TemplateService>();
+builder.Services.AddTransient<ICategoryRepo, CategoryRepo>();
+builder.Services.AddTransient<ICategoryService, CategoryService>();
+builder.Services.AddTransient<ITemplateRepo, TemplateRepo>();
+//builder.Services.AddTransient<ITemplateService, TemplateSerivce>();
+builder.Services.AddTransient<ICategoryTemplateRepo,CategoryTemplateRepo>();
+builder.Services.AddTransient<ISizeRepo, SizeRepo>();
+builder.Services.AddTransient<ISizeService,SizeService>();
 //DI Service
 builder.Services.AddTransient<ILoginService, LoginService>();
 builder.Services.AddSingleton<IUtilService, UtilService>();

@@ -9,5 +9,9 @@ namespace WebAPIGroup2.Service.Inteface
         public Task<MailContent> SendEmailAsync(MailContent mailContent);
 
         public Task<string> ValidateCodeAsync(string code, UserDTO user);
+
+        public Task<string> Upload(IFormFile formFile);
+
+        public Task<List<string>> UploadMany(IFormFile[] formFile);
     }
 }
