@@ -65,14 +65,16 @@ var mailSettings = builder.Configuration.GetSection("MailSettings");
 builder.Services.Configure<MailSetting>(mailSettings);
 
 //DI Repositoty
-builder.Services.AddScoped(typeof(GenericRepository<>));
-builder.Services.AddScoped<IUserService, UserService>();    
+builder.Services.AddScoped(typeof(GenericRepository<>));   
 builder.Services.AddTransient<IUserRepo, UserRepo>();
-
+builder.Services.AddTransient<ITemplateRepo, TemplateRepo>();
+builder.Services.AddTransient<IDescriptionTemplateRepo, DescriptionTemplateRepo>();
+builder.Services.AddTransient<ITemplateImageRepo, TemplateImageRepo>();
 //DI Service
 builder.Services.AddTransient<ILoginService, LoginService>();
 builder.Services.AddSingleton<IUtilService, UtilService>();
-
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ITemplateService, TemplateService>();
 
 var app = builder.Build();
 // Configure the HTTP request pipeline.

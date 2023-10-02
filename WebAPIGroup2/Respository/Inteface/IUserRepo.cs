@@ -6,6 +6,6 @@ namespace WebAPIGroup2.Respository.Inteface
     public interface IUserRepo :  ISharedRepository<User, int>
     {
         public Task<User> GetUser(LoginRequestDTO loginRequest);
-        Task<User> GetUserByEmail(string? userEmail);
+        public Task<User> GetUserByEmail(string? userEmail);
     }
 }
