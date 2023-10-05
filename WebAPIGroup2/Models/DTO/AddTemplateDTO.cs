@@ -24,7 +24,7 @@ namespace WebAPIGroup2.Models.DTO
         [FromForm]
         public IFormFile[] formFileList { get; set; }
 
-        public List<CategoryDTO> categoryDTOs { get; set; } = new List<CategoryDTO>();
+        public List<CollectionDTO> collectionDTOs { get; set; } = new List<CollectionDTO>();
 
         public List<SizeDTO> sizeDTOs { get; set; } = new List<SizeDTO>();
     }

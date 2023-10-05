@@ -26,7 +26,7 @@ public partial class Template
     public DateTime? CreateDate { get; set; }
 
     [InverseProperty("Template")]
-    public virtual ICollection<CategoryTemplate> CategoryTemplates { get; set; } = new List<CategoryTemplate>();
+    public virtual ICollection<CollectionTemplate> CollectionTemplates { get; set; } = new List<CollectionTemplate>();
 
     [InverseProperty("Template")]
     public virtual ICollection<DescriptionTemplate> DescriptionTemplates { get; set; } = new List<DescriptionTemplate>();

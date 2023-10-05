@@ -26,8 +26,8 @@ namespace WebAPIGroup2.Models.DTO
         public virtual ICollection<TemplateImageDTO> TemplateImages { get; set; } = new List<TemplateImageDTO>();
 
         [JsonIgnore]
-        public virtual ICollection<CategoryTemplateDTO> CategoryTemplates { get; set; } = new List<CategoryTemplateDTO>();
-        public virtual List<CategoryDTO> CategoriesDTO { get; set; } = new List<CategoryDTO>();
+        public virtual ICollection<CollectionTemplateDTO> CollectionTemplates { get; set; } = new List<CollectionTemplateDTO>();
+        public virtual List<CollectionDTO> CollectionsDTO { get; set; } = new List<CollectionDTO>();
 
         [JsonIgnore]
         public virtual ICollection<TemplateSizeDTO> TemplateSizes { get; set; } = new List<TemplateSizeDTO>();
