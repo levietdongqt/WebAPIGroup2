@@ -27,4 +27,8 @@ public partial class Review
     [ForeignKey("TemplateId")]
     [InverseProperty("Reviews")]
     public virtual Template? Template { get; set; }
+
+    [ForeignKey("TemplateId")]
+    [InverseProperty("Reviews")]
+    public virtual User? User { get; set; }
 }

@@ -33,6 +33,8 @@ namespace WebAPIGroup2.Models.DTO
         public virtual ICollection<TemplateSizeDTO> TemplateSizes { get; set; } = new List<TemplateSizeDTO>();
 
         public virtual List<SizeDTO> SizesDTO { get; set; } = new List<SizeDTO>();
+
+        public virtual ICollection<ReviewDTO> Reviews { get; set; } = new List<ReviewDTO>();
     }
 }
 

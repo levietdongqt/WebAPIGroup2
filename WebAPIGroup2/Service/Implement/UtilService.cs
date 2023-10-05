@@ -1,5 +1,6 @@
 ﻿using MailKit.Security;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using MimeKit;
@@ -7,6 +8,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using WebAPIGroup2.Models;
 using WebAPIGroup2.Models.DTO;
+using WebAPIGroup2.Models.POJO;
+using WebAPIGroup2.Respository.Inteface;
 using WebAPIGroup2.Service.Inteface;
 
 namespace TestEmail.Services
@@ -14,6 +17,7 @@ namespace TestEmail.Services
     public class UtilService : IUtilService
     {
         private readonly MailSetting mailSettings;
+        private readonly IContentEmailRepo _contentEmailRepo;
 
         private readonly ILogger<UtilService> logger;
 
@@ -24,13 +28,14 @@ namespace TestEmail.Services
 
         // mailSetting được Inject qua dịch vụ hệ thống
         // Có inject Logger để xuất log
-        public UtilService(IOptions<MailSetting> _mailSettings, ILogger<UtilService> _logger, IConfiguration configuration, IWebHostEnvironment _webHostEnvironment)
+        public UtilService(IOptions<MailSetting> _mailSettings, ILogger<UtilService> _logger, IConfiguration configuration, IWebHostEnvironment _webHostEnvironment, IContentEmailRepo contentEmailRepo)
         {
             mailSettings = _mailSettings.Value;
             logger = _logger;
             logger.LogInformation("Create SendMailService");
             _configuration = configuration;
             this._webHostEnvironment = _webHostEnvironment;
+            _contentEmailRepo = contentEmailRepo;
         }
 
         // Gửi email, theo nội dung trong mailContent
@@ -117,6 +122,8 @@ namespace TestEmail.Services
             return urlFilePathList;
         }
 
+        
+
         //Validate token when ConfirmEmail
         public async Task<string> ValidateCodeAsync(string code,UserDTO user)
         {
@@ -171,6 +178,58 @@ namespace TestEmail.Services
             }
             return code;
 
+        }
+        /*
+         * Dùng để validate File khi upload
+         */
+        public void ValiadateAllFileUpload(IFormFile[] formFile)
+        {
+            var allowExtensions = new string[] { ".jpg", ".jpeg", ".png" };
+
+            foreach (var f in formFile)
+            {
+                if (!allowExtensions.Contains(Path.GetExtension(f.FileName)))
+                {
+                    throw new ArgumentException("Extension of File is not support");
+                }
+            }
+        }
+
+        public void ValiadateFileUpload(IFormFile formFile)
+        {
+            var allowExtensions = new string[] { ".jpg", ".jpeg", ".png" };
+
+            if (!allowExtensions.Contains(Path.GetExtension(formFile.FileName)))
+            {
+                throw new ArgumentException("Extension of File is not support");
+            }
+        }
+
+        public void ValidateFileForUser(IFormFile[] formFile)
+        {
+            var allowExtension = ".jpeg";
+
+            foreach (var f in formFile)
+            {
+                if (!allowExtension.Contains(Path.GetExtension(f.FileName)))
+                {
+                    throw new ArgumentException("Extension of File is not support");
+                }
+            }
+        }
+
+        //Lưu database ContentEmail
+        public async Task<bool> CreateContentEmail(int deliveryInfoId,MailContent mailContent)
+        {
+            var contentEmail = new ContentEmail()
+            {
+                DeliveryInfoId = deliveryInfoId,
+                SubjectEmail = mailContent.Subject,
+                BodyEmail = mailContent.htmlhtmlMessage,
+                Type = mailContent.type,
+            };
+            var result = await _contentEmailRepo.InsertAsync(contentEmail);
+            return result;
         }
     }
 

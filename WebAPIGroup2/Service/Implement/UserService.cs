@@ -13,14 +13,16 @@ namespace WebAPIGroup2.Service.Implement
     public class UserService : IUserService
     {
         private readonly IUserRepo _useRepo;
+        private readonly IDeliveryInfoRepo _deliveryInfoRepo;
         private readonly MyImageContext _context;
         private readonly IMapper _mapper;
         
         
 
-        public UserService(MyImageContext context, IUserRepo userRepo, IMapper mapper)
+        public UserService(MyImageContext context, IUserRepo userRepo, IDeliveryInfoRepo deliveryInfoRepo, IMapper mapper)
         {
             _context = context;
+            _deliveryInfoRepo = deliveryInfoRepo;
             _useRepo = userRepo;
             _mapper = mapper;
         }
@@ -41,8 +43,24 @@ namespace WebAPIGroup2.Service.Implement
             return update;
         }
 
+        
 
-
+        public async Task<DeliveryInfoDTO> CreateDeliveryInfoOfUser(int userId, DeliveryInfoDTO deliveryInfoDTO)
+        {
+            var user = await _useRepo.GetByIDAsync(userId);
+            if (user == null)
+            {
+                return null;
+            }
+            var deliveryInfo = _mapper.Map<DeliveryInfo>(deliveryInfoDTO);
+            deliveryInfo.UserId = userId;
+            var result = await _deliveryInfoRepo.InsertAsync(deliveryInfo);
+            if (!result)
+            {
+                return null;
+            }
+            return _mapper.Map<DeliveryInfoDTO>(deliveryInfo);
+        }
 
         public async Task<UserDTO> CreateUser(UserDTO userDTO)
         {
@@ -99,6 +117,17 @@ namespace WebAPIGroup2.Service.Implement
             }
 
             return list;
+        }
+
+        public async  Task<List<DeliveryInfoDTO>> GetDeliveryInfoByUserIDAsync(int userId)
+        {
+            var user = await _useRepo.GetByIDAsync(userId);
+            if(user == null)
+            {
+                return null;
+            }
+            var deliveryInfos = user.DeliveryInfos.ToList();
+            return _mapper.Map<List<DeliveryInfoDTO>>(deliveryInfos);
         }
 
         public async Task<UserDTO> GetUserByIDAsync(int id)
