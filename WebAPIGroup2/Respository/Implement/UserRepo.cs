@@ -32,7 +32,7 @@ namespace WebAPIGroup2.Respository.Implement
 
         public async Task<User?> GetByIDAsync(int id)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(user => user.Id == id);
+            var user = await _context.Users.Include(d=>d.DeliveryInfos).ThenInclude(c=>c.ContentEmails).FirstOrDefaultAsync(user => user.Id == id);
             if(user == null)
             {
                 return null;

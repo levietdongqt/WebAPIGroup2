@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using System.Net;
 using WebAPIGroup2.Models;
 using WebAPIGroup2.Models.DTO;
@@ -40,12 +41,56 @@ namespace WebAPIGroup2.Controllers.TemplateModule
         }
 
         [HttpPost]
-        public async Task<JsonResult> Create([FromForm] AddTemplateDTO addTemplateDTO)
+        public async Task<JsonResult> Create([FromForm] AddTemplateDTO addTemplateDTO)          
         {
-            var templateDTO = await templateService.CreateAsync(addTemplateDTO);
-            var response = new ResponseDTO<TemplateDTO>(HttpStatusCode.Created, "Add success", null, templateDTO);
+            var response = new ResponseDTO<TemplateDTO>();
+            try
+            {
+                utilService.ValiadateAllFileUpload(addTemplateDTO.formFileList);
+                var templateDTO = await templateService.CreateAsync(addTemplateDTO);
+                response = new ResponseDTO<TemplateDTO>(HttpStatusCode.Created, "Add success", null, templateDTO);
+            }
+            catch (Exception ex)
+            {
+                response = new ResponseDTO<TemplateDTO>(HttpStatusCode.BadRequest,ex.Message, null,null);
+            }          
             return new JsonResult(response);
         }
+        [HttpPost]
+        [Route("{templateId:int}/description")]
+        public async Task<JsonResult> CreateDescription([FromRoute] int templateId, [FromBody] List<DescriptionTemplateDTO> descriptionTemplateDTOs)
+        {
+            var templateDTO = await templateService.AddDescriptionByTemplateIdAsync(templateId, descriptionTemplateDTOs);
+            if (templateDTO == null)
+            {
+                return new JsonResult(new ResponseDTO<TemplateDTO>(HttpStatusCode.BadRequest, "Add Fail", null, null));
+            }
+            var response = new ResponseDTO<TemplateDTO>(HttpStatusCode.Created, "Add Desciption successful", null, templateDTO);
+            return new JsonResult(response);
+        }
+
+        [HttpPost]
+        [Route("{templateId:int}/image")]
+        public async Task<JsonResult> CreateImage([FromRoute] int templateId, [FromForm] IFormFile[] formFiles)
+        {
+            var response = new ResponseDTO<TemplateDTO>();
+            try
+            {
+                utilService.ValiadateAllFileUpload(formFiles);
+                var templateDTO = await templateService.AddImageByTemplateIdAsync(templateId, formFiles);
+                if (templateDTO == null)
+                {
+                    return new JsonResult(new ResponseDTO<TemplateDTO>(HttpStatusCode.BadRequest, "Add Fail", null, null));
+                }
+                response = new ResponseDTO<TemplateDTO>(HttpStatusCode.Created, "Add Image successful", null, templateDTO);
+            }
+            catch(Exception ex)
+            {
+                response = new ResponseDTO<TemplateDTO>(HttpStatusCode.BadRequest, ex.Message, null, null);
+            }           
+            return new JsonResult(response);
+        }
+
 
         [HttpPut]
         [Route("{id:int}")]
@@ -69,6 +114,31 @@ namespace WebAPIGroup2.Controllers.TemplateModule
                 return new JsonResult(new ResponseDTO<TemplateDTO>(HttpStatusCode.NotFound, "Template is null", null, null));
             }
             var response = new ResponseDTO<TemplateDTO>(HttpStatusCode.OK, "Delete success", null, templateDTO);
+            return new JsonResult(response);
+        }
+
+        [HttpPut]
+        public async Task<JsonResult> DeleteAll([FromBody] int[] id)
+        {
+            var templateDTOs = await templateService.UpdateAllStatusAsync(id);
+            if (templateDTOs.IsNullOrEmpty())
+            {
+                return new JsonResult(new ResponseDTO<TemplateDTO>(HttpStatusCode.NotFound, "Template is null", null, null));
+            }
+            var response = new ResponseDTO<List<TemplateDTO>>(HttpStatusCode.OK, "Delete success", null, templateDTOs);
+            return new JsonResult(response);
+        }
+
+        [HttpPut]
+        [Route("{templateId:int}/description")]
+        public async Task<JsonResult> UpdateDescriptionTemplateByTemplateIdAsync([FromRoute] int templateId, [FromBody] List<DescriptionTemplateDTO> descriptionTemplateDTOs)
+        {
+            var templateDTO = await templateService.UpdateDescriptionByTemplateIdAsync(templateId, descriptionTemplateDTOs);
+            if (templateDTO == null)
+            {
+                return new JsonResult(new ResponseDTO<TemplateDTO>(HttpStatusCode.NotFound, "Template is null", null, null));
+            }
+            var response = new ResponseDTO<TemplateDTO>(HttpStatusCode.Created, "Update Description successful", null, templateDTO);
             return new JsonResult(response);
         }
     }

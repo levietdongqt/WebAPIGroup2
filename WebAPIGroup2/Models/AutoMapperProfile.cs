@@ -27,6 +27,11 @@ namespace WebAPIGroup2.Models
             CreateMap<Category, CategoryDTO>().ReverseMap();
             CreateMap<PrintSize, SizeDTO>().ReverseMap();
             CreateMap<TemplateSize,TemplateSizeDTO>().ReverseMap();
+            CreateMap<MaterialPage, MaterialPageDTO>().ReverseMap();
+            CreateMap<DeliveryInfo, DeliveryInfoDTO>().ReverseMap();
+            CreateMap<ContentEmail, ContentEmailDTO>().ReverseMap();
+            CreateMap<Review, ReviewDTO>().ReverseMap();
+            CreateMap<Review, AddReviewDTO>().ReverseMap();
         }
     }
 }

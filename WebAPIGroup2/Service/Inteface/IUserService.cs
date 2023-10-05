@@ -15,5 +15,12 @@ namespace WebAPIGroup2.Service.Inteface
         Task<UserDTO> GetUserByIDAsync(int id);
 
         Task<UserDTO> UpdateConfirmEmailAsync(UserDTO userDTO);
+
+        Task<List<DeliveryInfoDTO>> GetDeliveryInfoByUserIDAsync(int userId);
+
+        Task<DeliveryInfoDTO> CreateDeliveryInfoOfUser(int userId,DeliveryInfoDTO deliveryInfoDTO);
+
+
+
     }
 }

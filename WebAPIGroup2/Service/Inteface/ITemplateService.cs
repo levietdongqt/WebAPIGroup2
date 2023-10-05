@@ -13,5 +13,13 @@ namespace WebAPIGroup2.Service.Inteface
         Task<TemplateDTO> GetByIDAsync(int id);
 
         Task<TemplateDTO> UpdateStatusAsync(int id);
+
+        Task<List<TemplateDTO>> UpdateAllStatusAsync(int[] id);
+
+        Task<TemplateDTO> AddDescriptionByTemplateIdAsync(int templateId,List<DescriptionTemplateDTO> descriptionTemplateDTOs);
+
+        Task<TemplateDTO> AddImageByTemplateIdAsync(int templateId, IFormFile[] formFiles);
+
+        Task<TemplateDTO> UpdateDescriptionByTemplateIdAsync(int templateId, List<DescriptionTemplateDTO> descriptionTemplateDTOs);
     }
 }

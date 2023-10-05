@@ -13,5 +13,13 @@ namespace WebAPIGroup2.Service.Inteface
         public Task<string> Upload(IFormFile formFile);
 
         public Task<List<string>> UploadMany(IFormFile[] formFile);
+
+        public void ValiadateFileUpload(IFormFile formFile);
+
+        public void ValiadateAllFileUpload(IFormFile[] formFile);
+
+        public void ValidateFileForUser(IFormFile[] formFile);
+
+        public Task<bool> CreateContentEmail(int deliveryInfoId,MailContent mailContent);
     }
 }

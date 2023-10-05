@@ -90,7 +90,7 @@ namespace WebAPIGroup2.Controllers.UserModule
                 var code = _loginService.GenerateToken(createdUserDTO);              
                 code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                 var callbackUrl = Url.Action(nameof(ConfirmEmail),"User",new { userId = userId, code = code },Request.Scheme);
-                var mailContent = new MailContent(userDTO.Email, "Confirm your email", $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                var mailContent = new MailContent(userDTO.Email, "Confirm your email", $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.","Confirmation");
 
                 var mailContented = await _utilService.SendEmailAsync(mailContent);
                 if(mailContented == null) 
@@ -171,6 +171,31 @@ namespace WebAPIGroup2.Controllers.UserModule
             return Ok(response);
         }
 
+        [HttpGet]
+        [Route("{userId:int}/deliveryInfos")]
+        public async Task<JsonResult> GetDeliveryInfoByUserId([FromRoute] int userId)
+        {
+            var deliveryInfoDTOs = await _userService.GetDeliveryInfoByUserIDAsync(userId);
+            if(deliveryInfoDTOs == null)
+            {
+                return new JsonResult(new ResponseDTO<DeliveryInfoDTO>(HttpStatusCode.NotFound, "User dont exist", null, null));
+            }
+            var response = new ResponseDTO<List<DeliveryInfoDTO>>(HttpStatusCode.OK, "Get All Successfully", null,deliveryInfoDTOs);
+            return new JsonResult(response);
+        }
+
+        [HttpPost]
+        [Route("{userId:int}/deliveryInfos")]
+        public async Task<JsonResult> AddDeliveryInfoByUser([FromRoute] int userId, [FromBody] DeliveryInfoDTO deliveryInfoDTO)
+        {
+            var deliveryDTO = await _userService.CreateDeliveryInfoOfUser(userId,deliveryInfoDTO);
+            if( deliveryDTO == null)
+            {
+                return new JsonResult(new ResponseDTO<DeliveryInfoDTO>(HttpStatusCode.NotFound, "User dont exist", null, null));
+            }
+            var response = new ResponseDTO<DeliveryInfoDTO>(HttpStatusCode.Created, "Created Successfully",null, deliveryDTO);
+            return new JsonResult(response);
+        }
     }
 
 }
