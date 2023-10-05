@@ -6,7 +6,7 @@ namespace WebAPIGroup2.Respository
 {
     public class GenericRepository<T> where T : class
     {
-        private readonly MyImageContext _context;
+        public readonly MyImageContext _context;
         private DbSet<T> _entities;
         public GenericRepository(MyImageContext context)
         {

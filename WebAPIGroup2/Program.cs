@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -16,6 +17,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
+
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.MultipartBodyLengthLimit = int.MaxValue; // Kích thước tối đa của yêu cầu
+});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -26,7 +32,7 @@ builder.Services.AddCors(options =>
     {
         builder.WithOrigins(new[] { "http://localhost:3000" })
                .AllowAnyHeader()
-               .AllowAnyMethod();
+               .AllowAnyMethod();   
     });
 });
 builder.Services.AddDbContext<MyImageContext>();
@@ -65,13 +71,32 @@ var mailSettings = builder.Configuration.GetSection("MailSettings");
 builder.Services.Configure<MailSetting>(mailSettings);
 
 //DI Repositoty
-builder.Services.AddScoped(typeof(GenericRepository<>));
-builder.Services.AddScoped<IUserService, UserService>();    
+builder.Services.AddScoped(typeof(GenericRepository<>));   
 builder.Services.AddTransient<IUserRepo, UserRepo>();
-
+builder.Services.AddTransient<IDescriptionTemplateRepo, DescriptionTemplateRepo>();
+builder.Services.AddTransient<ITemplateImageRepo, TemplateImageRepo>();
+builder.Services.AddTransient<ICategoryRepo, CategoryRepo>();
+builder.Services.AddTransient<ITemplateRepo, TemplateRepo>();
+builder.Services.AddTransient<ICategoryTemplateRepo, CategoryTemplateRepo>();
+builder.Services.AddTransient<ISizeRepo, SizeRepo>();
+builder.Services.AddTransient<ITemplateSizeRepo,TemplateSizeRepo>();
+builder.Services.AddTransient<IMaterialPageRepo, MaterialPageRepo>();
+builder.Services.AddTransient<IDeliveryInfoRepo, DeliveryInfoRepo>();
+builder.Services.AddTransient<IContentEmailRepo, ContentEmailRepo>();
+builder.Services.AddTransient<IPurchaseOrderRepo, PurchaseOrderRepo>();
+builder.Services.AddTransient<IReviewRepo, ReviewRepo>();
+builder.Services.AddTransient<IFeedBackRepo, FeedBackRepo>();
 //DI Service
 builder.Services.AddTransient<ILoginService, LoginService>();
-builder.Services.AddSingleton<IUtilService, UtilService>();
+builder.Services.AddTransient<IUtilService, UtilService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddTransient<ITemplateService,TemplateService>();
+builder.Services.AddTransient<ICategoryService, CategoryService>();
+builder.Services.AddTransient<ISizeService,SizeService>();
+builder.Services.AddTransient<IMaterialPageService, MaterialPageService>();
+builder.Services.AddTransient<IPurchaseOrderService, PurchaseOrderService>();
+builder.Services.AddTransient<IReviewService, ReviewService>();
+builder.Services.AddTransient<IFeedBackService, FeedBackService>();
 
 
 var app = builder.Build();

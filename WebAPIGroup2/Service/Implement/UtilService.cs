@@ -1,5 +1,6 @@
 ﻿using MailKit.Security;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using MimeKit;
@@ -7,6 +8,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using WebAPIGroup2.Models;
 using WebAPIGroup2.Models.DTO;
+using WebAPIGroup2.Models.POJO;
+using WebAPIGroup2.Respository.Inteface;
 using WebAPIGroup2.Service.Inteface;
 
 namespace TestEmail.Services
@@ -14,20 +17,25 @@ namespace TestEmail.Services
     public class UtilService : IUtilService
     {
         private readonly MailSetting mailSettings;
+        private readonly IContentEmailRepo _contentEmailRepo;
 
         private readonly ILogger<UtilService> logger;
 
         private readonly IConfiguration _configuration;
 
+        private readonly IWebHostEnvironment _webHostEnvironment;
+
 
         // mailSetting được Inject qua dịch vụ hệ thống
         // Có inject Logger để xuất log
-        public UtilService(IOptions<MailSetting> _mailSettings, ILogger<UtilService> _logger, IConfiguration configuration)
+        public UtilService(IOptions<MailSetting> _mailSettings, ILogger<UtilService> _logger, IConfiguration configuration, IWebHostEnvironment _webHostEnvironment, IContentEmailRepo contentEmailRepo)
         {
             mailSettings = _mailSettings.Value;
             logger = _logger;
             logger.LogInformation("Create SendMailService");
             _configuration = configuration;
+            this._webHostEnvironment = _webHostEnvironment;
+            _contentEmailRepo = contentEmailRepo;
         }
 
         // Gửi email, theo nội dung trong mailContent
@@ -71,6 +79,50 @@ namespace TestEmail.Services
             logger.LogInformation("Send mail to "+ mailContent.Email );
             return mailContent;
         }
+
+        //Dung de upload file
+        public async Task<string> Upload(IFormFile formFile)
+        {
+            var fileName = formFile.FileName;
+
+            //Upload
+            var localFilePath = Path.Combine(_webHostEnvironment.ContentRootPath, "Image", fileName);
+
+            var stream = new FileStream(localFilePath, FileMode.Create);
+
+            await formFile.CopyToAsync(stream);
+
+            //Set URL Static
+
+            var urlFilePath = $"/Image/{fileName}";
+
+            return urlFilePath;
+        }
+
+        //DUng de upload nhieu file
+        public async Task<List<string>> UploadMany(IFormFile[] formFile)
+        {
+            List<string> urlFilePathList = new List<string>();
+            foreach(var f in formFile)
+            {
+                var fileName = f.FileName;
+
+                //Upload
+                var localFilePath = Path.Combine(_webHostEnvironment.ContentRootPath, "Image", fileName);
+
+                var stream = new FileStream(localFilePath, FileMode.Create);
+
+                await f.CopyToAsync(stream);
+
+                //Set URL Static
+
+                var urlFilePath = $"/Image/{fileName}";
+                urlFilePathList.Add(urlFilePath);
+            }
+            return urlFilePathList;
+        }
+
+        
 
         //Validate token when ConfirmEmail
         public async Task<string> ValidateCodeAsync(string code,UserDTO user)
@@ -126,6 +178,58 @@ namespace TestEmail.Services
             }
             return code;
 
+        }
+        /*
+         * Dùng để validate File khi upload
+         */
+        public void ValiadateAllFileUpload(IFormFile[] formFile)
+        {
+            var allowExtensions = new string[] { ".jpg", ".jpeg", ".png" };
+
+            foreach (var f in formFile)
+            {
+                if (!allowExtensions.Contains(Path.GetExtension(f.FileName)))
+                {
+                    throw new ArgumentException("Extension of File is not support");
+                }
+            }
+        }
+
+        public void ValiadateFileUpload(IFormFile formFile)
+        {
+            var allowExtensions = new string[] { ".jpg", ".jpeg", ".png" };
+
+            if (!allowExtensions.Contains(Path.GetExtension(formFile.FileName)))
+            {
+                throw new ArgumentException("Extension of File is not support");
+            }
+        }
+
+        public void ValidateFileForUser(IFormFile[] formFile)
+        {
+            var allowExtension = ".jpeg";
+
+            foreach (var f in formFile)
+            {
+                if (!allowExtension.Contains(Path.GetExtension(f.FileName)))
+                {
+                    throw new ArgumentException("Extension of File is not support");
+                }
+            }
+        }
+
+        //Lưu database ContentEmail
+        public async Task<bool> CreateContentEmail(int deliveryInfoId,MailContent mailContent)
+        {
+            var contentEmail = new ContentEmail()
+            {
+                DeliveryInfoId = deliveryInfoId,
+                SubjectEmail = mailContent.Subject,
+                BodyEmail = mailContent.htmlhtmlMessage,
+                Type = mailContent.type,
+            };
+            var result = await _contentEmailRepo.InsertAsync(contentEmail);
+            return result;
         }
     }
 
