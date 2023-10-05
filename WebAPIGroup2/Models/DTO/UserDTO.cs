@@ -1,4 +1,5 @@
-﻿using WebAPIGroup2.Models.POJO;
+﻿using System.Text.Json.Serialization;
+using WebAPIGroup2.Models.POJO;
 
 namespace WebAPIGroup2.Models.DTO
 {
@@ -21,6 +22,11 @@ namespace WebAPIGroup2.Models.DTO
 
         public string? Status { get; set; }
         public string? Role { get; set; }
-
+        [JsonIgnore]
+        public string oldPassword { get; set; }
+        [JsonIgnore]
+        public string newPassword { get; set; }
     }
+
+    
 }

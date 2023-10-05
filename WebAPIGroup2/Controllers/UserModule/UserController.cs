@@ -79,7 +79,7 @@ namespace WebAPIGroup2.Controllers.UserModule
             }
         }
 
-        [HttpPost("create")]
+        [HttpPost("Create")]
         public async Task<IActionResult> Create(UserDTO userDTO)
         {
             var createdUserDTO = await _userService.CreateUser(userDTO);
@@ -120,16 +120,16 @@ namespace WebAPIGroup2.Controllers.UserModule
         }
 
         [HttpPut("ChangePass")]
-        public async Task<IActionResult> ChangePassWord([FromBody] UserDTO userDTO, string oldPassword)
+        public async Task<IActionResult> ChangePassWord([FromBody] UserDTO userDTO)
         {
-            bool success = await _userService.ChangePassword(userDTO, oldPassword);
+            bool success = await _userService.ChangePassword(userDTO);
             if (success)
             {
                 return Ok(new ResponseDTO<UserDTO>(HttpStatusCode.OK, "Changepass ok", null, userDTO));
             }
             else
             {
-                return BadRequest(new ResponseDTO<string>(HttpStatusCode.BadRequest, "Failed to create user", null, "Failed"));
+                return BadRequest(new ResponseDTO<string>(HttpStatusCode.BadRequest, "Failed to changepassword", null, "Failed"));
             }
         }
         [HttpGet("ConfirmEmail")]
@@ -163,7 +163,7 @@ namespace WebAPIGroup2.Controllers.UserModule
         }
 
         [HttpGet]
-        [Route("{id:int}")]
+        [Route("{id}")]
         public async Task<IActionResult> GetByID([FromRoute] int id)
         {
             var userDTO = await _userService.GetUserByIDAsync(id);

@@ -23,17 +23,17 @@ namespace WebAPIGroup2.Service.Implement
             _mapper = mapper;
         }
 
-        public async Task<bool> ChangePassword(UserDTO userDTO, string oldPassword)
+        public async Task<bool> ChangePassword(UserDTO userDTO)
         {
             //var passwordHash = BCrypt.Net.BCrypt.HashPassword(userDTO.Password);
             //oldPassword = passwordHash;
-            var existingUser = await _context.Users.SingleOrDefaultAsync(u => u.Id == userDTO.Id && u.Password == oldPassword);
+            var existingUser = await _context.Users.SingleOrDefaultAsync(u => u.Id == userDTO.Id && u.Password == userDTO.oldPassword);
             if (existingUser == null)
             {
                 return false; 
             }
 
-            existingUser.Password = userDTO.Password;
+            existingUser.Password = userDTO.newPassword;
             var update = await _useRepo.UpdateAsync(existingUser);
 
             return update;
@@ -133,6 +133,7 @@ namespace WebAPIGroup2.Service.Implement
 
             if (existingUser != null)
             {
+                existingUser.FullName = userDTO.FullName;
                 existingUser.Address = userDTO.Address;
                 existingUser.Phone = userDTO.Phone;
                 existingUser.Role = userDTO.Role;
