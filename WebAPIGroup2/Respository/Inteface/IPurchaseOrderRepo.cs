@@ -2,7 +2,7 @@
 
 namespace WebAPIGroup2.Respository.Inteface
 {
-    public interface IPurchaseOrderRepo : ISharedRepository<PurchaseOrder,int>
+    public interface IPurchaseOrderRepo : IBaseRepository<PurchaseOrder,int>
     {
     }
 }

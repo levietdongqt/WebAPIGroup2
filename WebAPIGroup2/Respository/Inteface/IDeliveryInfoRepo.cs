@@ -2,7 +2,7 @@
 
 namespace WebAPIGroup2.Respository.Inteface
 {
-    public interface IDeliveryInfoRepo : ISharedRepository<DeliveryInfo,int>
+    public interface IDeliveryInfoRepo : IBaseRepository<DeliveryInfo,int>
     {
     }
 }

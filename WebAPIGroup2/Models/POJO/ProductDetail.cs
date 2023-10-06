@@ -28,6 +28,9 @@ public partial class ProductDetail
     [Column(TypeName = "datetime")]
     public DateTime? CreateDate { get; set; }
 
+    [InverseProperty("ProductDetail")]
+    public virtual ICollection<Image> Images { get; set; } = new List<Image>();
+
     [ForeignKey("MaterialPageId")]
     [InverseProperty("ProductDetails")]
     public virtual MaterialPage? MaterialPage { get; set; }
@@ -39,7 +42,4 @@ public partial class ProductDetail
     [ForeignKey("TemplateId")]
     [InverseProperty("ProductDetails")]
     public virtual TemplateSize? Template { get; set; }
-
-    [InverseProperty("ProductDetail")]
-    public virtual ICollection<UploadImage> UploadImages { get; set; } = new List<UploadImage>();
 }
