@@ -28,5 +28,6 @@ namespace WebAPIGroup2.Models.DTO
         public string newPassword { get; set; }
     }
 
+
     
 }
