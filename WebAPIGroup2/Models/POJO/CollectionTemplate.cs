@@ -6,21 +6,21 @@ using Microsoft.EntityFrameworkCore;
 
 namespace WebAPIGroup2.Models.POJO;
 
-[Table("CategoryTemplate")]
-public partial class CategoryTemplate
+[Table("CollectionTemplate")]
+public partial class CollectionTemplate
 {
     [Key]
     public int Id { get; set; }
 
-    public int? CategoryId { get; set; }
+    public int? CollectionId { get; set; }
 
     public int? TemplateId { get; set; }
 
-    [ForeignKey("CategoryId")]
-    [InverseProperty("CategoryTemplates")]
-    public virtual Category? Category { get; set; }
+    [ForeignKey("CollectionId")]
+    [InverseProperty("CollectionTemplates")]
+    public virtual Collection? Collection { get; set; }
 
     [ForeignKey("TemplateId")]
-    [InverseProperty("CategoryTemplates")]
+    [InverseProperty("CollectionTemplates")]
     public virtual Template? Template { get; set; }
 }

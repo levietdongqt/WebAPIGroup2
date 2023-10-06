@@ -12,22 +12,22 @@ namespace WebAPIGroup2.Service.Implement
         private readonly IDescriptionTemplateRepo descriptionTemplateRepo;
         private readonly ITemplateImageRepo imageRepo;
         private readonly IUtilService utilService;
-        private readonly ICategoryRepo categoryRepo;
+        private readonly ICollectionRepo collectionRepo;
         private readonly ISizeRepo sizeRepo;
         private readonly ITemplateSizeRepo templateSizeRepo;
-        private readonly ICategoryTemplateRepo categoryTemplateRepo;
+        private readonly ICollectionTemplateRepo collectionTemplateRepo;
         private readonly IMapper mapper;
-        public TemplateService(ITemplateRepo templateRepo, IMapper mapper, IDescriptionTemplateRepo descriptionTemplateRepo, ITemplateImageRepo imageRepo, IUtilService utilService,ICategoryRepo categoryRepo, ISizeRepo sizeRepo,ICategoryTemplateRepo categoryTemplateRepo,ITemplateSizeRepo templateSizeRepo)
+        public TemplateService(ITemplateRepo templateRepo, IMapper mapper, IDescriptionTemplateRepo descriptionTemplateRepo, ITemplateImageRepo imageRepo, IUtilService utilService, ICollectionRepo collectionRepo, ISizeRepo sizeRepo, ICollectionTemplateRepo collectionTemplateRepo, ITemplateSizeRepo templateSizeRepo)
         {
             this.templateRepo = templateRepo;
             this.mapper = mapper;
             this.descriptionTemplateRepo = descriptionTemplateRepo;
             this.imageRepo = imageRepo;
             this.utilService = utilService;
-            this.categoryRepo = categoryRepo;
+            this.collectionRepo = collectionRepo;
             this.sizeRepo = sizeRepo;
             this.templateSizeRepo = templateSizeRepo;
-            this.categoryTemplateRepo = categoryTemplateRepo;
+            this.collectionTemplateRepo = collectionTemplateRepo;
         }
 
         public async  Task<TemplateDTO> AddDescriptionByTemplateIdAsync(int templateId, List<DescriptionTemplateDTO> descriptionTemplateDTOs)
@@ -95,18 +95,18 @@ namespace WebAPIGroup2.Service.Implement
             var r2 = await imageRepo.InsertAllAsync(templateImages);
 
             //Luu vao bang phu Category Template
-            var categoryTemplateDTOs = new List<CategoryTemplateDTO>();
-            foreach(var i in addTemplateDTO.categoryDTOs)
+            var collectionTemplateDTOs = new List<CollectionTemplateDTO>();
+            foreach(var i in addTemplateDTO.collectionDTOs)
             {
-                var categoryTemplateDTO = new CategoryTemplateDTO()
+                var collectionTemplateDTO = new CollectionTemplateDTO()
                 {
-                    CategoryId = i.Id,
+                    CollectionId = i.Id,
                     TemplateId = templateDTO.Id,
                 };
-                categoryTemplateDTOs.Add(categoryTemplateDTO);
+                collectionTemplateDTOs.Add(collectionTemplateDTO);
             }
-            var categoryTemplate = mapper.Map<List<CategoryTemplate>>(categoryTemplateDTOs);
-            var r3 = await categoryTemplateRepo.InsertAllAsync(categoryTemplate);
+            var collectionTemplate = mapper.Map<List<CollectionTemplate>>(collectionTemplateDTOs);
+            var r3 = await collectionTemplateRepo.InsertAllAsync(collectionTemplate);
             //Luu vao bang phu Template Size
             var sizeTemplateDTOs = new List<TemplateSizeDTO>();
             foreach (var i in addTemplateDTO.sizeDTOs)
@@ -130,11 +130,11 @@ namespace WebAPIGroup2.Service.Implement
             var templateDTOs =  mapper.Map<List<TemplateDTO>>(templates);
             foreach (var templateDTO in templateDTOs)
             {
-                foreach (var item in templateDTO.CategoryTemplates)
+                foreach (var item in templateDTO.CollectionTemplates)
                 {
-                    var category = await categoryRepo.GetByIDAsync(item.CategoryId);
-                    var categoryDTO = mapper.Map<CategoryDTO>(category);
-                    templateDTO.CategoriesDTO.Add(categoryDTO);
+                    var collection = await collectionRepo.GetByIDAsync(item.CollectionId);
+                    var collectionDTO = mapper.Map<CollectionDTO>(collection);
+                    templateDTO.CollectionsDTO.Add(collectionDTO);
                 }
                 foreach (var item in templateDTO.TemplateSizes)
                 {
@@ -154,11 +154,11 @@ namespace WebAPIGroup2.Service.Implement
                 return null;
             }
             var templateDTO =  mapper.Map<TemplateDTO>(templateDomain);
-            foreach (var item in templateDTO.CategoryTemplates)
+            foreach (var item in templateDTO.CollectionTemplates)
             {
-                var category = await categoryRepo.GetByIDAsync(item.CategoryId);
-                var categoryDTO = mapper.Map<CategoryDTO>(category);
-                templateDTO.CategoriesDTO.Add(categoryDTO);
+                var collection = await collectionRepo.GetByIDAsync(item.CollectionId);
+                var collectionDTO = mapper.Map<CollectionDTO>(collection);
+                templateDTO.CollectionsDTO.Add(collectionDTO);
             }
             foreach (var item in templateDTO.TemplateSizes)
             {

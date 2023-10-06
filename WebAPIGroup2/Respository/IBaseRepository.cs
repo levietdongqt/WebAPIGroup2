@@ -1,6 +1,6 @@
 ﻿namespace WebAPIGroup2.Respository
 {
-    public interface ISharedRepository<T, U> where T : class
+    public interface IBaseRepository<T, U> where T : class
     {
         public Task<T?> GetByIDAsync(U id);
         public Task<IEnumerable<T>?> GetAllAsync();

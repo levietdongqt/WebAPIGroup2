@@ -2,7 +2,7 @@
 
 namespace WebAPIGroup2.Respository.Inteface
 {
-    public interface ITemplateSizeRepo : ISharedRepository<TemplateSize, int>
+    public interface ITemplateSizeRepo : IBaseRepository<TemplateSize, int>
     {
     }
 }

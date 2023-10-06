@@ -2,7 +2,7 @@
 
 namespace WebAPIGroup2.Respository.Inteface
 {
-    public interface IMaterialPageRepo : ISharedRepository<MaterialPage, int>
+    public interface IMaterialPageRepo : IBaseRepository<MaterialPage, int>
     {
     }
 }
