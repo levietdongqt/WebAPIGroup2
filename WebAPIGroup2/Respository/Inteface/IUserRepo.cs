@@ -3,7 +3,7 @@ using WebAPIGroup2.Models.POJO;
 
 namespace WebAPIGroup2.Respository.Inteface
 {
-    public interface IUserRepo :  ISharedRepository<User, int>
+    public interface IUserRepo :  IBaseRepository<User, int>
     {
         public Task<User> GetUser(LoginRequestDTO loginRequest);
         public Task<User> GetUserByEmail(string? userEmail);

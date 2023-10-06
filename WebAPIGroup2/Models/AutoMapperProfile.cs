@@ -23,8 +23,7 @@ namespace WebAPIGroup2.Models
             //Template Image
             CreateMap<TemplateImage,TemplateImageDTO>().ReverseMap();
             
-            CreateMap<CategoryTemplate, CategoryTemplateDTO>().ReverseMap();
-            CreateMap<Category, CategoryDTO>().ReverseMap();
+            CreateMap<CollectionTemplate, CollectionTemplateDTO>().ReverseMap();
             CreateMap<PrintSize, SizeDTO>().ReverseMap();
             CreateMap<TemplateSize,TemplateSizeDTO>().ReverseMap();
             CreateMap<MaterialPage, MaterialPageDTO>().ReverseMap();
@@ -32,6 +31,7 @@ namespace WebAPIGroup2.Models
             CreateMap<ContentEmail, ContentEmailDTO>().ReverseMap();
             CreateMap<Review, ReviewDTO>().ReverseMap();
             CreateMap<Review, AddReviewDTO>().ReverseMap();
+            CreateMap<Collection,CollectionDTO>().ReverseMap(); 
         }
     }
 }

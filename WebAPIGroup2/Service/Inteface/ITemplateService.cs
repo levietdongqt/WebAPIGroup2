@@ -21,5 +21,7 @@ namespace WebAPIGroup2.Service.Inteface
         Task<TemplateDTO> AddImageByTemplateIdAsync(int templateId, IFormFile[] formFiles);
 
         Task<TemplateDTO> UpdateDescriptionByTemplateIdAsync(int templateId, List<DescriptionTemplateDTO> descriptionTemplateDTOs);
+
+        
     }
 }
