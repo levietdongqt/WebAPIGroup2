@@ -20,7 +20,7 @@ namespace WebAPIGroup2.Controllers.TemplateModule
             this.templateService = templateService;
             this.utilService = utilService;
         }
-
+    
         [HttpGet]
         public async Task<JsonResult> GetAll([FromQuery] string? filterOn, [FromQuery] string? filterQuery, [FromQuery] string? sortBy, [FromQuery] bool? isAscending, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 1000)
         {
@@ -30,7 +30,13 @@ namespace WebAPIGroup2.Controllers.TemplateModule
             return new JsonResult(response);
         }
 
-
+        [HttpGet("bestSeller")]
+        public async Task<JsonResult> Get()
+        {
+            var templateDto = await templateService.GetBestSeller();
+            var response = new ResponseDTO<List<TemplateDTO>>(HttpStatusCode.OK, "Success", null, templateDto);
+            return new JsonResult(response);
+        }
         [HttpGet]
         [Route("{id:int}")]
         public async Task<JsonResult> GetById(int id)

@@ -10,14 +10,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7cd16388-67af-4601-a58e-e3e6823391f9" name="Changes" comment="category">
-      <change afterPath="$PROJECT_DIR$/WebAPIGroup2/Models/DTO/SizeDTO.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebAPIGroup2/Respository/Implement/SizeRepo.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebAPIGroup2/Respository/Inteface/ISizeRepo.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebAPIGroup2/Service/Implement/SizeService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebAPIGroup2/Service/Inteface/ISizeService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebAPIGroup2/Models/DTO/CategoryDTO.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebAPIGroup2/Respository/Implement/CategoryRepo.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebAPIGroup2/Respository/Inteface/ICategoryRepo.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebAPIGroup2/Service/Implement/CategoryService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebAPIGroup2/Service/Inteface/ICategoryService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.WebAPIGroup2/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.WebAPIGroup2/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Controllers/AdminModule/TemplateController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Controllers/AdminModule/TemplateController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Models/AutoMapperProfile.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Models/AutoMapperProfile.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Models/DTO/CollectionDTO.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Models/DTO/CollectionDTO.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Models/DTO/TemplateImageDTO.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Models/DTO/TemplateImageDTO.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Respository/Implement/TemplateRepo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Respository/Implement/TemplateRepo.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Respository/Inteface/ITemplateRepo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Respository/Inteface/ITemplateRepo.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Service/Implement/TemplateService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Service/Implement/TemplateService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Service/Inteface/ITemplateService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Service/Inteface/ITemplateService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,9 +54,10 @@
     </option>
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/36e740b59df23626d207e72ea77e34298e53dd99db463eee529f8c416b5664/ThrowHelper.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/d856066ffe4c59543feec5c19d3d3c8934b5eec93f8cf1358aedcb555825/Boolean.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/e74356f198b598e97eaeea83e8b7b1f2bfe27c0a39fedf86bb7dc44827fbda/ActionMethodExecutor.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/f9daeeaab8409865442b5e80e634dc64dae9a14892fe81e0f17b46f51b2c48f8/DbSet.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Models/AutoMapperProfile.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -70,7 +78,7 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "Nam",
+    "git-widget-placeholder": "master",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -144,6 +152,7 @@
       <updated>1695976017164</updated>
       <workItem from="1695976021728" duration="1821000" />
       <workItem from="1695979569429" duration="40048000" />
+      <workItem from="1696583893022" duration="25847000" />
     </task>
     <task id="LOCAL-00001" summary="category">
       <option name="closed" value="true" />
