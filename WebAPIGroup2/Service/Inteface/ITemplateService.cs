@@ -22,6 +22,5 @@ namespace WebAPIGroup2.Service.Inteface
 
         Task<TemplateDTO> UpdateDescriptionByTemplateIdAsync(int templateId, List<DescriptionTemplateDTO> descriptionTemplateDTOs);
 
-        
     }
 }

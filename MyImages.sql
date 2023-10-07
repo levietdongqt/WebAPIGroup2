@@ -194,7 +194,7 @@ go
 create table TemplateImage(
 	Id int identity(1,1) not null,
 	ImageUrl varchar(500) null,
-	TemplateId int null
+	TemplateId int null,
 
 	constraint PK_TemplateImage primary key (Id)
 )
