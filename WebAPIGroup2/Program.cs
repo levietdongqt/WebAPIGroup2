@@ -86,6 +86,10 @@ builder.Services.AddTransient<IContentEmailRepo, ContentEmailRepo>();
 builder.Services.AddTransient<IPurchaseOrderRepo, PurchaseOrderRepo>();
 builder.Services.AddTransient<IReviewRepo, ReviewRepo>();
 builder.Services.AddTransient<IFeedBackRepo, FeedBackRepo>();
+builder.Services.AddTransient<IProductDetailsRepo, ProductDetailRepo>();
+builder.Services.AddTransient<IImageRepo, ImageRepo>();
+
+
 //DI Service
 builder.Services.AddTransient<ILoginService, LoginService>();
 builder.Services.AddTransient<IUtilService, UtilService>();
@@ -97,6 +101,10 @@ builder.Services.AddTransient<IMaterialPageService, MaterialPageService>();
 builder.Services.AddTransient<IPurchaseOrderService, PurchaseOrderService>();
 builder.Services.AddTransient<IReviewService, ReviewService>();
 builder.Services.AddTransient<IFeedBackService, FeedBackService>();
+builder.Services.AddTransient<IOrderService, OrderService>();
+builder.Services.AddTransient<IUpLoadService, UpLoadService>();
+
+
 
 
 var app = builder.Build();
@@ -106,11 +114,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseStaticFiles();
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(
-            Path.Combine(Directory.GetCurrentDirectory(), "Image")), // Đường dẫn tương đối đến thư mục "Image"
-    RequestPath = "/Image" // Đường dẫn URL sẽ được sử dụng để truy cập các tệp trong thư mục "Image"
+            Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")), // Đường dẫn tương đối đến thư mục "Image"
+    RequestPath = "/wwwroot" // Đường dẫn URL sẽ được sử dụng để truy cập các tệp trong thư mục "Image"
 });
 app.UseCors();
 app.UseHttpsRedirection();

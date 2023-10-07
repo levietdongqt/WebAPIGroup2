@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WebAPIGroup2.Models;
 using WebAPIGroup2.Models.DTO;
+using WebAPIGroup2.Models.POJO;
 
 namespace WebAPIGroup2.Respository
 {
@@ -130,11 +131,6 @@ namespace WebAPIGroup2.Respository
                     return false;
                 }
             }
-        }
-
-        internal Task<bool> UpdateAsync(UserDTO userDTO)
-        {
-            throw new NotImplementedException();
         }
     }
 
