@@ -24,6 +24,8 @@ public partial class Image
     [Required]
     public bool? Status { get; set; }
 
+    public int? Index { get; set; }
+
     [Column(TypeName = "datetime")]
     public DateTime? CreateDate { get; set; }
 
