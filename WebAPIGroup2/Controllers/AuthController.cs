@@ -27,6 +27,10 @@ namespace WebAPIGroup2.Controllers
             public string Name { get; set; }
             public string Picture { get; set; }
         }
+        public class OAuthRequest
+        {
+            public string access_token { get; set; }
+        }
         private readonly ILoginService _loginService;
         public AuthController(ILoginService loginService)
         {
@@ -67,7 +71,7 @@ namespace WebAPIGroup2.Controllers
         }
 
         [HttpPost("handle-google-response")]
-        public async Task<ResponseDTO<UserDTO>> HandleGoogleResponse([FromBody] LoginRequestDTO loginRequest)
+        public async Task<ResponseDTO<UserDTO>> HandleGoogleResponse([FromBody] OAuthRequest oAuthRequest)
         {
             ResponseDTO<UserDTO> response = null;
 
@@ -76,7 +80,7 @@ namespace WebAPIGroup2.Controllers
 
 
             // Gửi yêu cầu kiểm tra access token
-            httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {loginRequest.email}");
+            httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {oAuthRequest.access_token}");
             var responseGoogle = await httpClient.GetAsync(userInfoUrl);
 
             if (responseGoogle.IsSuccessStatusCode)
