@@ -21,14 +21,21 @@ namespace WebAPIGroup2.Controllers.UserModule
         [Route("defaultTemplate")]
         public async Task<JsonResult> UpLoadWithDefaultTemplate([FromForm] UpLoadDTO upLoadDTO)
         {
-            bool isValidImages = await _upLoadService.ValidateFiles(upLoadDTO.files);
-            if (!isValidImages)
+            var isValidRequestData =  _upLoadService.ValidateRequestData(upLoadDTO);
+            var isValidImages =    _upLoadService.ValidateFiles(upLoadDTO.files);
+            Task.WhenAll(isValidImages, isValidRequestData);         
+            if(!isValidRequestData.Result)
+            {
+                var response = new ResponseDTO<String>(HttpStatusCode.BadRequest, "Request Data is invalid", null, null);
+                return new JsonResult(response);
+            }
+            if (!isValidImages.Result)
             {
                 var response = new ResponseDTO<String>(HttpStatusCode.BadRequest, "File is invalid", null, null);
                 return new JsonResult(response);
             }
             var imagesUrls = await _upLoadService.SaveImages(upLoadDTO.userID,1, upLoadDTO.files);
-            bool isSavedDB = await _upLoadService.SaveProductDetails(upLoadDTO.userID, 1, imagesUrls);
+            bool isSavedDB = await _upLoadService.SaveProductDetails(upLoadDTO,imagesUrls);
             var response2 = new ResponseDTO<String>(HttpStatusCode.OK, "Save successfull", null, null);
             return new JsonResult(response2);
 

@@ -1,6 +1,8 @@
-﻿namespace WebAPIGroup2.Respository.Inteface
+﻿using WebAPIGroup2.Models.POJO;
+
+namespace WebAPIGroup2.Respository.Inteface
 {
-    public interface IProductDetailsRepo
+    public interface IProductDetailsRepo : IBaseRepository<ProductDetail,int>
     {
     }
 }

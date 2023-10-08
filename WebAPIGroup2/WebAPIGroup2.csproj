@@ -7,12 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot\Image\cach-cai-hinh-nen-doi-theo-ngay-dem-tren-iphone-d-1.jpg" />
-    <Content Remove="wwwroot\Image\image (1).jpg" />
-    <Content Remove="wwwroot\Image\image (2).jpg" />
-    <Content Remove="wwwroot\Image\image (3).jpg" />
     <Content Remove="wwwroot\Image\image.jpg" />
-    <Content Remove="wwwroot\Image\images_Ảnh chụp màn hình 2023-04-01 200534.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -40,12 +35,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\Image\cach-cai-hinh-nen-doi-theo-ngay-dem-tren-iphone-d-1.jpg" />
-    <None Include="wwwroot\Image\image (1).jpg" />
-    <None Include="wwwroot\Image\image (2).jpg" />
-    <None Include="wwwroot\Image\image (3).jpg" />
     <None Include="wwwroot\Image\image.jpg" />
-    <None Include="wwwroot\Image\images_Ảnh chụp màn hình 2023-04-01 200534.png" />
   </ItemGroup>
 
 </Project>
