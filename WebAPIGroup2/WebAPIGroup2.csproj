@@ -48,4 +48,9 @@
     <None Include="wwwroot\Image\images_Ảnh chụp màn hình 2023-04-01 200534.png" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\CategoryImage\" />
+    <Folder Include="wwwroot\CollectionImage\" />
+  </ItemGroup>
+
 </Project>

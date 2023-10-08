@@ -12,11 +12,9 @@ CREATE TABLE [User] (
 	[Password] [nvarchar](256) NULL,
 	[FullName] [nvarchar] (256) NULL,
 	[EmailConfirmed] [bit] default 0,
-	[Gender] bit default(1),
 	[DateOfBirth] date null,
 	[Address] nvarchar(256) null,
 	[Phone] [nvarchar](max) NULL,
-	[Avatar] varchar(255) null,
 	[Role] varchar(50) constraint CK_Role check (  [Role] in ('admin','user','vip')) default('user'),
 	[Status] varchar(10) constraint CK_Status check ([Status] in ('Pending','Enabled','Disabled')) default('Pending'),
 	CreateDate datetime null
@@ -145,8 +143,7 @@ create table [Image](
 	ImageUrl varchar(500) null,
 	FolderName nvarchar(500) null,
 	Status bit default(1) not null,
-	CreateDate datetime null,
-	[index] int null,
+	CreateDate datetime null
 
 	constraint PK_Image primary key (Id)
 )
@@ -295,7 +292,7 @@ add constraint Fk_Product_Detail
 go
 ----------------------------------------------------------------------------------------
 insert into Category
-values('Book',null),('Calendar',null),('Gift',null),('Prints',null),('Card',null)
+values('Book','/CategoryImage/Book.jpg'),('Calendar','/CategoryImage/Calender.jpg'),('Gift','/CategoryImage/Gift.jpg'),('Prints','/CategoryImage/Poster.jpg'),('Card','/CategoryImage/Card.jpg')
 go
 
 insert into [dbo].[Collection]
@@ -348,12 +345,12 @@ values('High',0,0.5,1,'Best material page for print images'),
 go
 
 insert into [dbo].[User]
-values('admin@gmail.com','123','Acc Van Min',1,1,'1995-10-15','356 Pham Van Dong TPHCM','09012345679','','admin','Enabled',GETDATE()),
-	  ('user1@gmail.com','123456','Huy Dep Trai',1,1,'1992-12-05','374 Ap Bac My Dinh','09023332223','','user','Enabled',GETDATE()),
-	  ('user2@gmail.com','1234567','Dong Dep Trai',1,1,'1992-12-05','374 Ap Bac My Dinh','09023332223','','user','Enabled',GETDATE()),
-	  ('user3@gmail.com','1234568','Phuoc Dep Trai',1,1,'1992-12-05','374 Ap Bac My Dinh','09023332223','','user','Enabled',GETDATE()),
-	  ('user4@gmail.com','1234562','Nam Dep Trai',1,1,'1992-12-05','374 Ap Bac My Dinh','09023332223','','user','Enabled',GETDATE()),
-	  ('user5@gmail.com','1234562','Minh Dep Trai',1,1,'1992-12-05','374 Ap Bac My Dinh','09023332223','','user','Enabled',GETDATE())
+values('admin@gmail.com','123','Acc Van Min',1,'1995-10-15','356 Pham Van Dong TPHCM','09012345679','admin','Enabled',GETDATE()),
+	  ('user1@gmail.com','123456','Huy Dep Trai',1,'1992-12-05','374 Ap Bac My Dinh','09023332223','user','Enabled',GETDATE()),
+	  ('user2@gmail.com','1234567','Dong Dep Trai',1,'1992-12-05','374 Ap Bac My Dinh','09023332223','user','Enabled',GETDATE()),
+	  ('user3@gmail.com','1234568','Phuoc Dep Trai',1,'1992-12-05','374 Ap Bac My Dinh','09023332223','user','Enabled',GETDATE()),
+	  ('user4@gmail.com','1234562','Nam Dep Trai',1,'1992-12-05','374 Ap Bac My Dinh','09023332223','user','Enabled',GETDATE()),
+	  ('user5@gmail.com','1234562','Minh Dep Trai',1,'1992-12-05','374 Ap Bac My Dinh','09023332223','user','Enabled',GETDATE())
 go
 
 insert into DeliveryInfo
@@ -369,8 +366,8 @@ values(1,1,1,10.3,5,1,GETDATE())
 go
 
 insert into Image
-values(1,'https://images.pexels.com/photos/5342974/pexels-photo-5342974.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1','2-user1',1,GETDATE(),1),
-	  (1,'https://images.pexels.com/photos/4350631/pexels-photo-4350631.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1','2-user1',1,GETDATE(),2)
+values(1,'https://images.pexels.com/photos/5342974/pexels-photo-5342974.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1','2-user1',1,GETDATE()),
+	  (1,'https://images.pexels.com/photos/4350631/pexels-photo-4350631.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1','2-user1',1,GETDATE())
 go
 
 

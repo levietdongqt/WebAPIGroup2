@@ -88,7 +88,7 @@ builder.Services.AddTransient<IReviewRepo, ReviewRepo>();
 builder.Services.AddTransient<IFeedBackRepo, FeedBackRepo>();
 builder.Services.AddTransient<IProductDetailsRepo, ProductDetailRepo>();
 builder.Services.AddTransient<IImageRepo, ImageRepo>();
-
+builder.Services.AddTransient<ICategoryRepo, CategoryRepo>();
 
 //DI Service
 builder.Services.AddTransient<ILoginService, LoginService>();
@@ -103,7 +103,7 @@ builder.Services.AddTransient<IReviewService, ReviewService>();
 builder.Services.AddTransient<IFeedBackService, FeedBackService>();
 builder.Services.AddTransient<IOrderService, OrderService>();
 builder.Services.AddTransient<IUpLoadService, UpLoadService>();
-
+builder.Services.AddTransient<ICategoryService, CategoryService>();
 
 
 

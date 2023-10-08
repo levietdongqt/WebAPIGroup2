@@ -9,22 +9,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7cd16388-67af-4601-a58e-e3e6823391f9" name="Changes" comment="category">
-      <change afterPath="$PROJECT_DIR$/WebAPIGroup2/Models/DTO/CategoryDTO.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebAPIGroup2/Respository/Implement/CategoryRepo.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebAPIGroup2/Respository/Inteface/ICategoryRepo.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebAPIGroup2/Service/Implement/CategoryService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebAPIGroup2/Service/Inteface/ICategoryService.cs" afterDir="false" />
+    <list default="true" id="7cd16388-67af-4601-a58e-e3e6823391f9" name="Changes" comment="add best Seller">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.WebAPIGroup2/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.WebAPIGroup2/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Controllers/AdminModule/TemplateController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Controllers/AdminModule/TemplateController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Models/AutoMapperProfile.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Models/AutoMapperProfile.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Models/DTO/CollectionDTO.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Models/DTO/CollectionDTO.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Models/DTO/TemplateImageDTO.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Models/DTO/TemplateImageDTO.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyImages.sql" beforeDir="false" afterPath="$PROJECT_DIR$/MyImages.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Respository/Implement/TemplateRepo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Respository/Implement/TemplateRepo.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Respository/Inteface/ITemplateRepo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Respository/Inteface/ITemplateRepo.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Service/Implement/TemplateService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Service/Implement/TemplateService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Service/Inteface/ITemplateService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Service/Inteface/ITemplateService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/WebAPIGroup2.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/WebAPIGroup2.csproj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,7 +23,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="master" />
+        <entry key="$PROJECT_DIR$" value="Nam" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -58,6 +47,27 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/d856066ffe4c59543feec5c19d3d3c8934b5eec93f8cf1358aedcb555825/Boolean.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/e74356f198b598e97eaeea83e8b7b1f2bfe27c0a39fedf86bb7dc44827fbda/ActionMethodExecutor.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/f9daeeaab8409865442b5e80e634dc64dae9a14892fe81e0f17b46f51b2c48f8/DbSet.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Models/AutoMapperProfile.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Program.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Program.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Program.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Program.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Program.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Program.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Program.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Program.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Program.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Program.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Program.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Program.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Program.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Program.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Program.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Program.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Respository/Inteface/ITemplateRepo.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Respository/Inteface/ITemplateRepo.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Respository/Inteface/ITemplateRepo.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Respository/Inteface/ITemplateRepo.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -74,27 +84,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Nam&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "rider.external.source.directories": [
-      "C:\\Users\\finsr\\AppData\\Roaming\\JetBrains\\Rider2023.3\\resharper-host\\DecompilerCache",
-      "C:\\Users\\finsr\\AppData\\Roaming\\JetBrains\\Rider2023.3\\resharper-host\\SourcesCache",
-      "C:\\Users\\finsr\\AppData\\Local\\Symbols\\src"
+  &quot;keyToStringList&quot;: {
+    &quot;rider.external.source.directories&quot;: [
+      &quot;C:\\Users\\finsr\\AppData\\Roaming\\JetBrains\\Rider2023.3\\resharper-host\\DecompilerCache&quot;,
+      &quot;C:\\Users\\finsr\\AppData\\Roaming\\JetBrains\\Rider2023.3\\resharper-host\\SourcesCache&quot;,
+      &quot;C:\\Users\\finsr\\AppData\\Local\\Symbols\\src&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected=".NET Launch Settings Profile.WebAPIGroup2: https">
     <configuration name="WebAPIGroup2: IIS Express" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/WebAPIGroup2/WebAPIGroup2.csproj" />
@@ -152,7 +162,7 @@
       <updated>1695976017164</updated>
       <workItem from="1695976021728" duration="1821000" />
       <workItem from="1695979569429" duration="40048000" />
-      <workItem from="1696583893022" duration="25847000" />
+      <workItem from="1696583893022" duration="31340000" />
     </task>
     <task id="LOCAL-00001" summary="category">
       <option name="closed" value="true" />
@@ -162,7 +172,15 @@
       <option name="project" value="LOCAL" />
       <updated>1696129927040</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="add best Seller">
+      <option name="closed" value="true" />
+      <created>1696672471775</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1696672471775</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -195,6 +213,7 @@
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
     <MESSAGE value="category" />
-    <option name="LAST_COMMIT_MESSAGE" value="category" />
+    <MESSAGE value="add best Seller" />
+    <option name="LAST_COMMIT_MESSAGE" value="add best Seller" />
   </component>
 </project>
