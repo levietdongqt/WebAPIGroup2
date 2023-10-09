@@ -82,48 +82,71 @@ namespace WebAPIGroup2.Controllers.UserModule
         [HttpPost("Create")]
         public async Task<IActionResult> Create(UserDTO userDTO)
         {
-            var createdUserDTO = await _userService.CreateUser(userDTO);
-
-            if (createdUserDTO != null)
+            try
             {
-                var userId = createdUserDTO.Id;
-                var code = _loginService.GenerateToken(createdUserDTO);              
-                code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                var callbackUrl = Url.Action(nameof(ConfirmEmail),"User",new { userId = userId, code = code },Request.Scheme);
-                var mailContent = new MailContent(userDTO.Email, "Confirm your email", $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.","Confirmation");
+                
+                var createdUserDTO = await _userService.CreateUser(userDTO);
 
-                var mailContented = await _utilService.SendEmailAsync(mailContent);
-                if(mailContented == null) 
+                if (createdUserDTO != null)
                 {
-                    return BadRequest(new ResponseDTO<string>(HttpStatusCode.BadRequest, "Failed to Send Mail To User", null, "Failed"));
+                    var userId = createdUserDTO.Id;
+                    var code = _loginService.GenerateToken(createdUserDTO);
+                    code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                    var callbackUrl = Url.Action(nameof(ConfirmEmail), "User", new { userId = userId, code = code }, Request.Scheme);
+                    var mailContent = new MailContent(userDTO.Email, "Confirm your email", $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.", "Confirmation");
+
+                    var mailContented = await _utilService.SendEmailAsync(mailContent);
+                    if (mailContented == null)
+                    {
+                        return BadRequest(new ResponseDTO<string>(HttpStatusCode.BadRequest, "Failed to Send Mail To User", null, "Failed"));
+                    }
+                    return Ok(new ResponseDTO<UserDTO>(HttpStatusCode.Created, "Create Ok", null, userDTO));
                 }
-                return Ok(new ResponseDTO<UserDTO>(HttpStatusCode.Created, "Create Ok", null, userDTO));
+                else
+                {
+                    return BadRequest(new ResponseDTO<string>(HttpStatusCode.BadRequest, "Failed to create user", null, "Failed"));
+                }
             }
-            else
+            catch (Exception e)
             {
-                return BadRequest(new ResponseDTO<string>(HttpStatusCode.BadRequest, "Failed to create user", null, "Failed"));
+
+                return BadRequest(new ResponseDTO<string>(HttpStatusCode.BadRequest,e.Message, null, "Failed"));
+
             }
+
         }
 
         [HttpPut("Edit")]
-        public async Task<IActionResult> Update(UserDTO userDTO)
+        public async Task<IActionResult> Update(AddUserDTO addUserDTO)
         {
-            bool success = await _userService.UpdateUser(userDTO);
-            if (success)
+
+            try
             {
-                return Ok(new ResponseDTO<UserDTO>(HttpStatusCode.OK, "Edit ok", null, userDTO));
+                _utilService.ValiadateFileUpload(addUserDTO.formFile);
+                bool success = await _userService.UpdateUser(addUserDTO);
+                if (success)
+                {
+                    return Ok(new ResponseDTO<AddUserDTO>(HttpStatusCode.OK, "Edit ok", null, addUserDTO));
+                }
+                else
+                {
+                    return BadRequest(new ResponseDTO<string>(HttpStatusCode.BadRequest, "Failed to create user", null, "Failed"));
+                }
             }
-            else
+            catch (Exception e )
             {
-                return BadRequest(new ResponseDTO<string>(HttpStatusCode.BadRequest, "Failed to create user", null, "Failed"));
+
+                return BadRequest(new ResponseDTO<string>(HttpStatusCode.BadRequest, e.Message, null, "Failed"));;
+
             }
+
         }
 
         [HttpPut("ChangePass")]
-        public async Task<IActionResult> ChangePassWord([FromBody] UserDTO userDTO)
+        public async Task<IActionResult> ChangePassWord([FromBody] AddUserDTO addUserDTO)
         {
-            bool success = await _userService.ChangePassword(userDTO);
-            if (success)
+            var userDTO = await _userService.ChangePassword(addUserDTO);
+            if (userDTO != null)
             {
                 return Ok(new ResponseDTO<UserDTO>(HttpStatusCode.OK, "Changepass ok", null, userDTO));
             }

@@ -16,34 +16,38 @@ namespace WebAPIGroup2.Service.Implement
         private readonly IDeliveryInfoRepo _deliveryInfoRepo;
         private readonly MyImageContext _context;
         private readonly IMapper _mapper;
-        
-        
+        private readonly IUtilService _utilService;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public UserService(MyImageContext context, IUserRepo userRepo, IDeliveryInfoRepo deliveryInfoRepo, IMapper mapper)
+
+
+
+        public UserService(MyImageContext context, IUserRepo userRepo, IDeliveryInfoRepo deliveryInfoRepo, IMapper mapper, IUtilService utilService, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
             _deliveryInfoRepo = deliveryInfoRepo;
             _useRepo = userRepo;
             _mapper = mapper;
+            _utilService = utilService;
+            _webHostEnvironment = webHostEnvironment;
         }
 
-        public async Task<bool> ChangePassword(UserDTO userDTO)
+        public async Task<UserDTO> ChangePassword(AddUserDTO addUserDTO)
         {
             //var passwordHash = BCrypt.Net.BCrypt.HashPassword(userDTO.Password);
             //oldPassword = passwordHash;
-            var existingUser = await _context.Users.SingleOrDefaultAsync(u => u.Id == userDTO.Id && u.Password == userDTO.oldPassword);
+            var existingUser = await _context.Users.SingleOrDefaultAsync(u => u.Id == addUserDTO.Id && u.Password == addUserDTO.oldPassword);
             if (existingUser == null)
             {
-                return false; 
+                return null;
             }
 
-            existingUser.Password = userDTO.newPassword;
+            existingUser.Password = addUserDTO.newPassword;
             var update = await _useRepo.UpdateAsync(existingUser);
+            var userDTO = _mapper.Map<UserDTO>(existingUser);
 
-            return update;
+            return userDTO;
         }
-
-        
 
         public async Task<DeliveryInfoDTO> CreateDeliveryInfoOfUser(int userId, DeliveryInfoDTO deliveryInfoDTO)
         {
@@ -64,8 +68,10 @@ namespace WebAPIGroup2.Service.Implement
 
         public async Task<UserDTO> CreateUser(UserDTO userDTO)
         {
+            var avatar = "Avatar/avatardf.jpg";
             var user = _mapper.Map<User>(userDTO);
             user.Status = UserStatus.Pending;
+            user.Avatar = avatar;
             var passwordHash = BCrypt.Net.BCrypt.HashPassword(userDTO.Password);
             user.Password = passwordHash;
             var success = await _useRepo.InsertAsync(user);
@@ -77,9 +83,6 @@ namespace WebAPIGroup2.Service.Implement
             return null;
 
         }
-
-
-
 
         public async Task<IEnumerable<UserDTO>?> GetAllAsync(string? search, string? st, int page, int pageSize)
         {
@@ -119,10 +122,10 @@ namespace WebAPIGroup2.Service.Implement
             return list;
         }
 
-        public async  Task<List<DeliveryInfoDTO>> GetDeliveryInfoByUserIDAsync(int userId)
+        public async Task<List<DeliveryInfoDTO>> GetDeliveryInfoByUserIDAsync(int userId)
         {
             var user = await _useRepo.GetByIDAsync(userId);
-            if(user == null)
+            if (user == null)
             {
                 return null;
             }
@@ -156,21 +159,20 @@ namespace WebAPIGroup2.Service.Implement
 
         }
 
-
-
-        public async Task<bool> UpdateUser(UserDTO userDTO)
+        public async Task<bool> UpdateUser(AddUserDTO addUserDTO)
         {
-            var existingUser = await _context.Users.SingleOrDefaultAsync(u => u.Id == userDTO.Id);
-
+            var existingUser = await _context.Users.SingleOrDefaultAsync(u => u.Id == addUserDTO.Id);
+            var avatar = await _utilService.Upload(addUserDTO.formFile);
             if (existingUser != null)
             {
-                existingUser.FullName = userDTO.FullName;
-                existingUser.Address = userDTO.Address;
-                existingUser.Phone = userDTO.Phone;
-                existingUser.Role = userDTO.Role;
-                existingUser.DateOfBirth = userDTO.DateOfBirth;
-                existingUser.Status = userDTO.Status;
-
+                existingUser.FullName = addUserDTO.FullName;
+                existingUser.Address = addUserDTO.Address;
+                existingUser.Phone = addUserDTO.Phone;
+                existingUser.Role = addUserDTO.Role;
+                existingUser.DateOfBirth = addUserDTO.DateOfBirth;
+                existingUser.Status = addUserDTO.Status;
+                existingUser.Gender = addUserDTO.Gender;
+                existingUser.Avatar = avatar;
                 var update = await _useRepo.UpdateAsync(existingUser);
                 return update;
             }

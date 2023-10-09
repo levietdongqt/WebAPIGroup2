@@ -1,9 +1,8 @@
 ﻿using System.Text.Json.Serialization;
-using WebAPIGroup2.Models.POJO;
 
 namespace WebAPIGroup2.Models.DTO
 {
-    public class UserDTO
+    public class AddUserDTO
     {
         public int Id { get; set; }
 
@@ -20,14 +19,12 @@ namespace WebAPIGroup2.Models.DTO
 
         public string? Phone { get; set; }
 
-        public string? Avatar { get; set; }
-
         public string? Status { get; set; }
         public string? Role { get; set; }
         public bool? Gender { get; set; }
+        public IFormFile? formFile { get; set; }
 
+        public string oldPassword { get; set; }
+        public string newPassword { get; set; }
     }
-
-
-    
 }
