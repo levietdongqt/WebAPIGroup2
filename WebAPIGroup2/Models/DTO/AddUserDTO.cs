@@ -24,7 +24,7 @@ namespace WebAPIGroup2.Models.DTO
         public bool? Gender { get; set; }
         public IFormFile? formFile { get; set; }
 
-        public string oldPassword { get; set; }
-        public string newPassword { get; set; }
+        public string? oldPassword { get; set; }
+        public string? newPassword { get; set; }
     }
 }

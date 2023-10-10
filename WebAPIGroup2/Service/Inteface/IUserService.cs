@@ -8,7 +8,7 @@ namespace WebAPIGroup2.Service.Inteface
     public interface IUserService
     {
         Task <UserDTO> CreateUser(UserDTO userDTO);   
-        Task <bool> UpdateUser(AddUserDTO addUserDTO);
+        Task<UserDTO> UpdateUser(AddUserDTO addUserDTO);
         Task<IEnumerable<UserDTO>?> GetAllAsync(string? search,string? st, int page, int pageSize);
         Task<UserDTO> ChangePassword(AddUserDTO addUserDTO );
         Task<UserDTO> GetUserByIDAsync(int id);

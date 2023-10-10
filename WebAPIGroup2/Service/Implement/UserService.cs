@@ -159,10 +159,10 @@ namespace WebAPIGroup2.Service.Implement
 
         }
 
-        public async Task<bool> UpdateUser(AddUserDTO addUserDTO)
+        public async Task<UserDTO> UpdateUser(AddUserDTO addUserDTO)
         {
             var existingUser = await _context.Users.SingleOrDefaultAsync(u => u.Id == addUserDTO.Id);
-            var avatar = await _utilService.Upload(addUserDTO.formFile);
+
             if (existingUser != null)
             {
                 existingUser.FullName = addUserDTO.FullName;
@@ -172,15 +172,21 @@ namespace WebAPIGroup2.Service.Implement
                 existingUser.DateOfBirth = addUserDTO.DateOfBirth;
                 existingUser.Status = addUserDTO.Status;
                 existingUser.Gender = addUserDTO.Gender;
-                existingUser.Avatar = avatar;
+
+                if (addUserDTO.formFile != null)
+                {
+                    // Only update the avatar if addUserDTO.formFile is not null
+                    var avatar = await _utilService.Upload(addUserDTO.formFile);
+                    existingUser.Avatar = avatar;
+                }
+
                 var update = await _useRepo.UpdateAsync(existingUser);
-                return update;
             }
-            else
-            {
-                return false;
-            }
+
+            var userDTO = _mapper.Map<UserDTO>(existingUser);
+            return userDTO;
         }
+
 
     }
 

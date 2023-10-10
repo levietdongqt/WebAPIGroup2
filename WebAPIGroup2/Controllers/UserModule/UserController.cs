@@ -119,28 +119,29 @@ namespace WebAPIGroup2.Controllers.UserModule
         [HttpPut("Edit")]
         public async Task<IActionResult> Update(AddUserDTO addUserDTO)
         {
-
             try
             {
-                _utilService.ValiadateFileUpload(addUserDTO.formFile);
-                bool success = await _userService.UpdateUser(addUserDTO);
-                if (success)
+                if (addUserDTO.formFile != null)
                 {
-                    return Ok(new ResponseDTO<AddUserDTO>(HttpStatusCode.OK, "Edit ok", null, addUserDTO));
+                    _utilService.ValiadateFileUpload(addUserDTO.formFile);
+                }
+
+                var userDTO = await _userService.UpdateUser(addUserDTO);
+                if (userDTO != null)
+                {
+                    return Ok(new ResponseDTO<UserDTO>(HttpStatusCode.OK, "Edit ok", null, userDTO));
                 }
                 else
                 {
-                    return BadRequest(new ResponseDTO<string>(HttpStatusCode.BadRequest, "Failed to create user", null, "Failed"));
+                    return BadRequest(new ResponseDTO<string>(HttpStatusCode.BadRequest, "Failed to update user", null, "Failed"));
                 }
             }
-            catch (Exception e )
+            catch (Exception e)
             {
-
-                return BadRequest(new ResponseDTO<string>(HttpStatusCode.BadRequest, e.Message, null, "Failed"));;
-
+                return BadRequest(new ResponseDTO<string>(HttpStatusCode.BadRequest, e.Message, null, "Failed"));
             }
-
         }
+
 
         [HttpPut("ChangePass")]
         public async Task<IActionResult> ChangePassWord([FromBody] AddUserDTO addUserDTO)
