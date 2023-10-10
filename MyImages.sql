@@ -46,7 +46,7 @@ go
 create table Template(
 	Id int identity(1,1) not null,
 	Name nvarchar(max) null,
-	PricePlus decimal null,
+	PricePlus float null,
 	Status bit default(1) not null,
 	QuantitySold int null,
 	CreateDate datetime null

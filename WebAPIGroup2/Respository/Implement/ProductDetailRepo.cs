@@ -10,5 +10,9 @@ namespace WebAPIGroup2.Respository.Implement
         {
         }
 
+        public Task<ProductDetail?> GetByIDAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

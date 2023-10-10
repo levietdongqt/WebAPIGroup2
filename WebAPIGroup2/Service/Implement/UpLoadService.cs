@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
+using WebAPIGroup2.Models;
+using WebAPIGroup2.Models.DTO;
 using WebAPIGroup2.Models.POJO;
 using WebAPIGroup2.Respository.Inteface;
 using WebAPIGroup2.Service.Inteface;
@@ -9,16 +11,23 @@ namespace WebAPIGroup2.Service.Implement
     {
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IImageRepo _imageRepo;
-        public UpLoadService (IWebHostEnvironment webHostEnvironment,IImageRepo imageRepo)
+        private readonly IPurchaseOrderRepo _purchaseOrderRepo;
+        private readonly IProductDetailsRepo _productDetailsRepo;
+
+        public UpLoadService(IWebHostEnvironment webHostEnvironment, IImageRepo imageRepo, IPurchaseOrderRepo purchaseOrderRepo, IProductDetailsRepo productDetailsRepo)
 
         {
             _webHostEnvironment = webHostEnvironment;
             _imageRepo = imageRepo;
+            _purchaseOrderRepo = purchaseOrderRepo;
+            _productDetailsRepo = productDetailsRepo;
         }
         public async Task<List<string>> SaveImages(int userID, int templateID, IFormFile[] files)
         {
             List<string> imagesUrl = new List<string>();
-            var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "Image", userID.ToString(), templateID.ToString());
+            string userFolder = "UserFolder" + userID;
+            string templateFolder = "TemplateFolder" + templateID;
+            var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "Image", userFolder, templateFolder);
             if (!Directory.Exists(uploadsFolder))
             {
                 Directory.CreateDirectory(uploadsFolder);
@@ -32,41 +41,61 @@ namespace WebAPIGroup2.Service.Implement
 
                 await file.CopyToAsync(stream);
                 //Set URL Static
-                var urlFilePath = $"/Image/{userID}/{templateID}/{fileName}";
+                var urlFilePath = $"/Image/{userFolder}/{templateFolder}/{fileName}";
                 imagesUrl.Add(urlFilePath);
             }
             return imagesUrl;
         }
 
-        public async Task<bool> SaveProductDetails(int userID,int templateID, List<string> imagesUrls)
+        public async Task<bool> SaveProductDetails(UpLoadDTO upLoadDTO, List<string> imagesUrls)
         {
+            PurchaseOrder purchaseOrder = new PurchaseOrder()
+            {
+                CreateDate = DateTime.Now,
+                Status = PurchaseStatus.Temporary,
+                UserId = upLoadDTO.userID
+            };
+            if (!await _purchaseOrderRepo.InsertAsync(purchaseOrder))
+            {
+                return false;
+            };
+
             float areaImage = 2f;
-            float imagesNumber = (float) imagesUrls.Count;
+            float imagesNumber = (float)imagesUrls.Count;
             ProductDetail productDetail = new ProductDetail()
             {
                 CreateDate = DateTime.Now,
-                MaterialPageId = templateID,
-                PurchaseOrderId = userID,
+                MaterialPageId = upLoadDTO.templateID,
+                PurchaseOrderId = purchaseOrder.Id,
                 Status = true,
-                Price = (decimal) (areaImage*imagesNumber),
-                
+                Price = (decimal)(areaImage * imagesNumber),
+                TemplateId = upLoadDTO.templateID,
+            };
+            if (!await _productDetailsRepo.InsertAsync(productDetail))
+            {
+                return false;
             };
 
             List<Image> images = new List<Image>();
+            string userFolder = $"UserFolder{upLoadDTO.userID}";
+            string templateFolder = $"TemplateFolder{upLoadDTO.templateID}";
             imagesUrls.ForEach(imageUrl =>
             {
                 Image image = new Image()
                 {
-                    FolderName = templateID.ToString(),
+                    FolderName = $"/{userFolder}/{templateFolder}",
                     CreateDate = DateTime.Now,
                     ProductDetailId = productDetail.Id,
-                    Status = true
-                    
-                };
-                images.Add(image);  
-            });
-          await  _imageRepo.InsertAllAsync(images);
+                    Status = true,
+                    ImageUrl = imageUrl,
 
+                };
+                images.Add(image);
+            });
+            if (!await _imageRepo.InsertAllAsync(images))
+            {
+                return false;
+            };
             return true;
         }
 
@@ -86,6 +115,11 @@ namespace WebAPIGroup2.Service.Implement
                 }
             }
             return true;
+        }
+
+        public Task<bool> ValidateRequestData(UpLoadDTO upLoadDTO)
+        {
+            throw new NotImplementedException();
         }
     }
 }

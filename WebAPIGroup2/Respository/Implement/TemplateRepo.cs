@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using WebAPIGroup2.Models;
 using WebAPIGroup2.Models.POJO;
 using WebAPIGroup2.Respository.Inteface;
@@ -33,7 +34,7 @@ namespace WebAPIGroup2.Respository.Implement
                 }
                 else if (filterOn.Equals("PricePlus", StringComparison.OrdinalIgnoreCase))
                 {
-                    list = list.Where(x => x.PricePlus >= Decimal.Parse(filterQuery));
+                    list = list.Where(x => x.PricePlus >= float.Parse(filterQuery));
                 }
             }
 
