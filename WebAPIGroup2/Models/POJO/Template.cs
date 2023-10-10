@@ -14,8 +14,8 @@ public partial class Template
 
     public string? Name { get; set; }
 
-    [Column(TypeName = "decimal(18, 0)")]
-    public decimal? PricePlus { get; set; }
+    [Column(TypeName = "float")]
+    public float? PricePlus { get; set; }
 
     [Required]
     public bool? Status { get; set; }
