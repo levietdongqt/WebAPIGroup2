@@ -296,8 +296,8 @@ values('Book','/CategoryImage/Book.jpg'),('Calendar','/CategoryImage/Calender.jp
 go
 
 insert into [dbo].[Collection]
-values('Book 1',null,1),('Book 2',null,1),('Calendar 1',null,2),('Calendar 2',null,2),('Gift 1',null,3)
-,('Gift 2',null,3),('Prints 1',null,4),('Prints 2',null,4),('Card 1',null,5),('Card 2',null,5)
+values('Book 1','/CollectionImage/Bookmarks.jpg',1),('Book 2','/CollectionImage/Bookmarks.jpg',1),('Calendar 1','/CollectionImage/Calender1.jpg',2),('Calendar 2','/CollectionImage/Calender1.jpg',2),('Gift 1','/CollectionImage/houseGift.jpg',3)
+,('Gift 2','/CollectionImage/GiftTags.jpg',3),('Prints 1',null,4),('Prints 2',null,4),('Card 1','/CollectionImage/Holidaycards.jpg',5),('Card 2','/CollectionImage/ChristmasCard.jpg',5)
 go
 
 insert into Template

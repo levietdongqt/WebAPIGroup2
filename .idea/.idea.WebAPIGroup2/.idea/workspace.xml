@@ -9,11 +9,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7cd16388-67af-4601-a58e-e3e6823391f9" name="Changes" comment="add best Seller">
+    <list default="true" id="7cd16388-67af-4601-a58e-e3e6823391f9" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.WebAPIGroup2/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.WebAPIGroup2/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MyImages.sql" beforeDir="false" afterPath="$PROJECT_DIR$/MyImages.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/WebAPIGroup2.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/WebAPIGroup2.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Controllers/AdminModule/TemplateController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Controllers/AdminModule/TemplateController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Models/DTO/TemplateDTO.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Models/DTO/TemplateDTO.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Models/POJO/Template.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Models/POJO/Template.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Respository/Implement/TemplateRepo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Respository/Implement/TemplateRepo.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -163,6 +165,8 @@
       <workItem from="1695976021728" duration="1821000" />
       <workItem from="1695979569429" duration="40048000" />
       <workItem from="1696583893022" duration="31340000" />
+      <workItem from="1696740832721" duration="9208000" />
+      <workItem from="1696927839688" duration="456000" />
     </task>
     <task id="LOCAL-00001" summary="category">
       <option name="closed" value="true" />
@@ -180,7 +184,15 @@
       <option name="project" value="LOCAL" />
       <updated>1696672471775</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="add some iamge">
+      <option name="closed" value="true" />
+      <created>1696753886361</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1696753886361</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -214,6 +226,7 @@
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
     <MESSAGE value="category" />
     <MESSAGE value="add best Seller" />
-    <option name="LAST_COMMIT_MESSAGE" value="add best Seller" />
+    <MESSAGE value="add some iamge" />
+    <option name="LAST_COMMIT_MESSAGE" value="add some iamge" />
   </component>
 </project>

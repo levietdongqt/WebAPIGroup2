@@ -33,7 +33,7 @@ namespace WebAPIGroup2.Respository.Implement
                 }
                 else if (filterOn.Equals("PricePlus", StringComparison.OrdinalIgnoreCase))
                 {
-                    list = list.Where(x => x.PricePlus >= Decimal.Parse(filterQuery));
+                    list = list.Where(x => x.PricePlus >= float.Parse(filterQuery));
                 }
             }
 

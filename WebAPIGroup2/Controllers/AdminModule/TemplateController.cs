@@ -41,8 +41,9 @@ namespace WebAPIGroup2.Controllers.TemplateModule
         [Route("{id:int}")]
         public async Task<JsonResult> GetById(int id)
         {
-            var templateDTO = await templateService.GetByIDAsync(id);
-            var response = new ResponseDTO<TemplateDTO>(HttpStatusCode.OK, "Success", null, templateDTO);
+            var templateDto = await templateService.GetByIDAsync(id);
+            var listTemplate = new List<TemplateDTO>{templateDto};
+            var response = new ResponseDTO<List<TemplateDTO>>(HttpStatusCode.OK, "Success", null, listTemplate);
             return new JsonResult(response);
         }
 
