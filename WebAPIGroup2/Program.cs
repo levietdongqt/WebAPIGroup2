@@ -4,6 +4,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Text.Json.Serialization;
 using TestEmail.Services;
 using WebAPIGroup2.Models;
 using WebAPIGroup2.Respository;
@@ -69,7 +70,8 @@ builder.Services.AddAuthentication(options =>
 //Mail option appsetting.json
 var mailSettings = builder.Configuration.GetSection("MailSettings");
 builder.Services.Configure<MailSetting>(mailSettings);
-
+builder.Services.AddControllersWithViews()
+                .AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 //DI Repositoty
 builder.Services.AddScoped(typeof(GenericRepository<>));   
 builder.Services.AddTransient<IUserRepo, UserRepo>();

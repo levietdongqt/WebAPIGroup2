@@ -1,12 +1,15 @@
 ﻿using WebAPIGroup2.Models.DTO;
+using WebAPIGroup2.Models.POJO;
 
 namespace WebAPIGroup2.Service.Inteface
 {
     public interface IUpLoadService
     {
-        Task<List<string>> SaveImages(int userID, int templateID, IFormFile[] files);
-        Task<bool> SaveProductDetails(UpLoadDTO upLoadDTO, List<string> imagesUrls);
+        Task<bool> CreateOrder(OrderDTO orderDTO);
+        Task<List<ProductDetail>> LoadProductDetails(int userID);
+        Task<List<string>> SaveImages(string folderName, int templateID, IFormFile[] files);
+        Task<ProductDetail> SaveToDBTemporary(string folderName,UpLoadDTO upLoadDTO, List<string> imagesUrls);
         Task<bool> ValidateFiles(IFormFile[] files);
-        Task<bool> ValidateRequestData(UpLoadDTO upLoadDTO);
+        Task<string> ValidateRequestData(UpLoadDTO upLoadDTO);
     }
 }

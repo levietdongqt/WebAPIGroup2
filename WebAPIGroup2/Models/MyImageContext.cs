@@ -7,7 +7,9 @@ namespace WebAPIGroup2.Models;
 
 public partial class MyImageContext : DbContext
 {
-    
+    public MyImageContext()
+    {
+    }
 
     public MyImageContext(DbContextOptions<MyImageContext> options): base(options)
     {
