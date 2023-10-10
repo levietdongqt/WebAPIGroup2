@@ -9,8 +9,9 @@ public class CollectionDTO
     public string? Name { get; set; }
 
     public string? ImageUrl { get; set; }
-
-    //public virtual ICollection<CategoryTemplate> CategoryTemplates { get; set; } = new List<CategoryTemplate>();
+    
+    public virtual ICollection<CollectionTemplateDTO> CollectionTemplates { get; set; } = new List<CollectionTemplateDTO>();
+    public virtual List<TemplateDTO> TemplateDTO { get; set; } = new List<TemplateDTO>();
 }
 
 public class CollectionWithTemplateDTO
