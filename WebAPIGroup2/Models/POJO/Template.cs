@@ -14,6 +14,7 @@ public partial class Template
 
     public string? Name { get; set; }
 
+
     public double? PricePlusPerOne { get; set; }
 
     [Required]
