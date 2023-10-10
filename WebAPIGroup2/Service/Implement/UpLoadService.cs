@@ -116,5 +116,10 @@ namespace WebAPIGroup2.Service.Implement
             }
             return true;
         }
+
+        public async Task<bool> ValidateRequestData(UpLoadDTO upLoadDTO)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
