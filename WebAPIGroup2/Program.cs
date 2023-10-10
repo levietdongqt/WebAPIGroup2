@@ -91,6 +91,7 @@ builder.Services.AddTransient<IFeedBackRepo, FeedBackRepo>();
 builder.Services.AddTransient<IProductDetailsRepo, ProductDetailRepo>();
 builder.Services.AddTransient<IImageRepo, ImageRepo>();
 builder.Services.AddTransient<ICategoryRepo, CategoryRepo>();
+builder.Services.AddScoped<IMyImageRepo, MyImageRepo>();
 
 //DI Service
 builder.Services.AddTransient<ILoginService, LoginService>();

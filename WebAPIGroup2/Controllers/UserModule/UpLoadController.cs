@@ -37,21 +37,21 @@ namespace WebAPIGroup2.Controllers.UserModule
             }
             string folderName = $"{emailName.Result}{upLoadDTO.userID}";
             var imagesUrls = await _upLoadService.SaveImages(folderName, upLoadDTO.templateID, upLoadDTO.files);
-            var productDetail = await _upLoadService.SaveToDBTemporary(folderName,upLoadDTO, imagesUrls);
-            var response2 = new ResponseDTO<ProductDetail>(HttpStatusCode.OK, "Save successfull", null, productDetail);
+            var myImage = await _upLoadService.SaveToDBTemporary(folderName,upLoadDTO, imagesUrls);
+            var response2 = new ResponseDTO<MyImage>(HttpStatusCode.OK, "Save successfull", null, myImage);
             return new JsonResult(response2);
         }
         [HttpGet]
         [Route("LoadMyImage")]
         public async Task<JsonResult> LoadMyImage([FromQuery] int userID)
         {
-            var productDetails = await _upLoadService.LoadProductDetails(userID);
-            if(productDetails == null)
+            var myImages = await _upLoadService.LoadMyImages(userID);
+            if(myImages == null)
             {
                 var response= new ResponseDTO<String>(HttpStatusCode.NoContent, "Product is not exist", null, null);
                 return new JsonResult(response);
             }
-            var response2 = new ResponseDTO<List<ProductDetail>>(HttpStatusCode.OK, "Request Successfull", null, productDetails);
+            var response2 = new ResponseDTO<List<MyImage>>(HttpStatusCode.OK, "Request Successfull", null, myImages);
             return new JsonResult(response2);
         }
         [HttpPost]

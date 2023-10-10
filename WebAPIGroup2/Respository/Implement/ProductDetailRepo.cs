@@ -26,23 +26,6 @@ namespace WebAPIGroup2.Respository.Implement
             }
         }
 
-        public async Task<List<ProductDetail>> getProductDetailByOrder(int OrderID)
-        {
-            try
-            {
-                var list = await _context.ProductDetails.Include( t => t.Images)
-                    .Include(t => t.MaterialPage).Where(t => t.PurchaseOrderId == OrderID).ToListAsync ();
-                if( list.Count > 0 )
-                {
-                    return list;
-                }
-                return null;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                return null;
-            }
-        }
+        
     }
 }

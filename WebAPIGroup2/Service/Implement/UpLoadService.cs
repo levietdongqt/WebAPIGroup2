@@ -16,8 +16,9 @@ namespace WebAPIGroup2.Service.Implement
         private readonly IProductDetailsRepo _productDetailsRepo;
         private readonly IUserRepo _userRepo;
         private readonly ITemplateRepo _templateRepo;
+        private readonly IMyImageRepo _myImageRepo;
 
-        public UpLoadService(IWebHostEnvironment webHostEnvironment, IImageRepo imageRepo, IPurchaseOrderRepo purchaseOrderRepo, IProductDetailsRepo productDetailsRepo, ITemplateRepo templateRepo, IUserRepo userRepo)
+        public UpLoadService(IWebHostEnvironment webHostEnvironment, IImageRepo imageRepo, IPurchaseOrderRepo purchaseOrderRepo, IProductDetailsRepo productDetailsRepo, ITemplateRepo templateRepo, IUserRepo userRepo, IMyImageRepo myImageRepo)
 
         {
             _webHostEnvironment = webHostEnvironment;
@@ -47,8 +48,8 @@ namespace WebAPIGroup2.Service.Implement
                         return false;
                     };
                 }
-                var producDetail = await _productDetailsRepo.GetByIDAsync(orderDTO.productDetailID);
-                if (producDetail == null)
+                var myImage = await _myImageRepo.GetByIDAsync(orderDTO.myImageID);
+                if (myImage == null)
                 {
                     return false;
                 }
@@ -57,20 +58,23 @@ namespace WebAPIGroup2.Service.Implement
                 {
                     return false;
                 }
-
-                float priceOne = orderDTO.imageArea * (float)(materialPage.Result.PricePerInch);
-                float imagesNumber = (float)producDetail.Images.Count;
-                producDetail.PurchaseOrderId = purchaseOrder.Id;
-                producDetail.Price = (decimal)(priceOne * imagesNumber);
-                producDetail.Quantity = orderDTO.quantity;
-                producDetail.MaterialPageId= materialPage.Id;
-                await _productDetailsRepo.UpdateAsync(producDetail);
+                float priceOne = orderDTO.imageArea * (float)(materialPage.Result.PricePerInch) + (float)myImage.Template.PricePlusPerOne;
+                float imagesNumber = (float)myImage.Images.Count;
+                ProductDetail productDetail = new ProductDetail()
+                {
+                    MyImageId = myImage.Id,
+                    MaterialPageId = materialPage.Id,
+                    CreateDate = DateTime.Now,
+                    Price = (decimal)(priceOne * imagesNumber),
+                    Quantity = orderDTO.quantity
+                };
+                await _productDetailsRepo.UpdateAsync(productDetail);
                 return true;
             }
-               
+
         }
 
-        public async Task<List<ProductDetail>> LoadProductDetails(int userID)
+        public async Task<List<MyImage>> LoadMyImages(int userID)
         {
             var status = PurchaseStatus.Temporary;
             PurchaseOrder temppPurchase = await _purchaseOrderRepo.getPurchaseOrder(userID, status);
@@ -78,7 +82,7 @@ namespace WebAPIGroup2.Service.Implement
             {
                 return null;
             }
-            List<ProductDetail> listProduct = await _productDetailsRepo.getProductDetailByOrder(temppPurchase.Id);
+            List<MyImage> listProduct = await _myImageRepo.getByOrder(temppPurchase.Id);
             if (listProduct == null)
             {
                 return null;
@@ -110,7 +114,7 @@ namespace WebAPIGroup2.Service.Implement
             return imagesUrl;
         }
 
-        public async Task<ProductDetail> SaveToDBTemporary(string folderName, UpLoadDTO upLoadDTO, List<string> imagesUrls)
+        public async Task<MyImage> SaveToDBTemporary(string folderName, UpLoadDTO upLoadDTO, List<string> imagesUrls)
         {
             using (var context = new MyImageContext())
             {
@@ -138,16 +142,15 @@ namespace WebAPIGroup2.Service.Implement
 
                 //float priceOne = upLoadDTO.imageArea * (float)(materialPage.Result.PricePerInch);
                 //float imagesNumber = (float)imagesUrls.Count;
-                ProductDetail productDetail = new ProductDetail()
+                MyImage myImage = new MyImage()
                 {
-                    CreateDate = DateTime.Now,
-                   // MaterialPageId = upLoadDTO.materialPageId,
+                    // MaterialPageId = upLoadDTO.materialPageId,
                     PurchaseOrderId = temPurchaseOrder.Id,
                     Status = true,
                     //Price = (decimal)(priceOne * imagesNumber),
                     TemplateId = upLoadDTO.templateID,
                 };
-                if (!await _productDetailsRepo.InsertAsync(productDetail))
+                if (!await _myImageRepo.InsertAsync(myImage))
                 {
                     return null;
                 };
@@ -160,7 +163,7 @@ namespace WebAPIGroup2.Service.Implement
                     {
                         FolderName = $"/{folderName}/{templateFolder}",
                         CreateDate = DateTime.Now,
-                        ProductDetailId = productDetail.Id,
+                        MyImagesId = myImage.Id,
                         Status = true,
                         ImageUrl = imageUrl,
 
@@ -171,7 +174,7 @@ namespace WebAPIGroup2.Service.Implement
                 {
                     return null;
                 };
-                return productDetail;
+                return myImage;
             }
 
         }
