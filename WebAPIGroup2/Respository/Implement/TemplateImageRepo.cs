@@ -1,4 +1,5 @@
-﻿using WebAPIGroup2.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using WebAPIGroup2.Models;
 using WebAPIGroup2.Models.POJO;
 using WebAPIGroup2.Respository.Inteface;
 
@@ -12,7 +13,7 @@ namespace WebAPIGroup2.Respository.Implement
 
         public Task<TemplateImage?> GetByIDAsync(int id)
         {
-            throw new NotImplementedException();
+            return _context.TemplateImages.Include(i => i.Template).FirstOrDefaultAsync(i => i.Id == id);
         }
     }
 

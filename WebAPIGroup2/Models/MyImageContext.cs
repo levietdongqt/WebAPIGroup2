@@ -11,7 +11,8 @@ public partial class MyImageContext : DbContext
     {
     }
 
-    public MyImageContext(DbContextOptions<MyImageContext> options): base(options)
+    public MyImageContext(DbContextOptions<MyImageContext> options)
+        : base(options)
     {
     }
 
@@ -35,6 +36,8 @@ public partial class MyImageContext : DbContext
 
     public virtual DbSet<MonthlySpending> MonthlySpendings { get; set; }
 
+    public virtual DbSet<MyImage> MyImages { get; set; }
+
     public virtual DbSet<PrintSize> PrintSizes { get; set; }
 
     public virtual DbSet<ProductDetail> ProductDetails { get; set; }
@@ -55,7 +58,7 @@ public partial class MyImageContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=tcp:myimages.database.windows.net,1433;Initial Catalog=MyImages;Persist Security Info=False;User ID=finsr8280-admin;Password=Tiennam123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;;");
+        => optionsBuilder.UseSqlServer("Server=tcp:myimages.database.windows.net,1433;Initial Catalog=MyImages;Persist Security Info=False;User ID=finsr8280-admin;Password=Tiennam123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -95,7 +98,7 @@ public partial class MyImageContext : DbContext
         {
             entity.Property(e => e.Status).HasDefaultValueSql("((1))");
 
-            entity.HasOne(d => d.ProductDetail).WithMany(p => p.Images).HasConstraintName("Fk_Product_Detail");
+            entity.HasOne(d => d.MyImages).WithMany(p => p.Images).HasConstraintName("Fk_Image_MyImages");
         });
 
         modelBuilder.Entity<MaterialPage>(entity =>
@@ -108,15 +111,24 @@ public partial class MyImageContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.MonthlySpendings).HasConstraintName("FK_MonthlySpending_User");
         });
 
+        modelBuilder.Entity<MyImage>(entity =>
+        {
+            entity.Property(e => e.Status).HasDefaultValueSql("((1))");
+
+            entity.HasOne(d => d.PurchaseOrder).WithMany(p => p.MyImages).HasConstraintName("FK_MyImages_PerchaseOrder");
+
+            entity.HasOne(d => d.Template).WithMany(p => p.MyImages).HasConstraintName("FK_MyImages_Template");
+        });
+
         modelBuilder.Entity<ProductDetail>(entity =>
         {
             entity.Property(e => e.Status).HasDefaultValueSql("((1))");
 
             entity.HasOne(d => d.MaterialPage).WithMany(p => p.ProductDetails).HasConstraintName("FK_ProductDetail_MaterialPage");
 
-            entity.HasOne(d => d.PurchaseOrder).WithMany(p => p.ProductDetails).HasConstraintName("FK_ProductDetail_PurchaseOrder");
+            entity.HasOne(d => d.MyImage).WithMany(p => p.ProductDetails).HasConstraintName("FK_ProductDetail_MyImages");
 
-            entity.HasOne(d => d.Template).WithMany(p => p.ProductDetails).HasConstraintName("FK_ProductDetail_Template");
+            entity.HasOne(d => d.TemplateSize).WithMany(p => p.ProductDetails).HasConstraintName("FK_ProductDetail_TemplateSize");
         });
 
         modelBuilder.Entity<PurchaseOrder>(entity =>

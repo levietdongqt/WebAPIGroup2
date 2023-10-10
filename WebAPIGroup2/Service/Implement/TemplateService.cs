@@ -29,7 +29,6 @@ namespace WebAPIGroup2.Service.Implement
             this.templateSizeRepo = templateSizeRepo;
             this.collectionTemplateRepo = collectionTemplateRepo;
         }
-
         public async  Task<TemplateDTO> AddDescriptionByTemplateIdAsync(int templateId, List<DescriptionTemplateDTO> descriptionTemplateDTOs)
         {
             foreach (var templateDTO in descriptionTemplateDTOs)
@@ -124,6 +123,24 @@ namespace WebAPIGroup2.Service.Implement
             return templateDTO;
         }
 
+        public async Task<List<TemplateDTO>> GetBestSeller()
+        {
+            var best = await templateRepo.GetBestSellerTemplateAsync();
+            var templateDTOs = mapper.Map<List<TemplateDTO>>(best);
+            foreach (var item in templateDTOs)
+            {
+                var templateImages = new List<TemplateImageDTO>(); 
+                foreach (var x in item.TemplateImages)
+                {
+                    var image = await imageRepo.GetByIDAsync(x.TemplateId);
+                    var imageDto = mapper.Map<TemplateImageDTO>(image);
+                    templateImages.Add(imageDto);
+                } 
+                item.TemplateImages = templateImages; 
+            }
+            return templateDTOs;
+        }
+
         public async  Task<List<TemplateDTO>> GetAllAsync(string? filterOn = null, string? filterQuery = null, string? sortBy = null, bool isAscending = true, int pageNumber = 1, int pageSize = 1000)
         {
             var templates = await templateRepo.GetAllTemplateAsync(filterOn,filterQuery,sortBy,isAscending,pageNumber,pageSize);
@@ -191,7 +208,7 @@ namespace WebAPIGroup2.Service.Implement
             updatedTemplate.Status = updateTemplateDTO.Status;
             updatedTemplate.CreateDate = updateTemplateDTO.CreateDate;
             updatedTemplate.QuantitySold = updateTemplateDTO.QuantitySold;
-            updatedTemplate.PricePlus = updateTemplateDTO.PricePlus;
+            updatedTemplate.PricePlusPerOne = updateTemplateDTO.PricePlus;
             var result = await templateRepo.UpdateAsync(updatedTemplate);
             if (!result)
             {
