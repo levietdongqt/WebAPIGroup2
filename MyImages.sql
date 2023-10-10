@@ -44,7 +44,7 @@ go
 create table Template(
 	Id int identity(1,1) not null,
 	Name nvarchar(max) null,
-	PricePlus decimal null,
+	PricePlusPerOne float null,
 	Status bit default(1) not null,
 	QuantitySold int null,
 	CreateDate datetime null
@@ -93,9 +93,9 @@ create table MaterialPage(
 go
 create table ProductDetail (
 	Id int identity(1,1) not null,
-	TemplateId int null,
 	MaterialPageId int null,
-	PurchaseOrderId int null,
+	TemplateSizeId int null,
+	MyImageId int null,
 	Price decimal null,
 	Quantity int null,
 	Status bit default(1),
@@ -139,13 +139,16 @@ create table MonthlySpending(
 go
 create table [Image](
 	Id int identity(1,1) not null,
-	ProductDetailId int null,
+	MyImagesId int null,
 	ImageUrl varchar(500) null,
 	FolderName nvarchar(500) null,
 	Status bit default(1) not null,
+	[Index] int null,
 	CreateDate datetime null
 
-	constraint PK_Image primary key (Id)
+	constraint PK_Image primary key (Id),
+	constraint CK_Index_Image check ([Index] > 0)
+
 )
 go
 create table FeedBack(
@@ -191,11 +194,22 @@ create table RefeshToken (
 	constraint PK_RefeshToken primary key (Id)
 )
 go
+create table MyImages(
+	Id int identity(1,1) not null,
+	TemplateId int null,
+	PurchaseOrderId int null,
+	Status bit default(1)
+
+	constraint PK_MyImages primary key (Id)
+)
+go
 create table TemplateImage(
 	Id int identity(1,1) not null,
 	ImageUrl varchar(500) null,
-	TemplateId int null
+	TemplateId int null,
+	[Index] int null
 
+	constraint CK_Index check ([Index] > 0),
 	constraint PK_TemplateImage primary key (Id)
 )
 go
@@ -230,16 +244,16 @@ add constraint FK_CollectionTemplate_Template
 	foreign key (TemplateId) references Template(Id)
 go
 alter table ProductDetail
-add constraint FK_ProductDetail_Template
-	foreign key (TemplateId) references TemplateSize(Id)
-go
-alter table ProductDetail
 add constraint FK_ProductDetail_MaterialPage
 	foreign key (MaterialPageId) references MaterialPage(Id)
 go
 alter table ProductDetail
-add constraint FK_ProductDetail_PurchaseOrder
-	foreign key (PurchaseOrderId) references PurchaseOrder(Id)
+add constraint FK_ProductDetail_MyImages
+	foreign key (MyImageId) references MyImages(Id)
+go
+alter table ProductDetail
+add constraint FK_ProductDetail_TemplateSize
+	foreign key (TemplateSizeId) references TemplateSize(Id)
 go
 alter table PurchaseOrder
 add constraint FK_PurchaseOrder_User
@@ -287,9 +301,16 @@ add constraint Fk_Template_Image
 	foreign key (TemplateId) references [Template](Id)
 go
 alter table Image
-add constraint Fk_Product_Detail
-	foreign key (ProductDetailId) references [ProductDetail](Id)
+add constraint Fk_Image_MyImages
+	foreign key (MyImagesId) references MyImages(Id)
 go
+alter table MyImages
+add constraint FK_MyImages_Template
+	foreign key (TemplateId) references Template(Id)
+go
+alter table MyImages
+add constraint FK_MyImages_PerchaseOrder
+	foreign key (PurchaseOrderId) references PurchaseOrder(Id)
 ----------------------------------------------------------------------------------------
 insert into Category
 values('Book','/CategoryImage/Book.jpg'),('Calendar','/CategoryImage/Calender.jpg'),('Gift','/CategoryImage/Gift.jpg'),('Prints','/CategoryImage/Poster.jpg'),('Card','/CategoryImage/Card.jpg')
@@ -309,7 +330,7 @@ values('Prints&Enlargement',0,1,0,GETDATE()),
 	  ('Thank You',2.99,1,0,GETDATE())
 go
 
-insert into TemplateImage
+insert into TemplateImage (ImageUrl,TemplateId)
 values('https://images.pexels.com/photos/4350631/pexels-photo-4350631.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',1),
 	  ('https://images.pexels.com/photos/2226900/pexels-photo-2226900.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',2),
 	  ('https://images.pexels.com/photos/808466/pexels-photo-808466.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',3),
@@ -356,23 +377,6 @@ go
 insert into DeliveryInfo
 values(2,'huy.tran9510@gmail.com','374 Binh Trieu Tp.HCM','09027837465')
 go
-
-insert into PurchaseOrder
-values(2,1,'1303 3333 9999 8888',0,'Temporary',GETDATE())
-go
-
-insert into ProductDetail
-values(1,1,1,10.3,5,1,GETDATE())
-go
-
-insert into Image
-values(1,'https://images.pexels.com/photos/5342974/pexels-photo-5342974.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1','2-user1',1,GETDATE()),
-	  (1,'https://images.pexels.com/photos/4350631/pexels-photo-4350631.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1','2-user1',1,GETDATE())
-go
-
-
-
-
 insert into ContentEmail
 values(1,'Send mail to Buy','Confirm Bill','Sale')
 go
