@@ -208,7 +208,7 @@ namespace WebAPIGroup2.Service.Implement
             updatedTemplate.Status = updateTemplateDTO.Status;
             updatedTemplate.CreateDate = updateTemplateDTO.CreateDate;
             updatedTemplate.QuantitySold = updateTemplateDTO.QuantitySold;
-            updatedTemplate.PricePlus = updateTemplateDTO.PricePlus;
+            updatedTemplate.PricePlusPerOne = updateTemplateDTO.PricePlus;
             var result = await templateRepo.UpdateAsync(updatedTemplate);
             if (!result)
             {

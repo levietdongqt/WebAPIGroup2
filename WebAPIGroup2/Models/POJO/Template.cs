@@ -14,8 +14,7 @@ public partial class Template
 
     public string? Name { get; set; }
 
-    [Column(TypeName = "float")]
-    public float? PricePlus { get; set; }
+    public double? PricePlusPerOne { get; set; }
 
     [Required]
     public bool? Status { get; set; }
@@ -30,6 +29,9 @@ public partial class Template
 
     [InverseProperty("Template")]
     public virtual ICollection<DescriptionTemplate> DescriptionTemplates { get; set; } = new List<DescriptionTemplate>();
+
+    [InverseProperty("Template")]
+    public virtual ICollection<MyImage> MyImages { get; set; } = new List<MyImage>();
 
     [InverseProperty("Template")]
     public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();

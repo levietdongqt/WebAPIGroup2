@@ -33,7 +33,7 @@ namespace WebAPIGroup2.Respository.Implement
                 }
                 else if (filterOn.Equals("PricePlus", StringComparison.OrdinalIgnoreCase))
                 {
-                    list = list.Where(x => x.PricePlus >= float.Parse(filterQuery));
+                    list = list.Where(x => x.PricePlusPerOne >= float.Parse(filterQuery));
                 }
             }
 
@@ -46,7 +46,7 @@ namespace WebAPIGroup2.Respository.Implement
                 }
                 else if (sortBy.Equals("PricePlus", StringComparison.OrdinalIgnoreCase))
                 {
-                    list = isAscending ? list.OrderBy(x => x.PricePlus) : list.OrderByDescending(x => x.PricePlus);
+                    list = isAscending ? list.OrderBy(x => x.PricePlusPerOne) : list.OrderByDescending(x => x.PricePlusPerOne);
                 }
                 else if (sortBy.Equals("QuantitySold", StringComparison.OrdinalIgnoreCase))
                 {
