@@ -6,24 +6,28 @@ using Microsoft.EntityFrameworkCore;
 
 namespace WebAPIGroup2.Models.POJO;
 
-[Table("TemplateSize")]
-public partial class TemplateSize
+public partial class MyImage
 {
     [Key]
     public int Id { get; set; }
 
     public int? TemplateId { get; set; }
 
-    public int? PrintSizeId { get; set; }
+    public int? PurchaseOrderId { get; set; }
 
-    [ForeignKey("PrintSizeId")]
-    [InverseProperty("TemplateSizes")]
-    public virtual PrintSize? PrintSize { get; set; }
+    public bool? Status { get; set; }
 
-    [InverseProperty("TemplateSize")]
+    [InverseProperty("MyImages")]
+    public virtual ICollection<Image> Images { get; set; } = new List<Image>();
+
+    [InverseProperty("MyImage")]
     public virtual ICollection<ProductDetail> ProductDetails { get; set; } = new List<ProductDetail>();
 
+    [ForeignKey("PurchaseOrderId")]
+    [InverseProperty("MyImages")]
+    public virtual PurchaseOrder? PurchaseOrder { get; set; }
+
     [ForeignKey("TemplateId")]
-    [InverseProperty("TemplateSizes")]
+    [InverseProperty("MyImages")]
     public virtual Template? Template { get; set; }
 }

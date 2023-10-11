@@ -34,7 +34,7 @@ public partial class PurchaseOrder
     public virtual DeliveryInfo? DeliveryInfo { get; set; }
 
     [InverseProperty("PurchaseOrder")]
-    public virtual ICollection<ProductDetail> ProductDetails { get; set; } = new List<ProductDetail>();
+    public virtual ICollection<MyImage> MyImages { get; set; } = new List<MyImage>();
 
     [ForeignKey("UserId")]
     [InverseProperty("PurchaseOrders")]

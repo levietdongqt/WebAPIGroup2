@@ -4,6 +4,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Text.Json.Serialization;
 using TestEmail.Services;
 using WebAPIGroup2.Models;
 using WebAPIGroup2.Respository;
@@ -69,7 +70,8 @@ builder.Services.AddAuthentication(options =>
 //Mail option appsetting.json
 var mailSettings = builder.Configuration.GetSection("MailSettings");
 builder.Services.Configure<MailSetting>(mailSettings);
-
+builder.Services.AddControllersWithViews()
+                .AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 //DI Repositoty
 builder.Services.AddScoped(typeof(GenericRepository<>));   
 builder.Services.AddTransient<IUserRepo, UserRepo>();
@@ -89,7 +91,8 @@ builder.Services.AddTransient<IFeedBackRepo, FeedBackRepo>();
 builder.Services.AddTransient<ICategoryRepo, CategoryRepo>();
 builder.Services.AddTransient<IProductDetailsRepo, ProductDetailRepo>();
 builder.Services.AddTransient<IImageRepo, ImageRepo>();
-
+builder.Services.AddTransient<ICategoryRepo, CategoryRepo>();
+builder.Services.AddScoped<IMyImageRepo, MyImageRepo>();
 
 //DI Service
 builder.Services.AddTransient<ILoginService, LoginService>();
@@ -105,7 +108,7 @@ builder.Services.AddTransient<IFeedBackService, FeedBackService>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();
 builder.Services.AddTransient<IOrderService, OrderService>();
 builder.Services.AddTransient<IUpLoadService, UpLoadService>();
-
+builder.Services.AddTransient<ICategoryService, CategoryService>();
 
 
 var app = builder.Build();

@@ -12,11 +12,11 @@ public partial class ProductDetail
     [Key]
     public int Id { get; set; }
 
-    public int? TemplateId { get; set; }
-
     public int? MaterialPageId { get; set; }
 
-    public int? PurchaseOrderId { get; set; }
+    public int? TemplateSizeId { get; set; }
+
+    public int? MyImageId { get; set; }
 
     [Column(TypeName = "decimal(18, 0)")]
     public decimal? Price { get; set; }
@@ -28,18 +28,15 @@ public partial class ProductDetail
     [Column(TypeName = "datetime")]
     public DateTime? CreateDate { get; set; }
 
-    [InverseProperty("ProductDetail")]
-    public virtual ICollection<Image> Images { get; set; } = new List<Image>();
-
     [ForeignKey("MaterialPageId")]
     [InverseProperty("ProductDetails")]
     public virtual MaterialPage? MaterialPage { get; set; }
 
-    [ForeignKey("PurchaseOrderId")]
+    [ForeignKey("MyImageId")]
     [InverseProperty("ProductDetails")]
-    public virtual PurchaseOrder? PurchaseOrder { get; set; }
+    public virtual MyImage? MyImage { get; set; }
 
-    [ForeignKey("TemplateId")]
+    [ForeignKey("TemplateSizeId")]
     [InverseProperty("ProductDetails")]
-    public virtual TemplateSize? Template { get; set; }
+    public virtual TemplateSize? TemplateSize { get; set; }
 }

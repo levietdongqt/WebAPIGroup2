@@ -38,4 +38,9 @@
     <None Include="wwwroot\Image\image.jpg" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\CategoryImage\" />
+    <Folder Include="wwwroot\CollectionImage\" />
+  </ItemGroup>
+
 </Project>

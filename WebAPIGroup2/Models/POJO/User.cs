@@ -32,8 +32,6 @@ public partial class User
 
     public string? Phone { get; set; }
 
-    public string? Avatar { get; set; }
-
     [StringLength(50)]
     [Unicode(false)]
     public string? Role { get; set; }
