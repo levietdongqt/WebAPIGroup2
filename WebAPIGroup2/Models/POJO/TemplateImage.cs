@@ -18,6 +18,8 @@ public partial class TemplateImage
 
     public int? TemplateId { get; set; }
 
+    public int? Index { get; set; }
+
     [ForeignKey("TemplateId")]
     [InverseProperty("TemplateImages")]
     public virtual Template? Template { get; set; }

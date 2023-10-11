@@ -159,6 +159,22 @@ namespace WebAPIGroup2.Service.Implement
 
         }
 
+        public async Task<string> SaveUploadedFile(IFormFile formFile)
+        {
+         
+            var uniqueFileName = $"{Guid.NewGuid()}_{Path.GetExtension(formFile.FileName)}";
+
+            var filePath = Path.Combine(_webHostEnvironment.WebRootPath, "Avatar", uniqueFileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await formFile.CopyToAsync(stream);
+            }
+
+
+            return $"/Avatar/{uniqueFileName}";
+        }
+
         public async Task<UserDTO> UpdateUser(AddUserDTO addUserDTO)
         {
             var existingUser = await _context.Users.SingleOrDefaultAsync(u => u.Id == addUserDTO.Id);
@@ -175,9 +191,8 @@ namespace WebAPIGroup2.Service.Implement
 
                 if (addUserDTO.formFile != null)
                 {
-                    // Only update the avatar if addUserDTO.formFile is not null
-                    var avatar = await _utilService.Upload(addUserDTO.formFile);
-                    existingUser.Avatar = avatar;
+                    var avatar = await SaveUploadedFile(addUserDTO.formFile);
+                    existingUser.Avatar =  avatar;
                 }
 
                 var update = await _useRepo.UpdateAsync(existingUser);

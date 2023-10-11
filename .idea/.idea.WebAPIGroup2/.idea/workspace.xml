@@ -9,14 +9,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7cd16388-67af-4601-a58e-e3e6823391f9" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.WebAPIGroup2/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.WebAPIGroup2/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyImages.sql" beforeDir="false" afterPath="$PROJECT_DIR$/MyImages.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Controllers/AdminModule/TemplateController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Controllers/AdminModule/TemplateController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Models/DTO/TemplateDTO.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Models/DTO/TemplateDTO.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Models/POJO/Template.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Models/POJO/Template.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Respository/Implement/TemplateRepo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Respository/Implement/TemplateRepo.cs" afterDir="false" />
-    </list>
+    <list default="true" id="7cd16388-67af-4601-a58e-e3e6823391f9" name="Changes" comment="Nam" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -49,27 +42,7 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/d856066ffe4c59543feec5c19d3d3c8934b5eec93f8cf1358aedcb555825/Boolean.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/e74356f198b598e97eaeea83e8b7b1f2bfe27c0a39fedf86bb7dc44827fbda/ActionMethodExecutor.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/f9daeeaab8409865442b5e80e634dc64dae9a14892fe81e0f17b46f51b2c48f8/DbSet.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Models/AutoMapperProfile.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Program.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Program.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Program.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Program.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Program.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Program.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Program.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Program.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Program.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Program.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Program.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Program.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Program.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Program.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Program.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Program.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Respository/Inteface/ITemplateRepo.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Respository/Inteface/ITemplateRepo.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Respository/Inteface/ITemplateRepo.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Respository/Inteface/ITemplateRepo.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Models/DTO/AddTemplateDTO.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -166,7 +139,7 @@
       <workItem from="1695979569429" duration="40048000" />
       <workItem from="1696583893022" duration="31340000" />
       <workItem from="1696740832721" duration="9208000" />
-      <workItem from="1696927839688" duration="456000" />
+      <workItem from="1696927839688" duration="3601000" />
     </task>
     <task id="LOCAL-00001" summary="category">
       <option name="closed" value="true" />
@@ -192,7 +165,31 @@
       <option name="project" value="LOCAL" />
       <updated>1696753886361</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="add more">
+      <option name="closed" value="true" />
+      <created>1696938205765</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1696938205766</updated>
+    </task>
+    <task id="LOCAL-00005" summary="SQl">
+      <option name="closed" value="true" />
+      <created>1696944811300</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1696944811300</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Nam">
+      <option name="closed" value="true" />
+      <created>1696945094031</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1696945094031</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -227,6 +224,9 @@
     <MESSAGE value="category" />
     <MESSAGE value="add best Seller" />
     <MESSAGE value="add some iamge" />
-    <option name="LAST_COMMIT_MESSAGE" value="add some iamge" />
+    <MESSAGE value="add more" />
+    <MESSAGE value="SQl" />
+    <MESSAGE value="Nam" />
+    <option name="LAST_COMMIT_MESSAGE" value="Nam" />
   </component>
 </project>

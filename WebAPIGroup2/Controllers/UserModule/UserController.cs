@@ -80,7 +80,7 @@ namespace WebAPIGroup2.Controllers.UserModule
         }
 
         [HttpPost("Create")]
-        public async Task<IActionResult> Create(UserDTO userDTO)
+        public async Task<IActionResult> Create( UserDTO userDTO)
         {
             try
             {
@@ -117,7 +117,7 @@ namespace WebAPIGroup2.Controllers.UserModule
         }
 
         [HttpPut("Edit")]
-        public async Task<IActionResult> Update(AddUserDTO addUserDTO)
+        public async Task<IActionResult> Update([FromForm] AddUserDTO addUserDTO)
         {
             try
             {
@@ -138,6 +138,7 @@ namespace WebAPIGroup2.Controllers.UserModule
             }
             catch (Exception e)
             {
+                Console.Error.WriteLine("Lỗi khi cập nhật thông tin: " + e.Message);
                 return BadRequest(new ResponseDTO<string>(HttpStatusCode.BadRequest, e.Message, null, "Failed"));
             }
         }
