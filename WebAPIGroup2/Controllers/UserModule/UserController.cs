@@ -19,8 +19,8 @@ namespace WebAPIGroup2.Controllers.UserModule
         private readonly IUtilService _utilService;
         private readonly ILoginService _loginService;
 
-        public UserController(MyImageContext context , IUserService userService,IUtilService utilService,ILoginService loginService) 
-        { 
+        public UserController(MyImageContext context, IUserService userService, IUtilService utilService, ILoginService loginService)
+        {
             _context = context;
             _userService = userService;
             _utilService = utilService;
@@ -29,10 +29,10 @@ namespace WebAPIGroup2.Controllers.UserModule
 
         [HttpGet]
         [Route("admins")]
-        [Authorize(Roles ="admin")]
+        [Authorize(Roles = "admin")]
         public IActionResult AdminEndPoint()
         {
-           // var currentUser = GetCurrentUser();
+            // var currentUser = GetCurrentUser();
             return Ok($"Hi you are ");
         }
         //private User GetCurrentUser()
@@ -52,9 +52,9 @@ namespace WebAPIGroup2.Controllers.UserModule
         //}
 
         [HttpGet("GetAll")]
-        public async Task<IActionResult> GetAll(string? search , string? st, int page, int pageSize)
+        public async Task<IActionResult> GetAll(string? search, string? st, int page, int pageSize)
         {
-            var users = await _userService.GetAllAsync(search,st, page, pageSize);
+            var users = await _userService.GetAllAsync(search, st, page, pageSize);
 
             if (users != null)
             {
@@ -62,8 +62,8 @@ namespace WebAPIGroup2.Controllers.UserModule
                 var response = new ResponseDTO<IEnumerable<UserDTO>>(
                     HttpStatusCode.OK,
                     "Getall ok",
-                    null, 
-                    users 
+                    null,
+                    users
                 );
 
                 return Ok(response);
@@ -80,11 +80,11 @@ namespace WebAPIGroup2.Controllers.UserModule
         }
 
         [HttpPost("Create")]
-        public async Task<IActionResult> Create( UserDTO userDTO)
+        public async Task<IActionResult> Create(UserDTO userDTO)
         {
             try
             {
-                
+
                 var createdUserDTO = await _userService.CreateUser(userDTO);
 
                 if (createdUserDTO != null)
@@ -110,7 +110,7 @@ namespace WebAPIGroup2.Controllers.UserModule
             catch (Exception e)
             {
 
-                return BadRequest(new ResponseDTO<string>(HttpStatusCode.BadRequest,e.Message, null, "Failed"));
+                return BadRequest(new ResponseDTO<string>(HttpStatusCode.BadRequest, e.Message, null, "Failed"));
 
             }
 

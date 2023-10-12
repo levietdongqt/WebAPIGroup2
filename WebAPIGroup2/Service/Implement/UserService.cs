@@ -72,6 +72,7 @@ namespace WebAPIGroup2.Service.Implement
             var user = _mapper.Map<User>(userDTO);
             user.Status = UserStatus.Pending;
             user.Avatar = avatar;
+            user.Role = UserRole.user;
             var passwordHash = BCrypt.Net.BCrypt.HashPassword(userDTO.Password);
             user.Password = passwordHash;
             var success = await _useRepo.InsertAsync(user);

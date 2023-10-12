@@ -12,6 +12,12 @@
 
     }
 
+    public static class UserRole
+    {
+        public const string admin = "admin";
+        public const string user = "user";
+    }
+
     public static class PurchaseStatus
     {
         public const string Temporary = "Temporary";
@@ -20,5 +26,5 @@
         public const string ToShip = "To Ship";
     }
 
-
+    
 }
