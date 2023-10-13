@@ -19,14 +19,14 @@ namespace WebAPIGroup2.Controllers.UserModule
             _utilService = utilService;
         }
         [HttpPost]
-        [Route("SaveImages")]
+        [Route("WithTemplate")]
         public async Task<JsonResult> UpLoadWithTemplate([FromForm] UpLoadDTO upLoadDTO)
         {
-            var emailName =  _upLoadService.ValidateRequestData(upLoadDTO);
-            var isValidImages =    _upLoadService.ValidateFiles(upLoadDTO.files);
-            await Task.WhenAll(isValidImages, emailName);         
-            if(emailName.Result == null)
-            {   
+            var emailName = _upLoadService.ValidateRequestData(upLoadDTO);
+            var isValidImages = _upLoadService.ValidateFiles(upLoadDTO.files);
+            await Task.WhenAll(isValidImages, emailName);
+            if (emailName.Result == null)
+            {
                 var response = new ResponseDTO<String>(HttpStatusCode.BadRequest, "Request Data is invalid", null, null);
                 return new JsonResult(response);
             }
@@ -37,18 +37,50 @@ namespace WebAPIGroup2.Controllers.UserModule
             }
             string folderName = $"{emailName.Result}{upLoadDTO.userID}";
             var imagesUrls = await _upLoadService.SaveImages(folderName, upLoadDTO.templateID, upLoadDTO.files);
-            var myImage = await _upLoadService.SaveToDBTemporary(folderName,upLoadDTO, imagesUrls);
-            var response2 = new ResponseDTO<MyImage>(HttpStatusCode.OK, "Save successfull", null, myImage);
+            if (upLoadDTO.templateID == 1)
+            {
+                List<int> myImage = await _upLoadService.SaveToDBWithNoTemplate(folderName, upLoadDTO, imagesUrls);
+                var response = new ResponseDTO<List<int>>(HttpStatusCode.OK, "Save successfull", null, myImage);
+                return new JsonResult(response);
+            }
+            var myImage2 = await _upLoadService.SaveToDBTemporary(folderName, upLoadDTO, imagesUrls);
+            var response2 = new ResponseDTO<int>(HttpStatusCode.OK, "Save successfull", null, myImage2.Id);
             return new JsonResult(response2);
+        }
+        [HttpPost]
+        [Route("WithNoTemplate")]
+        public async Task<JsonResult> UpLoadWithNoTemplate([FromForm] UpLoadDTO upLoadDTO)
+        {
+            if (upLoadDTO.templateID == 1 || upLoadDTO.templateID == null)
+            {
+                var emailName = _upLoadService.ValidateRequestData(upLoadDTO);
+                var isValidImages = _upLoadService.ValidateFiles(upLoadDTO.files);
+                await Task.WhenAll(isValidImages, emailName);
+                if (emailName.Result == null)
+                {
+                    return new JsonResult(new ResponseDTO<String>(HttpStatusCode.BadRequest, "Request Data is invalid", null, null));
+                }
+                if (!isValidImages.Result)
+                {
+                    return new JsonResult(new ResponseDTO<String>(HttpStatusCode.BadRequest, "File is invalid", null, null));
+                }
+                string folderName = $"{emailName.Result}{upLoadDTO.userID}";
+                var imagesUrls = await _upLoadService.SaveImages(folderName, 1, upLoadDTO.files);
+                List<int> myImage = await _upLoadService.SaveToDBWithNoTemplate(folderName, upLoadDTO, imagesUrls);
+                return new JsonResult(new ResponseDTO<List<int>>(HttpStatusCode.OK, "Save successfull", null, myImage));
+             
+            }
+            return new JsonResult(new ResponseDTO<String>(HttpStatusCode.BadRequest, "Template is invalid", null, null));
+
         }
         [HttpGet]
         [Route("LoadMyImage")]
         public async Task<JsonResult> LoadMyImage([FromQuery] int userID)
         {
             var myImages = await _upLoadService.LoadMyImages(userID);
-            if(myImages == null)
+            if (myImages == null)
             {
-                var response= new ResponseDTO<String>(HttpStatusCode.NoContent, "Product is not exist", null, null);
+                var response = new ResponseDTO<String>(HttpStatusCode.NoContent, "MyImages is empty", null, null);
                 return new JsonResult(response);
             }
             var response2 = new ResponseDTO<List<MyImage>>(HttpStatusCode.OK, "Request Successfull", null, myImages);
@@ -58,9 +90,33 @@ namespace WebAPIGroup2.Controllers.UserModule
         [Route("AddToCart")]
         public async Task<JsonResult> AddToCart([FromForm] OrderDTO orderDTO)
         {
-            bool check =    await _upLoadService.CreateOrder(orderDTO);
+            bool isSucess = await _upLoadService.AddToCart(orderDTO);
+            if (isSucess)
+            {
+                return new JsonResult(new ResponseDTO<List<ProductDetail>>(HttpStatusCode.OK, "Request Successfull", null, null));
+            }
+            return new JsonResult(new ResponseDTO<List<ProductDetail>>(HttpStatusCode.BadRequest, "Request is invalid", null, null));
+        }
+        [HttpPut]
+        [Route("UpdateCart")]
+        public async Task<JsonResult> UpdateCart([FromQuery] int productDetailID, [FromQuery] int quantity)
+        {
+            bool isSucess = await _upLoadService.UpdateCart(productDetailID, quantity);
             var response = new ResponseDTO<List<ProductDetail>>(HttpStatusCode.OK, "Request Successfull", null, null);
             return new JsonResult(response);
+        }
+        [HttpGet]
+        [Route("LoadCart")]
+        public async Task<JsonResult> LoadCart([FromQuery] int userID)
+        {
+            List<MyImage> myImages = await _upLoadService.LoadCart(userID);
+            if (myImages == null)
+            {
+                var response = new ResponseDTO<String>(HttpStatusCode.NoContent, "Cart is empty", null, null);
+                return new JsonResult(response);
+            }
+            var response2 = new ResponseDTO<List<MyImage>>(HttpStatusCode.OK, "Request Successfull", null, myImages);
+            return new JsonResult(response2);
         }
     }
 }
