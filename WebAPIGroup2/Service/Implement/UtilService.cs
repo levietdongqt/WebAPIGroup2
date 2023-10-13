@@ -86,7 +86,7 @@ namespace TestEmail.Services
             var fileName = formFile.FileName;
 
             //Upload
-            var localFilePath = Path.Combine(_webHostEnvironment.ContentRootPath, "Image", fileName);
+            var localFilePath = Path.Combine(_webHostEnvironment.WebRootPath, "Image", fileName);
 
             var stream = new FileStream(localFilePath, FileMode.Create);
 
@@ -108,7 +108,7 @@ namespace TestEmail.Services
                 var fileName = f.FileName;
 
                 //Upload
-                var localFilePath = Path.Combine(_webHostEnvironment.ContentRootPath, "Image", fileName);
+                var localFilePath = Path.Combine(_webHostEnvironment.WebRootPath, "Image", fileName);
 
                 var stream = new FileStream(localFilePath, FileMode.Create);
 

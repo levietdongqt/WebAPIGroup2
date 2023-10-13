@@ -19,13 +19,22 @@ namespace WebAPIGroup2.Respository.Implement
         public async Task<PurchaseOrder> getPurchaseOrder(int userID, string status)
         {
             try
-            {
-                var purchase =  await _context.PurchaseOrders.FirstOrDefaultAsync(t => t.UserId == userID && t.Status == status);
-                if(purchase == null)
+            {   
+                if(status.Equals(PurchaseStatus.Temporary))
+                {
+                    var purchase = await _context.PurchaseOrders.FirstOrDefaultAsync(t => t.UserId == userID && (t.Status == status || t.Status == PurchaseStatus.InCart));
+                    if (purchase == null)
+                    {
+                        throw new Exception("Purchare is not exist!");
+                    }
+                    return purchase;
+                }
+                var purchase2 =  await _context.PurchaseOrders.FirstOrDefaultAsync(t => t.UserId == userID && t.Status == status);
+                if(purchase2 == null)
                 {
                     throw new Exception("Purchare is not exist!");
                 }
-                else { return purchase; }
+                 return purchase2;
             }
             catch (Exception e)
             {

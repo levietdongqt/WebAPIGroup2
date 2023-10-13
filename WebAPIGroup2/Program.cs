@@ -88,6 +88,7 @@ builder.Services.AddTransient<IContentEmailRepo, ContentEmailRepo>();
 builder.Services.AddTransient<IPurchaseOrderRepo, PurchaseOrderRepo>();
 builder.Services.AddTransient<IReviewRepo, ReviewRepo>();
 builder.Services.AddTransient<IFeedBackRepo, FeedBackRepo>();
+builder.Services.AddTransient<ICategoryRepo, CategoryRepo>();
 builder.Services.AddTransient<IProductDetailsRepo, ProductDetailRepo>();
 builder.Services.AddTransient<IImageRepo, ImageRepo>();
 builder.Services.AddTransient<ICategoryRepo, CategoryRepo>();
@@ -104,10 +105,10 @@ builder.Services.AddTransient<IMaterialPageService, MaterialPageService>();
 builder.Services.AddTransient<IPurchaseOrderService, PurchaseOrderService>();
 builder.Services.AddTransient<IReviewService, ReviewService>();
 builder.Services.AddTransient<IFeedBackService, FeedBackService>();
+builder.Services.AddTransient<ICategoryService, CategoryService>();
 builder.Services.AddTransient<IOrderService, OrderService>();
 builder.Services.AddTransient<IUpLoadService, UpLoadService>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();
-
 
 
 var app = builder.Build();

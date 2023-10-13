@@ -85,16 +85,17 @@ namespace WebAPIGroup2.Controllers.UserModule
         {
             try
             {
-
+                
                 var createdUserDTO = await _userService.CreateUser(userDTO);
 
                 if (createdUserDTO != null)
                 {
                     var userId = createdUserDTO.Id;
-                    var code = _loginService.GenerateToken(createdUserDTO);
-                    code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                    var callbackUrl = Url.Action(nameof(ConfirmEmail), "User", new { userId = userId, code = code }, Request.Scheme);
-                    var mailContent = new MailContent(userDTO.Email, "Confirm your email", $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.", "Confirmation");
+                var code = _loginService.GenerateToken(createdUserDTO);              
+                code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                //var callbackUrl = Url.Action(nameof(ConfirmEmail),"User",new { userId = userId, code = code },Request.Scheme);
+                var callbackUrl2 = $"http://localhost:3000/login/confirm?userId={userId}&&code={code}";
+                var mailContent = new MailContent(userDTO.Email, "Confirm your email", $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl2)}'>clicking here</a>.","Confirmation");
 
                     var mailContented = await _utilService.SendEmailAsync(mailContent);
                     if (mailContented == null)

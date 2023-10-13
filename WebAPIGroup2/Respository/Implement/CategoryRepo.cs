@@ -3,6 +3,7 @@ using WebAPIGroup2.Models;
 using WebAPIGroup2.Models.POJO;
 using WebAPIGroup2.Respository.Inteface;
 
+
 namespace WebAPIGroup2.Respository.Implement;
 
 public class CategoryRepo : GenericRepository<Category>, ICategoryRepo
@@ -27,3 +28,4 @@ public class CategoryRepo : GenericRepository<Category>, ICategoryRepo
         return result;
     }
 }
+

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebAPIGroup2.Models;
 using WebAPIGroup2.Models.DTO;
@@ -27,20 +28,21 @@ namespace WebAPIGroup2.Service.Implement
             _productDetailsRepo = productDetailsRepo;
             _templateRepo = templateRepo;
             _userRepo = userRepo;
+            _myImageRepo = myImageRepo;
         }
 
-        public async Task<bool> CreateOrder(OrderDTO orderDTO)
+        public async Task<bool> AddToCart(OrderDTO orderDTO)
         {
             using (var context = new MyImageContext())
             {
                 var materialPage = context.MaterialPages.FirstOrDefaultAsync(t => t.Id == orderDTO.materialPageId);
-                var purchaseOrder = await _purchaseOrderRepo.getPurchaseOrder(orderDTO.userID, PurchaseStatus.OrderPlaced);
+                var purchaseOrder = await _purchaseOrderRepo.getPurchaseOrder(orderDTO.userID, PurchaseStatus.InCart);
                 if (purchaseOrder == null)
                 {
                     purchaseOrder = new PurchaseOrder()
                     {
                         CreateDate = DateTime.Now,
-                        Status = PurchaseStatus.OrderPlaced,
+                        Status = PurchaseStatus.InCart,
                         UserId = orderDTO.userID
                     };
                     if (!await _purchaseOrderRepo.InsertAsync(purchaseOrder))
@@ -48,41 +50,56 @@ namespace WebAPIGroup2.Service.Implement
                         return false;
                     };
                 }
-                var myImage = await _myImageRepo.GetByIDAsync(orderDTO.myImageID);
-                if (myImage == null)
-                {
-                    return false;
-                }
+
                 await Task.WhenAll(materialPage);
                 if (materialPage.Result == null)
                 {
                     return false;
                 }
-                float priceOne = orderDTO.imageArea * (float)(materialPage.Result.PricePerInch) + (float)myImage.Template.PricePlusPerOne;
-                float imagesNumber = (float)myImage.Images.Count;
-                ProductDetail productDetail = new ProductDetail()
+                var myImage = await _myImageRepo.GetByIDAsync(orderDTO.myImageID);
+                if (myImage == null)
                 {
-                    MyImageId = myImage.Id,
-                    MaterialPageId = materialPage.Id,
-                    CreateDate = DateTime.Now,
-                    Price = (decimal)(priceOne * imagesNumber),
-                    Quantity = orderDTO.quantity
-                };
-                await _productDetailsRepo.UpdateAsync(productDetail);
+                    return false;
+                }
+                myImage.PurchaseOrderId = purchaseOrder.Id;
+                await _myImageRepo.UpdateAsync(myImage);
+
+                float priceOne = orderDTO.imageArea.Value * (float)(materialPage.Result.PricePerInch) + (float)myImage.Template.PricePlusPerOne;
+                float imagesNumber = (float)myImage.Images.Count;
+                decimal price = (decimal)(priceOne * imagesNumber * orderDTO.quantity);
+
+                var sameProduct =await _productDetailsRepo.GetByMyImageId(orderDTO);
+                if(sameProduct == null)
+                {
+                    ProductDetail productDetail = new ProductDetail()
+                    {
+                        MyImageId = myImage.Id,
+                        TemplateSizeId = orderDTO.temlateSizeId,
+                        MaterialPageId = materialPage.Result.Id,
+                        CreateDate = DateTime.Now,
+                        Price = price,
+                        Quantity = orderDTO.quantity
+                    };
+                    await _productDetailsRepo.InsertAsync(productDetail);
+                    return true;
+                }
+                sameProduct.Quantity += orderDTO.quantity;
+                sameProduct.Price += price;
+                await _productDetailsRepo.UpdateAsync(sameProduct);
                 return true;
             }
 
         }
 
+        public async Task<List<MyImage>> LoadCart(int userID)
+        {
+           List<MyImage> list =  await _myImageRepo.loadInCart(userID);
+            return list;
+        }
+
         public async Task<List<MyImage>> LoadMyImages(int userID)
         {
-            var status = PurchaseStatus.Temporary;
-            PurchaseOrder temppPurchase = await _purchaseOrderRepo.getPurchaseOrder(userID, status);
-            if (temppPurchase == null)
-            {
-                return null;
-            }
-            List<MyImage> listProduct = await _myImageRepo.getByOrder(temppPurchase.Id);
+            List<MyImage> listProduct = await _myImageRepo.getByUserId(userID);
             if (listProduct == null)
             {
                 return null;
@@ -90,7 +107,7 @@ namespace WebAPIGroup2.Service.Implement
             return listProduct;
         }
 
-        public async Task<List<string>> SaveImages(string folderName, int templateID, IFormFile[] files)
+        public async Task<List<string>> SaveImages(string folderName, int? templateID, IFormFile[] files)
         {
             List<string> imagesUrl = new List<string>();
             string templateFolder = "Template_" + templateID;
@@ -116,67 +133,111 @@ namespace WebAPIGroup2.Service.Implement
 
         public async Task<MyImage> SaveToDBTemporary(string folderName, UpLoadDTO upLoadDTO, List<string> imagesUrls)
         {
-            using (var context = new MyImageContext())
+
+            var temPurchaseOrder = await _purchaseOrderRepo.getPurchaseOrder(upLoadDTO.userID, PurchaseStatus.Temporary);
+            if (temPurchaseOrder == null)
             {
-
-                //var materialPage = context.MaterialPages.FirstOrDefaultAsync(t => t.Id == upLoadDTO.materialPageId);
-                var temPurchaseOrder = await _purchaseOrderRepo.getPurchaseOrder(upLoadDTO.userID, PurchaseStatus.Temporary);
-                if (temPurchaseOrder == null)
+                temPurchaseOrder = new PurchaseOrder()
                 {
-                    temPurchaseOrder = new PurchaseOrder()
-                    {
-                        CreateDate = DateTime.Now,
-                        Status = PurchaseStatus.Temporary,
-                        UserId = upLoadDTO.userID
-                    };
-                    if (!await _purchaseOrderRepo.InsertAsync(temPurchaseOrder))
-                    {
-                        return null;
-                    };
-                }
-                //await Task.WhenAll(materialPage);
-                //if(materialPage.Result == null)
-                //{
-                //    return false;
-                //}
+                    CreateDate = DateTime.Now,
+                    Status = PurchaseStatus.Temporary,
+                    UserId = upLoadDTO.userID
+                };
+                if (!await _purchaseOrderRepo.InsertAsync(temPurchaseOrder))
+                {
+                    return null;
+                };
+            }
+            MyImage myImage = new MyImage()
+            {
+                PurchaseOrderId = temPurchaseOrder.Id,
+                Status = true,
+                TemplateId = upLoadDTO.templateID,
+            };
+            if (!await _myImageRepo.InsertAsync(myImage))
+            {
+                return null;
+            };
 
-                //float priceOne = upLoadDTO.imageArea * (float)(materialPage.Result.PricePerInch);
-                //float imagesNumber = (float)imagesUrls.Count;
+            List<Image> images = new List<Image>();
+            string templateFolder = $"Template_{upLoadDTO.templateID}";
+            imagesUrls.ForEach(imageUrl =>
+            {
+                Image image = new Image()
+                {
+                    FolderName = $"/{folderName}/{templateFolder}",
+                    CreateDate = DateTime.Now,
+                    MyImagesId = myImage.Id,
+                    Status = true,
+                    ImageUrl = imageUrl,
+
+                };
+                images.Add(image);
+            });
+            if (!await _imageRepo.InsertAllAsync(images))
+            {
+                return null;
+            };
+            return myImage;
+
+        }
+
+        public async Task<List<int>> SaveToDBWithNoTemplate(string folderName, UpLoadDTO upLoadDTO, List<string> imagesUrls)
+        {
+            var temPurchaseOrder = await _purchaseOrderRepo.getPurchaseOrder(upLoadDTO.userID, PurchaseStatus.Temporary);
+            if (temPurchaseOrder == null)
+            {
+                temPurchaseOrder = new PurchaseOrder()
+                {
+                    CreateDate = DateTime.Now,
+                    Status = PurchaseStatus.Temporary,
+                    UserId = upLoadDTO.userID
+                };
+                if (!await _purchaseOrderRepo.InsertAsync(temPurchaseOrder))
+                {
+                    return null;
+                };
+            }
+            string templateFolder = $"Template_{upLoadDTO.templateID}";
+            List<int> myImageIDs = new List<int>();
+            foreach (var imageUrl in imagesUrls)
+            {
                 MyImage myImage = new MyImage()
                 {
-                    // MaterialPageId = upLoadDTO.materialPageId,
                     PurchaseOrderId = temPurchaseOrder.Id,
                     Status = true,
-                    //Price = (decimal)(priceOne * imagesNumber),
                     TemplateId = upLoadDTO.templateID,
                 };
                 if (!await _myImageRepo.InsertAsync(myImage))
                 {
                     return null;
                 };
-
-                List<Image> images = new List<Image>();
-                string templateFolder = $"Template_{upLoadDTO.templateID}";
-                imagesUrls.ForEach(imageUrl =>
+                myImageIDs.Add(myImage.Id);
+                Image image = new Image()
                 {
-                    Image image = new Image()
-                    {
-                        FolderName = $"/{folderName}/{templateFolder}",
-                        CreateDate = DateTime.Now,
-                        MyImagesId = myImage.Id,
-                        Status = true,
-                        ImageUrl = imageUrl,
+                    FolderName = $"/{folderName}/{templateFolder}",
+                    CreateDate = DateTime.Now,
+                    MyImagesId = myImage.Id,
+                    Status = true,
+                    ImageUrl = imageUrl,
 
-                    };
-                    images.Add(image);
-                });
-                if (!await _imageRepo.InsertAllAsync(images))
-                {
-                    return null;
                 };
-                return myImage;
-            }
+                await _imageRepo.InsertAsync(image);
 
+            };
+            return myImageIDs;
+        }
+
+        public async Task<bool> UpdateCart(int productDetailID,int quantity)
+        {
+            var oldProduct =await _productDetailsRepo.GetByIDAsync(productDetailID);
+            if (oldProduct == null)
+            {
+                return false;
+            }
+            oldProduct.Quantity = quantity;
+           await _productDetailsRepo.UpdateAsync(oldProduct);
+            return true;
         }
 
         public async Task<bool> ValidateFiles(IFormFile[] files)
@@ -197,6 +258,7 @@ namespace WebAPIGroup2.Service.Implement
             return true;
         }
 
+
         public async Task<string> ValidateRequestData(UpLoadDTO upLoadDTO)
         {
             using (var context = new MyImageContext())
@@ -211,7 +273,6 @@ namespace WebAPIGroup2.Service.Implement
                 }
                 return null;
             }
-
         }
     }
 }

@@ -35,7 +35,7 @@ namespace WebAPIGroup2.Models
             CreateMap<Review, AddReviewDTO>().ReverseMap();
             CreateMap<Collection,CollectionDTO>().ReverseMap(); 
             CreateMap<Category, CategoryDTO>().ReverseMap();
-            CreateMap<TemplateImage, TemplateImageDTO>().ReverseMap();
+
         }
     }
 }

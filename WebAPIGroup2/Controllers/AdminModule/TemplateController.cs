@@ -22,9 +22,9 @@ namespace WebAPIGroup2.Controllers.TemplateModule
         }
     
         [HttpGet]
-        public async Task<JsonResult> GetAll([FromQuery] string? filterOn, [FromQuery] string? filterQuery, [FromQuery] string? sortBy, [FromQuery] bool? isAscending, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 1000)
+        public async Task<JsonResult> GetAll([FromQuery] string? filterOn, [FromQuery] string? filterQuery, [FromQuery] string? sortBy, [FromQuery] bool? isAscending, [FromQuery] bool? status, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 1000)
         {
-            var templateDTO = await templateService.GetAllAsync(filterOn, filterQuery, sortBy, isAscending ?? true, pageNumber, pageSize);
+            var templateDTO = await templateService.GetAllAsync(filterOn, filterQuery, sortBy, isAscending ?? true,status ?? true,pageNumber, pageSize);
 
             var response = new ResponseDTO<List<TemplateDTO>>(HttpStatusCode.OK, "Success", null, templateDTO);
             return new JsonResult(response);
@@ -42,8 +42,7 @@ namespace WebAPIGroup2.Controllers.TemplateModule
         public async Task<JsonResult> GetById(int id)
         {
             var templateDto = await templateService.GetByIDAsync(id);
-            var listTemplate = new List<TemplateDTO>{templateDto};
-            var response = new ResponseDTO<List<TemplateDTO>>(HttpStatusCode.OK, "Success", null, listTemplate);
+            var response = new ResponseDTO<TemplateDTO>(HttpStatusCode.OK, "Success", null, templateDto);
             return new JsonResult(response);
         }
 
