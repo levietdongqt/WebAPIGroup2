@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using WebAPIGroup2.Models;
 using WebAPIGroup2.Models.DTO;
+using WebAPIGroup2.Models.POJO;
 using WebAPIGroup2.Service.Inteface;
 
 namespace WebAPIGroup2.Controllers.UserModule

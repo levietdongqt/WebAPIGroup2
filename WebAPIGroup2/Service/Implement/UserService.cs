@@ -137,6 +137,10 @@ namespace WebAPIGroup2.Service.Implement
         public async Task<UserDTO> GetUserByIDAsync(int id)
         {
             var user = await _useRepo.GetByIDAsync(id);
+            if (user == null)
+            {
+                return null;
+            }
             var userDTO = _mapper.Map<UserDTO>(user);
             return userDTO;
         }
@@ -197,13 +201,17 @@ namespace WebAPIGroup2.Service.Implement
                 }
 
                 var update = await _useRepo.UpdateAsync(existingUser);
+                if (!update)
+                {
+                    return null;
+                }
             }
 
             var userDTO = _mapper.Map<UserDTO>(existingUser);
             return userDTO;
         }
 
-
+        
     }
 
 
