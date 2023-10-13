@@ -43,7 +43,7 @@ namespace WebAPIGroup2.Controllers
             ResponseDTO<UserDTO> response;
             if (user == null)
             {
-                response = new ResponseDTO<UserDTO>(HttpStatusCode.BadRequest, "Fail", null, null);
+                response = new ResponseDTO<UserDTO>(HttpStatusCode.BadRequest, "Login Fail", null, null);
                 return new JsonResult(response);
             }
             var token = _loginService.GenerateToken(user);

@@ -110,11 +110,11 @@ create table PurchaseOrder(
 	DeliveryInfoId int null,
 	CreditCard varchar(max) null,
 	PriceTotal decimal null,
-	Status varchar(40) default('Pending') not null,
+	Status varchar(40) default('Temporary') not null,
 	CreateDate datetime null
 
 	constraint PK_PurchaseOrder primary key (Id),
-	constraint CK_StatusOrder check ([Status] in ('Order Placed','Order Paid','ToShip','Temporary'))
+	constraint CK_StatusOrder check ([Status] in ('Temporary','In Cart','Order Placed','Order Paid','ToShip'))
 )
 go
 create table Review(
