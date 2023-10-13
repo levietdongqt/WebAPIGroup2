@@ -1,13 +1,17 @@
-﻿namespace WebAPIGroup2.Models.DTO;
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
-public class CategoryDTO
+namespace WebAPIGroup2.Models.DTO
 {
-    public int Id { get; set; }
+    public class CategoryDTO
+    {
+        public int Id { get; set; }
 
-    public string? Name { get; set; }
+        public string? Name { get; set; }
 
-    
-    public string? ImageUrl { get; set; }
-    
-    public virtual ICollection<CollectionDTO> Collections { get; set; } = new List<CollectionDTO>();
+        public string? ImageUrl { get; set; }
+
+        public virtual ICollection<CollectionDTO> Collections { get; set; } = new List<CollectionDTO>();
+    }
 }

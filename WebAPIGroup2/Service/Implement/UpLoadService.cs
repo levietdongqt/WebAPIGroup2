@@ -258,6 +258,7 @@ namespace WebAPIGroup2.Service.Implement
             return true;
         }
 
+
         public async Task<string> ValidateRequestData(UpLoadDTO upLoadDTO)
         {
             using (var context = new MyImageContext())
@@ -272,7 +273,6 @@ namespace WebAPIGroup2.Service.Implement
                 }
                 return null;
             }
-
         }
     }
 }
