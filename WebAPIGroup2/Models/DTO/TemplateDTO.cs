@@ -12,7 +12,7 @@ namespace WebAPIGroup2.Models.DTO
 
         public string? Name { get; set; }
 
-        public float? PricePlus { get; set; }
+        public double? PricePlusPerOne { get; set; }
 
         public bool? Status { get; set; }
 

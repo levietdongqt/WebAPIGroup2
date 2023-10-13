@@ -71,6 +71,7 @@ namespace WebAPIGroup2.Service.Implement
         public async Task<TemplateDTO> CreateAsync(AddTemplateDTO addTemplateDTO)
         {
             var templateDomain = mapper.Map<Template>(addTemplateDTO);
+            templateDomain.CreateDate = DateTime.Now;
             var result = await templateRepo.InsertAsync(templateDomain);
             if (!result)
             {
@@ -141,9 +142,9 @@ namespace WebAPIGroup2.Service.Implement
             return templateDTOs;
         }
 
-        public async  Task<List<TemplateDTO>> GetAllAsync(string? filterOn = null, string? filterQuery = null, string? sortBy = null, bool isAscending = true, int pageNumber = 1, int pageSize = 1000)
+        public async  Task<List<TemplateDTO>> GetAllAsync(string? filterOn = null, string? filterQuery = null, string? sortBy = null, bool isAscending = true, bool status = true, int pageNumber = 1, int pageSize = 1000)
         {
-            var templates = await templateRepo.GetAllTemplateAsync(filterOn,filterQuery,sortBy,isAscending,pageNumber,pageSize);
+            var templates = await templateRepo.GetAllTemplateAsync(filterOn,filterQuery,sortBy,isAscending,status,pageNumber,pageSize);
             var templateDTOs =  mapper.Map<List<TemplateDTO>>(templates);
             foreach (var templateDTO in templateDTOs)
             {
