@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.IdentityModel.Tokens;
 using WebAPIGroup2.Models.DTO;
 using WebAPIGroup2.Models.POJO;
 using WebAPIGroup2.Respository.Inteface;
@@ -211,10 +212,24 @@ namespace WebAPIGroup2.Service.Implement
             updatedTemplate.QuantitySold = updateTemplateDTO.QuantitySold;
             updatedTemplate.PricePlusPerOne = updateTemplateDTO.PricePlus;
             var result = await templateRepo.UpdateAsync(updatedTemplate);
-            if (!result)
+            var result2 = await UpdateDescriptionByTemplateIdAsync(id, updateTemplateDTO.DescriptionTemplates);
+            if (!result && result2 == null)
             {
                 return null;
             }
+            var urlList = await utilService.UploadMany(updateTemplateDTO.formFileList);
+            var imageDTOs = new List<TemplateImageDTO>();
+            foreach (var i in urlList)
+            {
+                var imageDTO = new TemplateImageDTO()
+                {
+                    ImageUrl = i,
+                    TemplateId = id,
+                };
+                imageDTOs.Add(imageDTO);
+            }
+            var templateImages = mapper.Map<List<TemplateImage>>(imageDTOs);
+            var r2 = await imageRepo.InsertAllAsync(templateImages);
             var templateDTO = mapper.Map<TemplateDTO>(updatedTemplate);
             return templateDTO;
 
