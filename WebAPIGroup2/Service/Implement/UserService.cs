@@ -211,7 +211,42 @@ namespace WebAPIGroup2.Service.Implement
             return userDTO;
         }
 
-        
+        public async Task<UserDTO> PasswordRecovery(AddUserDTO addUserDTO)
+        {
+            var existingUser = await _context.Users.SingleOrDefaultAsync(u => u.Email == addUserDTO.Email);
+
+            if (existingUser != null)
+            {
+                existingUser.Password = addUserDTO.Password;
+             
+                if (addUserDTO.formFile != null)
+                {
+                    var avatar = await SaveUploadedFile(addUserDTO.formFile);
+                    existingUser.Avatar = avatar;
+                }
+
+                var update = await _useRepo.UpdateAsync(existingUser);
+                if (!update)
+                {
+                    return null;
+                }
+            }
+
+            var userDTO = _mapper.Map<UserDTO>(existingUser);
+            return userDTO;
+        }
+
+
+        public async Task<UserDTO> GetUserByEmailAsync(string email)
+        {
+            var user = await _useRepo.GetUserByEmail(email);
+            if (user == null)
+            {
+                return null;
+            }
+            var userDTO = _mapper.Map<UserDTO>(user);
+            return userDTO;
+        }
     }
 
 

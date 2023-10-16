@@ -11,7 +11,10 @@ namespace WebAPIGroup2.Service.Inteface
         Task<UserDTO> UpdateUser(AddUserDTO addUserDTO);
         Task<IEnumerable<UserDTO>?> GetAllAsync(string? search,string? st, int page, int pageSize);
         Task<UserDTO> ChangePassword(AddUserDTO addUserDTO );
+        Task<UserDTO> PasswordRecovery(AddUserDTO addUserDTO );
+
         Task<UserDTO> GetUserByIDAsync(int id);
+        Task<UserDTO> GetUserByEmailAsync(string email);
 
         Task<UserDTO> UpdateConfirmEmailAsync(UserDTO userDTO);
 

@@ -8,6 +8,7 @@ using WebAPIGroup2.Models;
 using WebAPIGroup2.Models.DTO;
 using WebAPIGroup2.Models.POJO;
 using WebAPIGroup2.Service.Inteface;
+using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
 
 namespace WebAPIGroup2.Controllers.UserModule
 {
@@ -85,6 +86,15 @@ namespace WebAPIGroup2.Controllers.UserModule
         {
             try
             {
+                var email = userDTO.Email;
+
+                // Kiểm tra xem email đã được sử dụng chưa bằng cách gọi phương thức GetUserByEmailAsync
+                var existingUserDTO = await _userService.GetUserByEmailAsync(email);
+
+                if (existingUserDTO != null)
+                {
+                    return BadRequest(new ResponseDTO<string>(HttpStatusCode.BadRequest, "Email is already in use", null, "Failed"));
+                }
 
                 var createdUserDTO = await _userService.CreateUser(userDTO);
 
@@ -141,11 +151,84 @@ namespace WebAPIGroup2.Controllers.UserModule
             }
             catch (Exception e)
             {
-                Console.Error.WriteLine("Lỗi khi cập nhật thông tin: " + e.Message);
+                Console.Error.WriteLine("Error updating information: " + e.Message);
                 return BadRequest(new ResponseDTO<string>(HttpStatusCode.BadRequest, e.Message, null, "Failed"));
             }
         }
 
+        private string GenerateRandomCode()
+        {
+            const string characters = "0123456789";
+            var random = new Random();
+            var result = new string(Enumerable.Repeat(characters, 6)
+                .Select(s => s[random.Next(s.Length)]).ToArray());
+            return result;
+        }
+
+
+
+        [HttpPost("SendMailPR")]
+        public async Task<IActionResult> SendMailPassReco(string email)
+        {
+            try
+            {
+
+                var existingUserDTO = await _userService.GetUserByEmailAsync(email);
+
+                if (existingUserDTO == null)
+                {
+                    return BadRequest(new ResponseDTO<string>(HttpStatusCode.BadRequest, "Email does not exist", null, "Failed"));
+                }
+
+                var confirmationCode = GenerateRandomCode();
+
+                var mailContent = new MailContent(email, "Confirm your email", $"Your confirmation code is: {confirmationCode}", "Confirmation");
+
+                var mailContented = await _utilService.SendEmailAsync(mailContent);
+
+                if (mailContented == null)
+                {
+                    return BadRequest(new ResponseDTO<string>(HttpStatusCode.BadRequest, "Failed to Send Mail To User", null, "Failed"));
+                }
+
+
+                return Ok(new ResponseDTO<string>(HttpStatusCode.OK, "Confirmation successful", null, "Success"));
+            }
+            catch (Exception e)
+            {
+                Console.Error.WriteLine("Error sending email or processing request: " + e.Message);
+                return BadRequest(new ResponseDTO<string>(HttpStatusCode.BadRequest, e.Message, null, "Failed"));
+            }
+        }
+
+
+
+
+
+
+        [HttpPut("PassReco")]
+        public async Task<IActionResult> PasswordRecovery( AddUserDTO addUserDTO)
+        {
+            try
+            {
+                var userDTO = await _userService.PasswordRecovery(addUserDTO);
+                if (userDTO != null)
+                {
+                    return Ok(new ResponseDTO<UserDTO>(HttpStatusCode.OK, "PasswordRecovery ok", null, userDTO));
+                }
+                else
+                {
+                    return BadRequest(new ResponseDTO<string>(HttpStatusCode.BadRequest, "Failed to Password Recovery", null, "Failed"));
+                }
+            }
+            catch (Exception e)
+            {
+                Console.Error.WriteLine("Error updating information: " + e.Message);
+                return BadRequest(new ResponseDTO<string>(HttpStatusCode.BadRequest, e.Message, null, "Failed"));
+            }
+        }
+
+       
 
         [HttpPut("ChangePass")]
         public async Task<IActionResult> ChangePassWord([FromBody] AddUserDTO addUserDTO)
@@ -200,6 +283,25 @@ namespace WebAPIGroup2.Controllers.UserModule
         }
 
         [HttpGet]
+        [Route("get-by-email/{email}")]
+        public async Task<IActionResult> GetByEmail([FromBody] string email)
+        {
+            var userDTO = await _userService.GetUserByEmailAsync(email);
+
+            if (userDTO == null)
+            {
+                var errorResponse = new ResponseDTO<string>(HttpStatusCode.NotFound, "Email not found", "The specified email address does not exist in the system.", null);
+                return NotFound(errorResponse);
+            }
+
+            var response = new ResponseDTO<UserDTO>(HttpStatusCode.OK, "Success", null, userDTO);
+            return Ok(response);
+        }
+
+
+
+
+        [HttpGet]
         [Route("{userId:int}/deliveryInfos")]
         public async Task<JsonResult> GetDeliveryInfoByUserId([FromRoute] int userId)
         {
@@ -225,5 +327,8 @@ namespace WebAPIGroup2.Controllers.UserModule
             return new JsonResult(response);
         }
     }
+
+
+
 
 }
