@@ -21,7 +21,6 @@ namespace WebAPIGroup2.Models.DTO
         
         public List<DescriptionTemplateDTO> DescriptionTemplates { get; set; } = new List<DescriptionTemplateDTO>();
 
-        [FromForm]
         public IFormFile[] formFileList { get; set; }
 
         public List<CollectionDTO> collectionDTOs { get; set; } = new List<CollectionDTO>();
