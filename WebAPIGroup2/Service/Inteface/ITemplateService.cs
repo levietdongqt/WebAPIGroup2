@@ -4,7 +4,7 @@ namespace WebAPIGroup2.Service.Inteface
 {
     public interface ITemplateService
     {
-        Task<List<TemplateDTO>> GetBestSeller();
+        Task<List<TemplateDTO>> GetBestSeller(bool status = true);
         Task<List<TemplateDTO>> GetAllAsync(string? filterOn = null, string? filterQuery = null, string? sortBy = null, bool isAscending = true, bool status = true,int pageNumber = 1, int pageSize = 1000);
 
         Task<TemplateDTO> CreateAsync(AddTemplateDTO addTemplateDTO);
@@ -22,6 +22,8 @@ namespace WebAPIGroup2.Service.Inteface
         Task<TemplateDTO> AddImageByTemplateIdAsync(int templateId, IFormFile[] formFiles);
 
         Task<TemplateDTO> UpdateDescriptionByTemplateIdAsync(int templateId, List<DescriptionTemplateDTO> descriptionTemplateDTOs);
+        
+        Task<PaginationDTO<TemplateDTO>> GetByNameAsync(string? name,int page =1 ,int limit =1 );
 
     }
 }

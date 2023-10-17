@@ -1,4 +1,5 @@
-﻿using WebAPIGroup2.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using WebAPIGroup2.Models;
 using WebAPIGroup2.Models.POJO;
 using WebAPIGroup2.Respository.Inteface;
 
@@ -10,9 +11,9 @@ namespace WebAPIGroup2.Respository.Implement
         {
         }
 
-        public Task<FeedBack?> GetByIDAsync(int id)
+        public async Task<FeedBack?> GetByIDAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _context.FeedBacks.FirstOrDefaultAsync(x=>x.Id == id);
         }
     }
 }

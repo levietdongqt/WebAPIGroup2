@@ -8,19 +8,18 @@ namespace WebAPIGroup2.Service.Inteface
     public interface IUserService
     {
         Task <UserDTO> CreateUser(UserDTO userDTO);   
-        Task <bool> UpdateUser(UserDTO userDTO);
-        Task<IEnumerable<UserDTO>?> GetAllAsync(string? search,string? st, int page, int pageSize); 
-        Task<bool> ChangePassword(UserDTO userDTO, string oldPassword);
+        Task<UserDTO> UpdateUser(AddUserDTO addUserDTO);
+        Task<IEnumerable<UserDTO>?> GetAllAsync(string? search,string? st, int page, int pageSize);
+        Task<UserDTO> ChangePassword(AddUserDTO addUserDTO );
+        Task<UserDTO> PasswordRecovery(AddUserDTO addUserDTO );
 
         Task<UserDTO> GetUserByIDAsync(int id);
+        Task<UserDTO> GetUserByEmailAsync(string email);
 
         Task<UserDTO> UpdateConfirmEmailAsync(UserDTO userDTO);
 
         Task<List<DeliveryInfoDTO>> GetDeliveryInfoByUserIDAsync(int userId);
 
         Task<DeliveryInfoDTO> CreateDeliveryInfoOfUser(int userId,DeliveryInfoDTO deliveryInfoDTO);
-
-
-
     }
 }
