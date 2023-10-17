@@ -11,7 +11,7 @@ namespace WebAPIGroup2.Models.DTO
       
         public string? ImageUrl { get; set; }
 
-        public int? TemplateId { get; set; }
+        public int TemplateId { get; set; }
 
     }
 }

@@ -12,7 +12,7 @@ public partial class Image
     [Key]
     public int Id { get; set; }
 
-    public int? ProductDetailId { get; set; }
+    public int? MyImagesId { get; set; }
 
     [StringLength(500)]
     [Unicode(false)]
@@ -24,10 +24,12 @@ public partial class Image
     [Required]
     public bool? Status { get; set; }
 
+    public int? Index { get; set; }
+
     [Column(TypeName = "datetime")]
     public DateTime? CreateDate { get; set; }
 
-    [ForeignKey("ProductDetailId")]
+    [ForeignKey("MyImagesId")]
     [InverseProperty("Images")]
-    public virtual ProductDetail? ProductDetail { get; set; }
+    public virtual MyImage? MyImages { get; set; }
 }

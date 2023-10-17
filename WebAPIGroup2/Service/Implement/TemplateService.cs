@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.IdentityModel.Tokens;
 using WebAPIGroup2.Models.DTO;
 using WebAPIGroup2.Models.POJO;
 using WebAPIGroup2.Respository.Inteface;
@@ -29,7 +30,6 @@ namespace WebAPIGroup2.Service.Implement
             this.templateSizeRepo = templateSizeRepo;
             this.collectionTemplateRepo = collectionTemplateRepo;
         }
-
         public async  Task<TemplateDTO> AddDescriptionByTemplateIdAsync(int templateId, List<DescriptionTemplateDTO> descriptionTemplateDTOs)
         {
             foreach (var templateDTO in descriptionTemplateDTOs)
@@ -72,6 +72,7 @@ namespace WebAPIGroup2.Service.Implement
         public async Task<TemplateDTO> CreateAsync(AddTemplateDTO addTemplateDTO)
         {
             var templateDomain = mapper.Map<Template>(addTemplateDTO);
+            templateDomain.CreateDate = DateTime.Now;
             var result = await templateRepo.InsertAsync(templateDomain);
             if (!result)
             {
@@ -124,9 +125,27 @@ namespace WebAPIGroup2.Service.Implement
             return templateDTO;
         }
 
-        public async  Task<List<TemplateDTO>> GetAllAsync(string? filterOn = null, string? filterQuery = null, string? sortBy = null, bool isAscending = true, int pageNumber = 1, int pageSize = 1000)
+        public async Task<List<TemplateDTO>> GetBestSeller()
         {
-            var templates = await templateRepo.GetAllTemplateAsync(filterOn,filterQuery,sortBy,isAscending,pageNumber,pageSize);
+            var best = await templateRepo.GetBestSellerTemplateAsync();
+            var templateDTOs = mapper.Map<List<TemplateDTO>>(best);
+            foreach (var item in templateDTOs)
+            {
+                var templateImages = new List<TemplateImageDTO>(); 
+                foreach (var x in item.TemplateImages)
+                {
+                    var image = await imageRepo.GetByIDAsync(x.TemplateId);
+                    var imageDto = mapper.Map<TemplateImageDTO>(image);
+                    templateImages.Add(imageDto);
+                } 
+                item.TemplateImages = templateImages; 
+            }
+            return templateDTOs;
+        }
+
+        public async  Task<List<TemplateDTO>> GetAllAsync(string? filterOn = null, string? filterQuery = null, string? sortBy = null, bool isAscending = true, bool status = true, int pageNumber = 1, int pageSize = 1000)
+        {
+            var templates = await templateRepo.GetAllTemplateAsync(filterOn,filterQuery,sortBy,isAscending,status,pageNumber,pageSize);
             var templateDTOs =  mapper.Map<List<TemplateDTO>>(templates);
             foreach (var templateDTO in templateDTOs)
             {
@@ -191,12 +210,26 @@ namespace WebAPIGroup2.Service.Implement
             updatedTemplate.Status = updateTemplateDTO.Status;
             updatedTemplate.CreateDate = updateTemplateDTO.CreateDate;
             updatedTemplate.QuantitySold = updateTemplateDTO.QuantitySold;
-            updatedTemplate.PricePlus = updateTemplateDTO.PricePlus;
+            updatedTemplate.PricePlusPerOne = updateTemplateDTO.PricePlus;
             var result = await templateRepo.UpdateAsync(updatedTemplate);
-            if (!result)
+            var result2 = await UpdateDescriptionByTemplateIdAsync(id, updateTemplateDTO.DescriptionTemplates);
+            if (!result && result2 == null)
             {
                 return null;
             }
+            var urlList = await utilService.UploadMany(updateTemplateDTO.formFileList);
+            var imageDTOs = new List<TemplateImageDTO>();
+            foreach (var i in urlList)
+            {
+                var imageDTO = new TemplateImageDTO()
+                {
+                    ImageUrl = i,
+                    TemplateId = id,
+                };
+                imageDTOs.Add(imageDTO);
+            }
+            var templateImages = mapper.Map<List<TemplateImage>>(imageDTOs);
+            var r2 = await imageRepo.InsertAllAsync(templateImages);
             var templateDTO = mapper.Map<TemplateDTO>(updatedTemplate);
             return templateDTO;
 

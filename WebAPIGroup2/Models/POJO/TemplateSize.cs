@@ -20,7 +20,7 @@ public partial class TemplateSize
     [InverseProperty("TemplateSizes")]
     public virtual PrintSize? PrintSize { get; set; }
 
-    [InverseProperty("Template")]
+    [InverseProperty("TemplateSize")]
     public virtual ICollection<ProductDetail> ProductDetails { get; set; } = new List<ProductDetail>();
 
     [ForeignKey("TemplateId")]

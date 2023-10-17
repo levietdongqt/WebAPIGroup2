@@ -44,7 +44,7 @@ go
 create table Template(
 	Id int identity(1,1) not null,
 	Name nvarchar(max) null,
-	PricePlus decimal null,
+	PricePlusPerOne float null,
 	Status bit default(1) not null,
 	QuantitySold int null,
 	CreateDate datetime null
@@ -93,9 +93,9 @@ create table MaterialPage(
 go
 create table ProductDetail (
 	Id int identity(1,1) not null,
-	TemplateId int null,
 	MaterialPageId int null,
-	PurchaseOrderId int null,
+	TemplateSizeId int null,
+	MyImageId int null,
 	Price decimal null,
 	Quantity int null,
 	Status bit default(1),
@@ -139,13 +139,16 @@ create table MonthlySpending(
 go
 create table [Image](
 	Id int identity(1,1) not null,
-	ProductDetailId int null,
+	MyImagesId int null,
 	ImageUrl varchar(500) null,
 	FolderName nvarchar(500) null,
 	Status bit default(1) not null,
+	[Index] int null,
 	CreateDate datetime null
 
-	constraint PK_Image primary key (Id)
+	constraint PK_Image primary key (Id),
+	constraint CK_Index_Image check ([Index] > 0)
+
 )
 go
 create table FeedBack(
@@ -191,11 +194,22 @@ create table RefeshToken (
 	constraint PK_RefeshToken primary key (Id)
 )
 go
+create table MyImages(
+	Id int identity(1,1) not null,
+	TemplateId int null,
+	PurchaseOrderId int null,
+	Status bit default(1)
+
+	constraint PK_MyImages primary key (Id)
+)
+go
 create table TemplateImage(
 	Id int identity(1,1) not null,
 	ImageUrl varchar(500) null,
-	TemplateId int null
+	TemplateId int null,
+	[Index] int null
 
+	constraint CK_Index check ([Index] > 0),
 	constraint PK_TemplateImage primary key (Id)
 )
 go
@@ -230,16 +244,16 @@ add constraint FK_CollectionTemplate_Template
 	foreign key (TemplateId) references Template(Id)
 go
 alter table ProductDetail
-add constraint FK_ProductDetail_Template
-	foreign key (TemplateId) references TemplateSize(Id)
-go
-alter table ProductDetail
 add constraint FK_ProductDetail_MaterialPage
 	foreign key (MaterialPageId) references MaterialPage(Id)
 go
 alter table ProductDetail
-add constraint FK_ProductDetail_PurchaseOrder
-	foreign key (PurchaseOrderId) references PurchaseOrder(Id)
+add constraint FK_ProductDetail_MyImages
+	foreign key (MyImageId) references MyImages(Id)
+go
+alter table ProductDetail
+add constraint FK_ProductDetail_TemplateSize
+	foreign key (TemplateSizeId) references TemplateSize(Id)
 go
 alter table PurchaseOrder
 add constraint FK_PurchaseOrder_User
@@ -287,17 +301,24 @@ add constraint Fk_Template_Image
 	foreign key (TemplateId) references [Template](Id)
 go
 alter table Image
-add constraint Fk_Product_Detail
-	foreign key (ProductDetailId) references [ProductDetail](Id)
+add constraint Fk_Image_MyImages
+	foreign key (MyImagesId) references MyImages(Id)
 go
+alter table MyImages
+add constraint FK_MyImages_Template
+	foreign key (TemplateId) references Template(Id)
+go
+alter table MyImages
+add constraint FK_MyImages_PerchaseOrder
+	foreign key (PurchaseOrderId) references PurchaseOrder(Id)
 ----------------------------------------------------------------------------------------
 insert into Category
-values('Book',null),('Calendar',null),('Gift',null),('Prints',null),('Card',null)
+values('Book','/CategoryImage/Book.jpg'),('Calendar','/CategoryImage/Calender.jpg'),('Gift','/CategoryImage/Gift.jpg'),('Prints','/CategoryImage/Poster.jpg'),('Card','/CategoryImage/Card.jpg')
 go
 
 insert into [dbo].[Collection]
-values('Book 1',null,1),('Book 2',null,1),('Calendar 1',null,2),('Calendar 2',null,2),('Gift 1',null,3)
-,('Gift 2',null,3),('Prints 1',null,4),('Prints 2',null,4),('Card 1',null,5),('Card 2',null,5)
+values('Book 1','/CollectionImage/Bookmarks.jpg',1),('Book 2','/CollectionImage/Bookmarks.jpg',1),('Calendar 1','/CollectionImage/Calender1.jpg',2),('Calendar 2','/CollectionImage/Calender1.jpg',2),('Gift 1','/CollectionImage/houseGift.jpg',3)
+,('Gift 2','/CollectionImage/GiftTags.jpg',3),('Prints 1',null,4),('Prints 2',null,4),('Card 1','/CollectionImage/Holidaycards.jpg',5),('Card 2','/CollectionImage/ChristmasCard.jpg',5)
 go
 
 insert into Template
@@ -309,20 +330,246 @@ values('Prints&Enlargement',0,1,0,GETDATE()),
 	  ('Thank You',2.99,1,0,GETDATE())
 go
 
-insert into TemplateImage
-values('https://images.pexels.com/photos/4350631/pexels-photo-4350631.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',1),
-	  ('https://images.pexels.com/photos/2226900/pexels-photo-2226900.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',2),
-	  ('https://images.pexels.com/photos/808466/pexels-photo-808466.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',3),
-	  ('https://images.pexels.com/photos/5342974/pexels-photo-5342974.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',4),
-	  ('https://images.pexels.com/photos/5342974/pexels-photo-5342974.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',5),
-	  ('https://images.pexels.com/photos/808466/pexels-photo-808466.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',6)
+insert into Template
+values('Graphic Year',3.9,1,0,GETDATE()),
+	  ('Bright Seasonal',7.9,1,0,GETDATE()),
+	  ('Sketchy Expressions',10.9,1,0,GETDATE()),
+	  ('Black and Bashful',9.99,1,0,GETDATE()),
+	  ('The Life You Love',13.9,1,0,GETDATE())
 go
+
+insert into Template
+values('A Baby Story',3.9,1,0,GETDATE()),
+	  ('Always and Forever',7.9,1,0,GETDATE()),
+	  ('JouneyBook',10.9,1,0,GETDATE()),
+	  ('Life at the Beach',9.99,1,0,GETDATE()),
+	  ('Smitten',13.9,1,0,GETDATE())
+go
+
+insert into Template
+values('Collage Season Greetings',1.3,1,0,GETDATE()),
+	  ('Christmas',1.9,1,0,GETDATE())
+go
+
+insert into TemplateImage
+  values('/Image/prints1.jpg',1,1);
+
+  insert into TemplateImage
+  values('/Image/prints2.jpg',1,2);
+
+   insert into TemplateImage
+  values('/Image/prints3.jpg',1,3);
+
+insert into TemplateImage
+  values('/Image/book11.jpg',2,1);
+
+   insert into TemplateImage
+  values('/Image/book12.jpg',2,2);
+
+   insert into TemplateImage
+  values('/Image/book13.jpg',2,3);
+
+insert into TemplateImage
+  values('/Image/book21.jpg',3,1);
+
+  insert into TemplateImage
+  values('/Image/book22.jpg',3,2);
+
+   insert into TemplateImage
+  values('/Image/book23.jpg',3,3);
+
+   insert into TemplateImage
+  values('/Image/calendar1.jpg',4,1); 
+
+    insert into TemplateImage
+  values('/Image/calendar2.jpg',4,2);
+
+   insert into TemplateImage
+  values('/Image/calendar3.jpg',4,3);
+
+insert into TemplateImage
+  values('/Image/Glass1.jpg',5,1);
+
+  insert into TemplateImage
+  values('/Image/Glass2.jpg',5,2);
+
+   insert into TemplateImage
+  values('/Image/Glass3.png',5,3);
+
+ insert into TemplateImage
+  values('/Image/card1.jpg',6,1);
+
+  insert into TemplateImage
+  values('/Image/card2.jpg',6,2);
+
+  insert into TemplateImage
+  values('/Image/gy1.jpg',7,1);
+
+   insert into TemplateImage
+  values('/Image/gy2.jpg',7,2);
+
+   insert into TemplateImage
+  values('/Image/gy3.jpg',7,3);
+
+   insert into TemplateImage
+  values('/Image/bs1.jpg',8,1);
+
+   insert into TemplateImage
+  values('/Image/bs2.jpg',8,2);
+
+   insert into TemplateImage
+  values('/Image/bs3.jpg',8,3);
+
+   insert into TemplateImage
+  values('/Image/se1.jpg',9,1);
+
+  insert into TemplateImage
+  values('/Image/se2.jpg',9,2);
+
+  insert into TemplateImage
+  values('/Image/se3.jpg',9,3);
+
+  insert into TemplateImage
+  values('/Image/baf1.jpg',10,1);
+
+   insert into TemplateImage
+  values('/Image/baf2.jpg',10,2);
+
+   insert into TemplateImage
+  values('/Image/baf3.jpg',10,3);
+
+  insert into TemplateImage
+  values('/Image/tl1.jpg',11,1);
+
+  insert into TemplateImage
+  values('/Image/tl2.jpg',11,2);
+
+  insert into TemplateImage
+  values('/Image/tl3.jpg',11,3);
+
+  insert into TemplateImage
+  values('/Image/abs1.jpg',12,1);
+
+   insert into TemplateImage
+  values('/Image/abs2.jpg',12,2);
+
+   insert into TemplateImage
+  values('/Image/abs3.jpg',12,3);
+
+   insert into TemplateImage
+  values('/Image/aaf1.jpg',13,1);
+
+   insert into TemplateImage
+  values('/Image/aaf2.jpg',13,2);
+
+   insert into TemplateImage
+  values('/Image/aaf3.jpg',13,3);
+
+   insert into TemplateImage
+  values('/Image/jb1.jpg',14,1);
+
+  insert into TemplateImage
+  values('/Image/jb2.jpg',14,2);
+
+  insert into TemplateImage
+  values('/Image/jb3.jpg',14,3);
+
+  insert into TemplateImage
+  values('/Image/latb1.jpg',15,1);
+
+   insert into TemplateImage
+  values('/Image/latb2.jpg',15,2);
+
+   insert into TemplateImage
+  values('/Image/latb3.jpg',15,3);
+
+  insert into TemplateImage
+  values('/Image/s1.jpg',16,1);
+
+  insert into TemplateImage
+  values('/Image/s2.jpg',16,2);
+
+  insert into TemplateImage
+  values('/Image/s3.jpg',16,3);
+
+   insert into TemplateImage
+  values('/Image/csg1.jpg',17,1);
+
+   insert into TemplateImage
+  values('/Image/csg2.jpg',17,2);
+
+
+   insert into TemplateImage
+  values('/Image/ct1.jpg',18,1);
+
+   insert into TemplateImage
+  values('/Image/ct2.jpg',18,2);
 
 insert into DescriptionTemplate
 values('Print and share your favorite memories','<ul><li>Printed on glossy photo paper</li><li>Available sizes: 4x6, 5x7, 8x10, 4x5.3, 4x4 and 8x8</li></ul>',1),
 	('Product Details','<ul><li>New patented layflat pages for easier display</li><li>Eco-friendly, white matte paper</li><li>Features several photos per page, up to 50 pages (20 pages included in base price)</li></ul>',3),
 	('Product Details','<ul><li>5x7 folded card on 85lb. cardstock</li><li>Some cards available in portrait or landscape formats</li><li>Card will print with white border</li></ul>',6),
 	('Ship to You','<p>Get your photo products delivered directly to your home or business. Arrives in 3-10 business days</p>',6)
+go
+
+insert into DescriptionTemplate
+VALUES('Book and share your favorite memories','<ul><li>Printed on glossy photo paper</li><li>Available sizes: 4x6, 5x7, 8x10, 4x5.3, 4x4 and 8x8</li></ul>',2)
+go
+
+insert into DescriptionTemplate
+VALUES('Calendar and share your favorite memories','<ul><li>Printed on glossy photo paper</li><li>Available sizes: 4x6, 5x7, 8x10, 4x5.3, 4x4 and 8x8</li></ul>',4)
+go
+
+insert into DescriptionTemplate
+VALUES('Glass and share your favorite memories','<ul><li>Printed on glossy photo paper</li><li>Available sizes: 4x6, 5x7, 8x10, 4x5.3, 4x4 and 8x8</li></ul>',5)
+go
+
+ insert into DescriptionTemplate
+VALUES('Calender and share your favorite memories','<ul><li>Printed on glossy photo paper</li><li>Available sizes: 4x6, 5x7, 8x10, 4x5.3, 4x4 and 8x8</li></ul>',7)
+go
+
+  insert into DescriptionTemplate
+VALUES('Calender and share your favorite memories','<ul><li>Printed on glossy photo paper</li><li>Available sizes: 4x6, 5x7, 8x10, 4x5.3, 4x4 and 8x8</li></ul>',8)
+go
+
+  insert into DescriptionTemplate
+VALUES('Calender and share your favorite memories','<ul><li>Printed on glossy photo paper</li><li>Available sizes: 4x6, 5x7, 8x10, 4x5.3, 4x4 and 8x8</li></ul>',9)
+go
+
+  insert into DescriptionTemplate
+VALUES('Calender and share your favorite memories','<ul><li>Printed on glossy photo paper</li><li>Available sizes: 4x6, 5x7, 8x10, 4x5.3, 4x4 and 8x8</li></ul>',10)
+go
+
+  insert into DescriptionTemplate
+VALUES('Calender and share your favorite memories','<ul><li>Printed on glossy photo paper</li><li>Available sizes: 4x6, 5x7, 8x10, 4x5.3, 4x4 and 8x8</li></ul>',11)
+go
+
+insert into DescriptionTemplate
+VALUES('Calender and share your favorite memories','<ul><li>Printed on glossy photo paper</li><li>Available sizes: 4x6, 5x7, 8x10, 4x5.3, 4x4 and 8x8</li></ul>',12)
+go
+
+  insert into DescriptionTemplate
+VALUES('Calender and share your favorite memories','<ul><li>Printed on glossy photo paper</li><li>Available sizes: 4x6, 5x7, 8x10, 4x5.3, 4x4 and 8x8</li></ul>',13)
+go
+
+  insert into DescriptionTemplate
+VALUES('Calender and share your favorite memories','<ul><li>Printed on glossy photo paper</li><li>Available sizes: 4x6, 5x7, 8x10, 4x5.3, 4x4 and 8x8</li></ul>',14)
+go
+
+  insert into DescriptionTemplate
+VALUES('Calender and share your favorite memories','<ul><li>Printed on glossy photo paper</li><li>Available sizes: 4x6, 5x7, 8x10, 4x5.3, 4x4 and 8x8</li></ul>',15)
+go
+
+  insert into DescriptionTemplate
+VALUES('Calender and share your favorite memories','<ul><li>Printed on glossy photo paper</li><li>Available sizes: 4x6, 5x7, 8x10, 4x5.3, 4x4 and 8x8</li></ul>',16)
+go
+
+  insert into DescriptionTemplate
+VALUES('Calender and share your favorite memories','<ul><li>Printed on glossy photo paper</li><li>Available sizes: 4x6, 5x7, 8x10, 4x5.3, 4x4 and 8x8</li></ul>',17)
+go
+
+  insert into DescriptionTemplate
+VALUES('Calender and share your favorite memories','<ul><li>Printed on glossy photo paper</li><li>Available sizes: 4x6, 5x7, 8x10, 4x5.3, 4x4 and 8x8</li></ul>',18)
 go
 
 insert into PrintSize
@@ -333,10 +580,34 @@ insert into TemplateSize
 values(1,1),(1,3),(1,6),(1,7),(2,1),(3,2),(4,3),(5,4),(6,3)
 go
 
+insert into TemplateSize
+values(7,1),(7,3),(7,6),(7,7),(8,1),(8,3),(8,6),(8,7),(9,1),(9,3),(9,6),(9,4),(10,1),(10,3),(10,6),(11,7),(11,1),(11,2),(11,3),(11,7)
+go
+
+insert into TemplateSize
+values(12,1),(12,3),(12,6),(12,7),(13,1),(13,3),(13,6),(13,7),(14,1),(14,3),(14,6),(14,4),(14,1),(15,3),(15,6),(15,7),(16,1),(16,2),(16,3),(16,7)
+go
+
+insert into TemplateSize
+values(17,1),(17,3),(17,6),(17,7),(18,1),(18,3),(18,6),(18,7)
+go
+
+
 insert into CollectionTemplate(TemplateId,CollectionId)
 values(1,2),(2,1),(3,2),(4,3),(4,4),(5,5),(6,9)
 go
 
+insert into CollectionTemplate(TemplateId,CollectionId)
+values(7,3),(8,3),(9,4),(10,4),(11,3)
+go
+
+insert into CollectionTemplate(TemplateId,CollectionId)
+values(12,2),(13,1),(14,2),(15,1),(16,2)
+go
+
+insert into CollectionTemplate(TemplateId,CollectionId)
+values(17,9),(18,10)
+go
 
 insert into MaterialPage
 values('High',0,0.5,1,'Best material page for print images'),
@@ -356,27 +627,59 @@ go
 insert into DeliveryInfo
 values(2,'huy.tran9510@gmail.com','374 Binh Trieu Tp.HCM','09027837465')
 go
-
-insert into PurchaseOrder
-values(2,1,'1303 3333 9999 8888',0,'Temporary',GETDATE())
-go
-
-insert into ProductDetail
-values(1,1,1,10.3,5,1,GETDATE())
-go
-
-insert into Image
-values(1,'https://images.pexels.com/photos/5342974/pexels-photo-5342974.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1','2-user1',1,GETDATE()),
-	  (1,'https://images.pexels.com/photos/4350631/pexels-photo-4350631.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1','2-user1',1,GETDATE())
-go
-
-
-
-
 insert into ContentEmail
 values(1,'Send mail to Buy','Confirm Bill','Sale')
 go
 
 insert into Review
 values(1,2,'Good page',4,GETDATE())
+go
+
+insert into Review
+values(1,2,'Bad',2.5,GETDATE())
+go
+
+insert into Review
+values(1,2,'Web is good',4.7,GETDATE())
+go
+
+insert into Review
+values(2,2,'Excelent',5,GETDATE())
+go
+
+insert into Review
+values(2,2,'Web is good',4.2,GETDATE())
+go
+
+insert into Review
+values(3,3,'Excelent',5,GETDATE())
+go
+
+insert into Review
+values(3,2,'Web is good',3.5,GETDATE())
+go
+
+insert into Review
+values(1,2,'Bad',2.5,GETDATE())
+go
+
+insert into Review
+values(1,2,'Web is good',4.7,GETDATE())
+go
+
+insert into Review
+values(2,2,'Excelent',5,GETDATE())
+go
+
+insert into Review
+values(2,2,'Web is good',4.2,GETDATE())
+go
+
+
+insert into Review
+values(3,3,'Excelent',5,GETDATE())
+go
+
+insert into Review
+values(3,2,'Web is good',3.5,GETDATE())
 go

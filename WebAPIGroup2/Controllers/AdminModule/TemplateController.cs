@@ -20,23 +20,29 @@ namespace WebAPIGroup2.Controllers.TemplateModule
             this.templateService = templateService;
             this.utilService = utilService;
         }
-
+    
         [HttpGet]
-        public async Task<JsonResult> GetAll([FromQuery] string? filterOn, [FromQuery] string? filterQuery, [FromQuery] string? sortBy, [FromQuery] bool? isAscending, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 1000)
+        public async Task<JsonResult> GetAll([FromQuery] string? filterOn, [FromQuery] string? filterQuery, [FromQuery] string? sortBy, [FromQuery] bool? isAscending, [FromQuery] bool? status, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 1000)
         {
-            var templateDTO = await templateService.GetAllAsync(filterOn, filterQuery, sortBy, isAscending ?? true, pageNumber, pageSize);
+            var templateDTO = await templateService.GetAllAsync(filterOn, filterQuery, sortBy, isAscending ?? true,status ?? true,pageNumber, pageSize);
 
             var response = new ResponseDTO<List<TemplateDTO>>(HttpStatusCode.OK, "Success", null, templateDTO);
             return new JsonResult(response);
         }
 
-
+        [HttpGet("bestSeller")]
+        public async Task<JsonResult> Get()
+        {
+            var templateDto = await templateService.GetBestSeller();
+            var response = new ResponseDTO<List<TemplateDTO>>(HttpStatusCode.OK, "Success", null, templateDto);
+            return new JsonResult(response);
+        }
         [HttpGet]
         [Route("{id:int}")]
         public async Task<JsonResult> GetById(int id)
         {
-            var templateDTO = await templateService.GetByIDAsync(id);
-            var response = new ResponseDTO<TemplateDTO>(HttpStatusCode.OK, "Success", null, templateDTO);
+            var templateDto = await templateService.GetByIDAsync(id);
+            var response = new ResponseDTO<TemplateDTO>(HttpStatusCode.OK, "Success", null, templateDto);
             return new JsonResult(response);
         }
 

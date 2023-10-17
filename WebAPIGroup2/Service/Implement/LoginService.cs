@@ -43,7 +43,11 @@ namespace WebAPIGroup2.Service.Implement
             //var passwordHash = BCrypt.Net.BCrypt.HashPassword(loginRequest.password);
             //loginRequest.password = passwordHash;
             var user = await _userRepo.GetUser(loginRequest);
-            return _mapper.Map<UserDTO>(user);
+            if(user != null)
+            {
+                return _mapper.Map<UserDTO>(user);
+            }
+            return null;
 
         }
 

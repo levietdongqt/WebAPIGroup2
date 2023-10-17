@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using WebAPIGroup2.Models;
 using WebAPIGroup2.Models.POJO;
 using WebAPIGroup2.Respository.Inteface;
@@ -10,13 +11,13 @@ namespace WebAPIGroup2.Respository.Implement
         public TemplateRepo(MyImageContext context) : base(context)
         {
         }
-
+        
         public async Task<Template?> GetByIDAsync(int id)
         {
             return await _context.Templates.Include(i => i.TemplateImages).Include(d => d.DescriptionTemplates).Include(c=>c.CollectionTemplates).Include(s=>s.TemplateSizes).Include(r=>r.Reviews).ThenInclude(u=>u.User).FirstOrDefaultAsync(i => i.Id == id);
         }
 
-        public async Task<List<Template>> GetAllTemplateAsync(string? filterOn = null, string? filterQuery = null, string? sortBy = null, bool isAscending = true, int pageNumber = 1, int pageSize = 1000)
+        public async Task<List<Template>> GetAllTemplateAsync(string? filterOn = null, string? filterQuery = null, string? sortBy = null, bool isAscending = true, bool status = true, int pageNumber = 1, int pageSize = 1000)
         {
             var list = _context.Templates.Include(i => i.TemplateImages).Include(d => d.DescriptionTemplates).Include(c => c.CollectionTemplates).Include(s => s.TemplateSizes).Include(r => r.Reviews).ThenInclude(u => u.User).AsQueryable();
 
@@ -33,7 +34,8 @@ namespace WebAPIGroup2.Respository.Implement
                 }
                 else if (filterOn.Equals("PricePlus", StringComparison.OrdinalIgnoreCase))
                 {
-                    list = list.Where(x => x.PricePlus >= Decimal.Parse(filterQuery));
+
+                    list = list.Where(x => x.PricePlusPerOne >= float.Parse(filterQuery));
                 }
             }
 
@@ -46,17 +48,23 @@ namespace WebAPIGroup2.Respository.Implement
                 }
                 else if (sortBy.Equals("PricePlus", StringComparison.OrdinalIgnoreCase))
                 {
-                    list = isAscending ? list.OrderBy(x => x.PricePlus) : list.OrderByDescending(x => x.PricePlus);
+                    list = isAscending ? list.OrderBy(x => x.PricePlusPerOne) : list.OrderByDescending(x => x.PricePlusPerOne);
                 }
                 else if (sortBy.Equals("QuantitySold", StringComparison.OrdinalIgnoreCase))
                 {
                     list = isAscending ? list.OrderBy(x => x.QuantitySold) : list.OrderByDescending(x => x.QuantitySold);
                 }
             }
+            list = list.Where(x => x.Status == status);
             //Pagination
             var skipResult = (pageNumber - 1) * pageSize;
 
             return await list.Skip(skipResult).Take(pageSize).ToListAsync();
+        }
+
+        public async Task<List<Template>> GetBestSellerTemplateAsync()
+        {
+            return await _context.Templates.Include(c=>c.TemplateImages).OrderByDescending(t => t.QuantitySold).Take(8).ToListAsync();
         }
     }
 }
