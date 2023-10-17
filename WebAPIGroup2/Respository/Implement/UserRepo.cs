@@ -21,6 +21,7 @@ namespace WebAPIGroup2.Respository.Implement
             }
             return user;
         }
+
         public async Task<User?>  GetUser(LoginRequestDTO loginRequest)
         {
             string role = loginRequest.isClient ? "user" : "admin";

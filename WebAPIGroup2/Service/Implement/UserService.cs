@@ -18,9 +18,13 @@ namespace WebAPIGroup2.Service.Implement
         private readonly MyImageContext _context;
         private readonly IMapper _mapper;
         private readonly IFeedBackRepo _feedBackRepo;
-        
+        private readonly IUtilService _utilService;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public UserService(MyImageContext context, IUserRepo userRepo, IDeliveryInfoRepo deliveryInfoRepo, IMapper mapper,IReviewRepo reviewRepo,IFeedBackRepo feedBackRepo)
+
+
+
+        public UserService(MyImageContext context, IUserRepo userRepo, IDeliveryInfoRepo deliveryInfoRepo, IMapper mapper, IUtilService utilService, IWebHostEnvironment webHostEnvironment, IReviewRepo reviewRepo, IFeedBackRepo feedBackRepo)
         {
             _context = context;
             _deliveryInfoRepo = deliveryInfoRepo;
@@ -28,25 +32,26 @@ namespace WebAPIGroup2.Service.Implement
             _mapper = mapper;
             _reviewRepo = reviewRepo;
             _feedBackRepo = feedBackRepo;
+            _utilService = utilService;
+            _webHostEnvironment = webHostEnvironment;
         }
 
-        public async Task<bool> ChangePassword(UserDTO userDTO, string oldPassword)
+        public async Task<UserDTO> ChangePassword(AddUserDTO addUserDTO)
         {
             //var passwordHash = BCrypt.Net.BCrypt.HashPassword(userDTO.Password);
             //oldPassword = passwordHash;
-            var existingUser = await _context.Users.SingleOrDefaultAsync(u => u.Id == userDTO.Id && u.Password == oldPassword);
+            var existingUser = await _context.Users.SingleOrDefaultAsync(u => u.Id == addUserDTO.Id && u.Password == addUserDTO.oldPassword);
             if (existingUser == null)
             {
-                return false; 
+                return null;
             }
 
-            existingUser.Password = userDTO.Password;
+            existingUser.Password = addUserDTO.newPassword;
             var update = await _useRepo.UpdateAsync(existingUser);
+            var userDTO = _mapper.Map<UserDTO>(existingUser);
 
-            return update;
+            return userDTO;
         }
-
-        
 
         public async Task<DeliveryInfoDTO> CreateDeliveryInfoOfUser(int userId, DeliveryInfoDTO deliveryInfoDTO)
         {
@@ -68,8 +73,11 @@ namespace WebAPIGroup2.Service.Implement
 
         public async Task<UserDTO> CreateUser(UserDTO userDTO)
         {
+            var avatar = "Avatar/avatardf.jpg";
             var user = _mapper.Map<User>(userDTO);
             user.Status = UserStatus.Pending;
+            user.Avatar = avatar;
+            user.Role = UserRole.user;
             var passwordHash = BCrypt.Net.BCrypt.HashPassword(userDTO.Password);
             user.Password = passwordHash;
             var success = await _useRepo.InsertAsync(user);
@@ -81,9 +89,6 @@ namespace WebAPIGroup2.Service.Implement
             return null;
 
         }
-
-
-
 
         public async Task<IEnumerable<UserDTO>?> GetAllAsync(string? search, string? st, int page, int pageSize)
         {
@@ -123,10 +128,10 @@ namespace WebAPIGroup2.Service.Implement
             return list;
         }
 
-        public async  Task<List<DeliveryInfoDTO>> GetDeliveryInfoByUserIDAsync(int userId)
+        public async Task<List<DeliveryInfoDTO>> GetDeliveryInfoByUserIDAsync(int userId)
         {
             var user = await _useRepo.GetByIDAsync(userId);
-            if(user == null)
+            if (user == null)
             {
                 return null;
             }
@@ -168,6 +173,7 @@ namespace WebAPIGroup2.Service.Implement
             UserFullDto.FeedBacks = temporaryFeedBacks;
 
             return UserFullDto;
+
         }
 
         public async Task<UserDTO> UpdateConfirmEmailAsync(UserDTO userDTO)
@@ -189,29 +195,89 @@ namespace WebAPIGroup2.Service.Implement
 
         }
 
-
-
-        public async Task<bool> UpdateUser(UserDTO userDTO)
+        public async Task<string> SaveUploadedFile(IFormFile formFile)
         {
-            var existingUser = await _context.Users.SingleOrDefaultAsync(u => u.Id == userDTO.Id);
+         
+            var uniqueFileName = $"{Guid.NewGuid()}_{Path.GetExtension(formFile.FileName)}";
+
+            var filePath = Path.Combine(_webHostEnvironment.WebRootPath, "Avatar", uniqueFileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await formFile.CopyToAsync(stream);
+            }
+
+
+            return $"/Avatar/{uniqueFileName}";
+        }
+
+        public async Task<UserDTO> UpdateUser(AddUserDTO addUserDTO)
+        {
+            var existingUser = await _context.Users.SingleOrDefaultAsync(u => u.Id == addUserDTO.Id);
 
             if (existingUser != null)
             {
-                existingUser.Address = userDTO.Address;
-                existingUser.Phone = userDTO.Phone;
-                existingUser.Role = userDTO.Role;
-                existingUser.DateOfBirth = userDTO.DateOfBirth;
-                existingUser.Status = userDTO.Status;
+                existingUser.FullName = addUserDTO.FullName;
+                existingUser.Address = addUserDTO.Address;
+                existingUser.Phone = addUserDTO.Phone;
+                existingUser.Role = addUserDTO.Role;
+                existingUser.DateOfBirth = addUserDTO.DateOfBirth;
+                existingUser.Status = addUserDTO.Status;
+                existingUser.Gender = addUserDTO.Gender;
+
+                if (addUserDTO.formFile != null)
+                {
+                    var avatar = await SaveUploadedFile(addUserDTO.formFile);
+                    existingUser.Avatar =  avatar;
+                }
 
                 var update = await _useRepo.UpdateAsync(existingUser);
-                return update;
+                if (!update)
+                {
+                    return null;
+                }
             }
-            else
-            {
-                return false;
-            }
+
+            var userDTO = _mapper.Map<UserDTO>(existingUser);
+            return userDTO;
         }
 
+        public async Task<UserDTO> PasswordRecovery(AddUserDTO addUserDTO)
+        {
+            var existingUser = await _context.Users.SingleOrDefaultAsync(u => u.Email == addUserDTO.Email);
+
+            if (existingUser != null)
+            {
+                existingUser.Password = addUserDTO.Password;
+             
+                if (addUserDTO.formFile != null)
+                {
+                    var avatar = await SaveUploadedFile(addUserDTO.formFile);
+                    existingUser.Avatar = avatar;
+                }
+
+                var update = await _useRepo.UpdateAsync(existingUser);
+                if (!update)
+                {
+                    return null;
+                }
+            }
+
+            var userDTO = _mapper.Map<UserDTO>(existingUser);
+            return userDTO;
+        }
+
+
+        public async Task<UserDTO> GetUserByEmailAsync(string email)
+        {
+            var user = await _useRepo.GetUserByEmail(email);
+            if (user == null)
+            {
+                return null;
+            }
+            var userDTO = _mapper.Map<UserDTO>(user);
+            return userDTO;
+        }
     }
 
 
