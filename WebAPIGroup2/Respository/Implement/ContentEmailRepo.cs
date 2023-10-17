@@ -1,16 +1,17 @@
-﻿using WebAPIGroup2.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using WebAPIGroup2.Models;
 using WebAPIGroup2.Models.POJO;
 using WebAPIGroup2.Respository.Inteface;
 
 namespace WebAPIGroup2.Respository.Implement
 {
-    public class DeliveryInfoRepo : GenericRepository<DeliveryInfo>, IDeliveryInfoRepo
+    public class ContentEmailRepo : GenericRepository<ContentEmail>, IContentEmailRepo
     {
-        public DeliveryInfoRepo(MyImageContext context) : base(context)
+        public ContentEmailRepo(MyImageContext context) : base(context)
         {
         }
-
-        public Task<DeliveryInfo?> GetByIDAsync(int id)
+        
+        public Task<ContentEmail?> GetByIDAsync(int id)
         {
             throw new NotImplementedException();
         }

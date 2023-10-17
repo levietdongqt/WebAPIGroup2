@@ -18,5 +18,5 @@ public class CollectionWithTemplateDTO
 {
     public int Id { get; set; }
     public string? Name { get; set; }
-    public List<String> TemplateNames { get; set; }
+    public List<TemplateDTO> TemplateNames { get; set; }
 }

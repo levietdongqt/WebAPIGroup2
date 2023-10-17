@@ -125,9 +125,9 @@ namespace WebAPIGroup2.Service.Implement
             return templateDTO;
         }
 
-        public async Task<List<TemplateDTO>> GetBestSeller()
+        public async Task<List<TemplateDTO>> GetBestSeller(bool status = true)
         {
-            var best = await templateRepo.GetBestSellerTemplateAsync();
+            var best = await templateRepo.GetBestSellerTemplateAsync(status);
             var templateDTOs = mapper.Map<List<TemplateDTO>>(best);
             foreach (var item in templateDTOs)
             {
@@ -262,6 +262,13 @@ namespace WebAPIGroup2.Service.Implement
             var templateDTO = mapper.Map<TemplateDTO>(template);
             return templateDTO;
 
+        }
+
+        public async Task<PaginationDTO<TemplateDTO>> GetByNameAsync(string? name,int page = 1,int limit = 1)
+        {
+            var templateDto = await templateRepo.GetTemplateByNameAsync(name,page,limit);
+            var templateDTOs = mapper.Map<PaginationDTO<TemplateDTO>>(templateDto);
+            return templateDTOs;
         }
 
         public async Task<TemplateDTO> UpdateStatusAsync(int id)

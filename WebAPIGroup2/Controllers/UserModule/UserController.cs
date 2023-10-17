@@ -78,7 +78,6 @@ namespace WebAPIGroup2.Controllers.UserModule
                 ));
             }
         }
-
         [HttpPost("create")]
         public async Task<IActionResult> Create(UserDTO userDTO)
         {
