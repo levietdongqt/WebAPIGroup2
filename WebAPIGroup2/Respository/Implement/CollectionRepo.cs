@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.EntityFrameworkCore;
 using WebAPIGroup2.Models;
 using WebAPIGroup2.Models.DTO;
 using WebAPIGroup2.Models.POJO;
@@ -29,7 +30,15 @@ public class CollectionRepo : GenericRepository<Collection> , ICollectionRepo
             {
                 Id = s.Id,
                 Name = s.Name,
-                TemplateNames = s.CollectionTemplates.Select(c => c.Template.Name).ToList()
+                TemplateNames = s.CollectionTemplates.Select(c => new TemplateDTO()
+                {
+                    Id = c.Template.Id,
+                    Name = c.Template.Name,
+                    PricePlusPerOne = c.Template.PricePlusPerOne,
+                    Status = c.Template.Status,
+                    QuantitySold = c.Template.QuantitySold,
+                    
+                }).ToList()
             }).FirstOrDefaultAsync();
         return collection;
     }

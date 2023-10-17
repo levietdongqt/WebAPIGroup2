@@ -31,12 +31,19 @@ namespace WebAPIGroup2.Controllers.TemplateModule
         }
 
         [HttpGet("bestSeller")]
-        public async Task<JsonResult> Get()
+        public async Task<JsonResult> Get([FromQuery] bool? status)
         {
-            var templateDto = await templateService.GetBestSeller();
+            var templateDto = await templateService.GetBestSeller(status ?? true);
             var response = new ResponseDTO<List<TemplateDTO>>(HttpStatusCode.OK, "Success", null, templateDto);
             return new JsonResult(response);
         }
+        [HttpGet("GetTemplateByName")]
+        public async Task<JsonResult> Get([FromQuery] string? name,[FromQuery]int page = 1, [FromQuery]int limit = 1)
+        {
+            var templateDto = await templateService.GetByNameAsync(name,page,limit);
+            var response = new ResponseDTO<PaginationDTO<TemplateDTO>>(HttpStatusCode.OK, "Success", null, templateDto);
+            return new JsonResult(response);
+        }   
         [HttpGet]
         [Route("{id:int}")]
         public async Task<JsonResult> GetById(int id)

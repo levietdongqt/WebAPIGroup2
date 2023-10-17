@@ -45,8 +45,7 @@ namespace WebAPIGroup2.Controllers.AdminModule
             var category = await _categoryService.GetCategoryById(id);
             if (category != null)
             {
-                var categoryList = new List<CategoryDTO>{category};
-                var response = new ResponseDTO<List<CategoryDTO>>(HttpStatusCode.OK, "Success", null, categoryList);
+                var response = new ResponseDTO<CategoryDTO>(HttpStatusCode.OK, "Success", null, category);
                 return new JsonResult(response);
             }
             else

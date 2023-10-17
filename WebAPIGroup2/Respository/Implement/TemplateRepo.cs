@@ -1,6 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.ComponentModel;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using WebAPIGroup2.Models;
+using WebAPIGroup2.Models.DTO;
 using WebAPIGroup2.Models.POJO;
 using WebAPIGroup2.Respository.Inteface;
 
@@ -62,9 +64,33 @@ namespace WebAPIGroup2.Respository.Implement
             return await list.Skip(skipResult).Take(pageSize).ToListAsync();
         }
 
-        public async Task<List<Template>> GetBestSellerTemplateAsync()
+        public async Task<List<Template>> GetBestSellerTemplateAsync(bool status = true)
         {
-            return await _context.Templates.Include(c=>c.TemplateImages).OrderByDescending(t => t.QuantitySold).Take(8).ToListAsync();
+            var list = _context.Templates.Include(c=>c.TemplateImages).OrderByDescending(t => t.QuantitySold).Take(8).AsQueryable();
+            list = list.Where(x => x.Status == status);
+            return await list.ToListAsync();
+        }
+
+        public async Task<PaginationDTO<Template>> GetTemplateByNameAsync(string? name, int page = 1, int limit = 1)
+        {
+            var query = _context.Templates.AsQueryable();
+            if (!string.IsNullOrEmpty(name))
+            {
+                query = query.Where(x => x.Name.Contains(name));
+            }
+
+            int totalRows = await query.CountAsync(); 
+
+            var items = await query.Skip((page - 1) * limit).Take(limit).ToListAsync();
+
+            var paginations = new PaginationDTO<Template>()
+            {
+                limit = limit,
+                Page = page,
+                totalRows = totalRows,
+                Items = items
+            };
+            return paginations;
         }
     }
 }

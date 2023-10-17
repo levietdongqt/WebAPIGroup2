@@ -14,17 +14,20 @@ namespace WebAPIGroup2.Service.Implement
     {
         private readonly IUserRepo _useRepo;
         private readonly IDeliveryInfoRepo _deliveryInfoRepo;
+        private readonly IReviewRepo _reviewRepo;
         private readonly MyImageContext _context;
         private readonly IMapper _mapper;
-        
+        private readonly IFeedBackRepo _feedBackRepo;
         
 
-        public UserService(MyImageContext context, IUserRepo userRepo, IDeliveryInfoRepo deliveryInfoRepo, IMapper mapper)
+        public UserService(MyImageContext context, IUserRepo userRepo, IDeliveryInfoRepo deliveryInfoRepo, IMapper mapper,IReviewRepo reviewRepo,IFeedBackRepo feedBackRepo)
         {
             _context = context;
             _deliveryInfoRepo = deliveryInfoRepo;
             _useRepo = userRepo;
             _mapper = mapper;
+            _reviewRepo = reviewRepo;
+            _feedBackRepo = feedBackRepo;
         }
 
         public async Task<bool> ChangePassword(UserDTO userDTO, string oldPassword)
@@ -61,6 +64,7 @@ namespace WebAPIGroup2.Service.Implement
             }
             return _mapper.Map<DeliveryInfoDTO>(deliveryInfo);
         }
+        
 
         public async Task<UserDTO> CreateUser(UserDTO userDTO)
         {
@@ -133,8 +137,37 @@ namespace WebAPIGroup2.Service.Implement
         public async Task<UserDTO> GetUserByIDAsync(int id)
         {
             var user = await _useRepo.GetByIDAsync(id);
-            var userDTO = _mapper.Map<UserDTO>(user);
-            return userDTO;
+            if (user == null) return null;
+
+            var UserFullDto = _mapper.Map<UserDTO>(user);
+            var temporaryDeliveryInfos = new List<DeliveryInfoDTO>();
+            var temporaryReviews = new List<ReviewTempDTO>();
+            var temporaryFeedBacks = new List<FeedBackDTO>();
+
+            foreach (var item in UserFullDto.DeliveryInfos) 
+            {
+                var deliveryInfo = await _deliveryInfoRepo.GetByIDAsync(item.Id);
+                var deliveryInfoDTO = _mapper.Map<DeliveryInfoDTO>(deliveryInfo);
+                temporaryDeliveryInfos.Add(deliveryInfoDTO);
+            }
+            foreach (var item in UserFullDto.Reviews)
+            {
+                var review = await _reviewRepo.GetByIDAsync(item.Id);
+                var reviewDTO = _mapper.Map<ReviewTempDTO>(review);
+                temporaryReviews.Add(reviewDTO);
+            }
+            foreach (var item in UserFullDto.FeedBacks)
+            {
+                var feedback = await _feedBackRepo.GetByIDAsync(item.Id);
+                var feedbackDTO = _mapper.Map<FeedBackDTO>(feedback);
+                temporaryFeedBacks.Add(feedbackDTO);
+            }
+            
+            UserFullDto.DeliveryInfos = temporaryDeliveryInfos;
+            UserFullDto.Reviews = temporaryReviews;
+            UserFullDto.FeedBacks = temporaryFeedBacks;
+
+            return UserFullDto;
         }
 
         public async Task<UserDTO> UpdateConfirmEmailAsync(UserDTO userDTO)
