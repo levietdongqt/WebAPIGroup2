@@ -71,7 +71,9 @@ namespace WebAPIGroup2.Respository.Implement
                 {
                     return null;
                 }
-                var myImages = await _context.MyImages.Include(t=> t.Images)
+                var myImages = await _context.MyImages
+                    .Include(t=> t.Images)
+                    .Include(t=> t.Template)
                     .Include(t=> t.ProductDetails)
                         .ThenInclude(t=> t.MaterialPage)
                     .Include(t=> t.ProductDetails)

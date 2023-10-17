@@ -7,7 +7,7 @@ namespace WebAPIGroup2.Service.Inteface
     public interface IUpLoadService
     {
         Task<bool> AddToCart(OrderDTO orderDTO);
-        Task<List<MyImage>> LoadCart(int userID);
+        Task<List<CartResponseDTO>> LoadCart(int userID);
         Task<List<MyImage>> LoadMyImages(int userID);
         Task<List<string>> SaveImages(string folderName, int? templateID, IFormFile[] files);
         Task<MyImage> SaveToDBTemporary(string folderName,UpLoadDTO upLoadDTO, List<string> imagesUrls);
