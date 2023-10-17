@@ -100,7 +100,7 @@ namespace WebAPIGroup2.Controllers.TemplateModule
 
         [HttpPut]
         [Route("{id:int}")]
-        public async Task<JsonResult> Update([FromRoute] int id, [FromBody] AddTemplateDTO updateTemplateDTO)
+        public async Task<JsonResult> Update([FromRoute] int id, [FromForm] AddTemplateDTO updateTemplateDTO)
         {
             var templateDTO = await templateService.UpdateAsync(id, updateTemplateDTO);
             if (templateDTO == null)
