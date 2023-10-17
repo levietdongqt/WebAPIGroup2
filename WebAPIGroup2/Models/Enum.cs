@@ -25,6 +25,7 @@
         public const string OrderPlaced = "Order Placed";
         public const string OrderPaid = "Order Paid";
         public const string ToShip = "To Ship";
+        public const string Received = "Received";
     }
 
     
