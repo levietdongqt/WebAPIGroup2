@@ -11,6 +11,8 @@ namespace WebAPIGroup2.Models
             //User
             CreateMap<User, UserDTO>()
                 .ForMember(t => t.Password, option => option.Ignore()).ReverseMap();
+            CreateMap<User, AddUserDTO>()
+                .ForMember(t => t.Password, option => option.Ignore()).ReverseMap();
 
             //Template
             CreateMap<Template,TemplateDTO>().ReverseMap();
