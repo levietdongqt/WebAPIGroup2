@@ -11,6 +11,7 @@ namespace WebAPIGroup2.Models
             //User
             CreateMap<User, UserDTO>()
                 .ForMember(t => t.Password, option => option.Ignore()).ReverseMap();
+
             CreateMap<User, AddUserDTO>()
                 .ForMember(t => t.Password, option => option.Ignore()).ReverseMap();
 
@@ -33,9 +34,11 @@ namespace WebAPIGroup2.Models
             CreateMap<ContentEmail, ContentEmailDTO>().ReverseMap();
             CreateMap<Review, ReviewDTO>().ReverseMap();
             CreateMap<Review, AddReviewDTO>().ReverseMap();
+            CreateMap<Review, ReviewTempDTO>().ReverseMap();
             CreateMap<Collection,CollectionDTO>().ReverseMap(); 
             CreateMap<Category, CategoryDTO>().ReverseMap();
-
+            CreateMap<PaginationDTO<Template>, PaginationDTO<TemplateDTO>>().ReverseMap();
+           
         }
     }
 }

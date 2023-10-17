@@ -10,7 +10,7 @@ namespace WebAPIGroup2.Models.DTO
 
         public string? Name { get; set; }
 
-        public float? PricePlus { get; set; }
+        public string? PricePlusPerOne { get; set; }
 
         public bool? Status { get; set; }
 
@@ -21,7 +21,7 @@ namespace WebAPIGroup2.Models.DTO
         
         public List<DescriptionTemplateDTO> DescriptionTemplates { get; set; } = new List<DescriptionTemplateDTO>();
 
-        public IFormFile[] formFileList { get; set; }
+        public IFormFile[]? formFileList { get; set; }
 
         public List<CollectionDTO> collectionDTOs { get; set; } = new List<CollectionDTO>();
 

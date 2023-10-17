@@ -23,7 +23,14 @@ namespace WebAPIGroup2.Models.DTO
         public string? Avatar { get; set; }
 
         public string? Status { get; set; }
+    
         public string? Role { get; set; }
+    
+        public virtual ICollection<DeliveryInfoDTO> DeliveryInfos { get; set; } = new List<DeliveryInfoDTO>();
+
+        public virtual ICollection<FeedBackDTO> FeedBacks { get; set; } = new List<FeedBackDTO>();
+  
+        public virtual ICollection<ReviewTempDTO> Reviews { get; set; } = new List<ReviewTempDTO>();
         public bool? Gender { get; set; }
 
     }

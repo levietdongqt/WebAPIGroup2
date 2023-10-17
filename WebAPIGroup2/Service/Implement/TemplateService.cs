@@ -125,9 +125,9 @@ namespace WebAPIGroup2.Service.Implement
             return templateDTO;
         }
 
-        public async Task<List<TemplateDTO>> GetBestSeller()
+        public async Task<List<TemplateDTO>> GetBestSeller(bool status = true)
         {
-            var best = await templateRepo.GetBestSellerTemplateAsync();
+            var best = await templateRepo.GetBestSellerTemplateAsync(status);
             var templateDTOs = mapper.Map<List<TemplateDTO>>(best);
             foreach (var item in templateDTOs)
             {
@@ -207,29 +207,29 @@ namespace WebAPIGroup2.Service.Implement
                 return null;
             }
             updatedTemplate.Name = updateTemplateDTO.Name;
-            updatedTemplate.Status = updateTemplateDTO.Status;
-            updatedTemplate.CreateDate = updateTemplateDTO.CreateDate;
-            updatedTemplate.QuantitySold = updateTemplateDTO.QuantitySold;
-            updatedTemplate.PricePlusPerOne = updateTemplateDTO.PricePlus;
+            updatedTemplate.PricePlusPerOne = double.Parse(updateTemplateDTO.PricePlusPerOne);
             var result = await templateRepo.UpdateAsync(updatedTemplate);
             var result2 = await UpdateDescriptionByTemplateIdAsync(id, updateTemplateDTO.DescriptionTemplates);
             if (!result && result2 == null)
             {
                 return null;
             }
-            var urlList = await utilService.UploadMany(updateTemplateDTO.formFileList);
-            var imageDTOs = new List<TemplateImageDTO>();
-            foreach (var i in urlList)
+            if(updateTemplateDTO.formFileList != null)
             {
-                var imageDTO = new TemplateImageDTO()
+                var urlList = await utilService.UploadMany(updateTemplateDTO.formFileList);
+                var imageDTOs = new List<TemplateImageDTO>();
+                foreach (var i in urlList)
                 {
-                    ImageUrl = i,
-                    TemplateId = id,
-                };
-                imageDTOs.Add(imageDTO);
-            }
-            var templateImages = mapper.Map<List<TemplateImage>>(imageDTOs);
-            var r2 = await imageRepo.InsertAllAsync(templateImages);
+                    var imageDTO = new TemplateImageDTO()
+                    {
+                        ImageUrl = i,
+                        TemplateId = id,
+                    };
+                    imageDTOs.Add(imageDTO);
+                }
+                var templateImages = mapper.Map<List<TemplateImage>>(imageDTOs);
+                var r2 = await imageRepo.InsertAllAsync(templateImages);
+            }      
             var templateDTO = mapper.Map<TemplateDTO>(updatedTemplate);
             return templateDTO;
 
@@ -250,14 +250,25 @@ namespace WebAPIGroup2.Service.Implement
                     {
                         templateDescription.Title = descriptionTemplateDTO.Title;
                         templateDescription.Description = descriptionTemplateDTO.Description;
-                        templateDescription.TemplateId = descriptionTemplateDTO.TemplateId;
+                        templateDescription.TemplateId = templateId;
                     }
                 }
             }
-            await descriptionTemplateRepo.UpdateAllAsync(template.DescriptionTemplates.ToList());
+            var result = await descriptionTemplateRepo.UpdateAllAsync(template.DescriptionTemplates.ToList());
+            if (!result)
+            {
+                return null;
+            }
             var templateDTO = mapper.Map<TemplateDTO>(template);
             return templateDTO;
 
+        }
+
+        public async Task<PaginationDTO<TemplateDTO>> GetByNameAsync(string? name,int page = 1,int limit = 1)
+        {
+            var templateDto = await templateRepo.GetTemplateByNameAsync(name,page,limit);
+            var templateDTOs = mapper.Map<PaginationDTO<TemplateDTO>>(templateDto);
+            return templateDTOs;
         }
 
         public async Task<TemplateDTO> UpdateStatusAsync(int id)
