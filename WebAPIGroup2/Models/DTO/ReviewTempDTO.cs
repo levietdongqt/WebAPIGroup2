@@ -11,6 +11,8 @@ public class ReviewTempDTO
 
     public double? Rating { get; set; }
 
+    public bool? isImportant { get; set; }
+
     public DateTime? ReviewDate { get; set; }
     
 }

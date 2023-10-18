@@ -14,8 +14,11 @@ namespace WebAPIGroup2.Models.DTO
 
         public double? Rating { get; set; }
 
+        public bool? isImportant { get; set; }
+
         public DateTime? ReviewDate { get; set; }
 
-        public virtual UserDTO? User { get; set; }
+
+
     }
 }
