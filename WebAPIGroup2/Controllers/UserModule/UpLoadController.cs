@@ -35,7 +35,7 @@ namespace WebAPIGroup2.Controllers.UserModule
                 var response = new ResponseDTO<String>(HttpStatusCode.BadRequest, "File is invalid", null, null);
                 return new JsonResult(response);
             }
-            string folderName = $"{emailName.Result}{upLoadDTO.userID}";
+            string folderName = $"{upLoadDTO.userID}_{emailName.Result}";
             var imagesUrls = await _upLoadService.SaveImages(folderName, upLoadDTO.templateID, upLoadDTO.files);
             if (upLoadDTO.templateID == 1)
             {
@@ -64,7 +64,7 @@ namespace WebAPIGroup2.Controllers.UserModule
                 {
                     return new JsonResult(new ResponseDTO<String>(HttpStatusCode.BadRequest, "File is invalid", null, null));
                 }
-                string folderName = $"{emailName.Result}{upLoadDTO.userID}";
+                string folderName = $"{upLoadDTO.userID}_{emailName.Result}";
                 var imagesUrls = await _upLoadService.SaveImages(folderName, 1, upLoadDTO.files);
                 List<int> myImage = await _upLoadService.SaveToDBWithNoTemplate(folderName, upLoadDTO, imagesUrls);
                 return new JsonResult(new ResponseDTO<List<int>>(HttpStatusCode.OK, "Save successfull", null, myImage));
@@ -109,13 +109,13 @@ namespace WebAPIGroup2.Controllers.UserModule
         [Route("LoadCart")]
         public async Task<JsonResult> LoadCart([FromQuery] int userID)
         {
-            List<MyImage> myImages = await _upLoadService.LoadCart(userID);
+            List<CartResponseDTO> myImages = await _upLoadService.LoadCart(userID);
             if (myImages == null)
             {
                 var response = new ResponseDTO<String>(HttpStatusCode.NoContent, "Cart is empty", null, null);
                 return new JsonResult(response);
             }
-            var response2 = new ResponseDTO<List<MyImage>>(HttpStatusCode.OK, "Request Successfull", null, myImages);
+            var response2 = new ResponseDTO<List<CartResponseDTO>>(HttpStatusCode.OK, "Request Successfull", null, myImages);
             return new JsonResult(response2);
         }
     }
