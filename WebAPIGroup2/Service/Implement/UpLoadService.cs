@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using WebAPIGroup2.Models;
 using WebAPIGroup2.Models.DTO;
 using WebAPIGroup2.Models.POJO;
@@ -66,7 +67,7 @@ namespace WebAPIGroup2.Service.Implement
 
                 float priceOne = orderDTO.imageArea.Value * (float)(materialPage.Result.PricePerInch) + (float)myImage.Template.PricePlusPerOne;
                 float imagesNumber = (float)myImage.Images.Count;
-                decimal price = (decimal)(priceOne * imagesNumber * orderDTO.quantity);
+                decimal price = (decimal)(priceOne * imagesNumber);
 
                 var sameProduct =await _productDetailsRepo.GetByMyImageId(orderDTO);
                 if(sameProduct == null)
@@ -84,17 +85,32 @@ namespace WebAPIGroup2.Service.Implement
                     return true;
                 }
                 sameProduct.Quantity += orderDTO.quantity;
-                sameProduct.Price += price;
                 await _productDetailsRepo.UpdateAsync(sameProduct);
                 return true;
             }
 
         }
 
-        public async Task<List<MyImage>> LoadCart(int userID)
+        public async Task<List<CartResponseDTO>> LoadCart(int userID)
         {
            List<MyImage> list =  await _myImageRepo.loadInCart(userID);
-            return list;
+            List<CartResponseDTO> result = new List<CartResponseDTO>();
+            foreach (MyImage item in list)
+            {
+               var product= item.ProductDetails.Select(x => new CartResponseDTO()
+                {
+                    length = x.TemplateSize.PrintSize.Length,
+                    width = x.TemplateSize.PrintSize.Width,
+                    image = item.Images.First().ImageUrl,
+                    quantity= x.Quantity,
+                    materialPage = x.MaterialPage.Name,
+                    templateName = item.Template.Id != 1? item.Template.Name : "None",
+                    price = x.Price
+                }
+                ).ToList();
+                result.AddRange(product);
+            }
+            return result;
         }
 
         public async Task<List<MyImage>> LoadMyImages(int userID)
@@ -111,7 +127,7 @@ namespace WebAPIGroup2.Service.Implement
         {
             List<string> imagesUrl = new List<string>();
             string templateFolder = "Template_" + templateID;
-            var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "Image", folderName, templateFolder);
+            var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "MyImage", folderName, templateFolder);
             if (!Directory.Exists(uploadsFolder))
             {
                 Directory.CreateDirectory(uploadsFolder);
@@ -125,7 +141,7 @@ namespace WebAPIGroup2.Service.Implement
 
                 await file.CopyToAsync(stream);
                 //Set URL Static
-                var urlFilePath = $"/Image/{folderName}/{templateFolder}/{fileName}";
+                var urlFilePath = $"/MyImage/{folderName}/{templateFolder}/{fileName}";
                 imagesUrl.Add(urlFilePath);
             }
             return imagesUrl;
@@ -242,7 +258,12 @@ namespace WebAPIGroup2.Service.Implement
 
         public async Task<bool> ValidateFiles(IFormFile[] files)
         {
-            var allowExtension = ".jpeg";
+            List<string> allowExtensions = new List<string>()
+            {
+                ".jpg",
+                ".jpeg",
+                ".png"
+            };
 
             foreach (var file in files)
             {
@@ -250,7 +271,12 @@ namespace WebAPIGroup2.Service.Implement
                 {
                     return false;
                 }
-                if (!allowExtension.Contains(Path.GetExtension(file.FileName)))
+                var extension = Path.GetExtension(file.FileName);
+                if (extension.IsNullOrEmpty())
+                {
+                    return false;
+                }
+                if (!allowExtensions.Contains(extension))
                 {
                     return false;
                 }
