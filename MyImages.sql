@@ -15,6 +15,8 @@ CREATE TABLE [User] (
 	[DateOfBirth] date null,
 	[Address] nvarchar(256) null,
 	[Phone] [nvarchar](max) NULL,
+	[Avatar] [nvarchar](max) NULL,
+	[Gender] [bit] NULL,
 	[Role] varchar(50) constraint CK_Role check (  [Role] in ('admin','user','vip')) default('user'),
 	[Status] varchar(10) constraint CK_Status check ([Status] in ('Pending','Enabled','Disabled')) default('Pending'),
 	CreateDate datetime null
@@ -114,7 +116,7 @@ create table PurchaseOrder(
 	CreateDate datetime null
 
 	constraint PK_PurchaseOrder primary key (Id),
-	constraint CK_StatusOrder check ([Status] in ('Order Placed','Order Paid','ToShip','Temporary'))
+	constraint CK_StatusOrder check ([Status] in ('Order Placed','Order Paid','ToShip','Temporary','Received'))
 )
 go
 create table Review(
@@ -618,12 +620,12 @@ values('High',0,0.5,1,'Best material page for print images'),
 go
 
 insert into [dbo].[User]
-values('admin@gmail.com','123','Acc Van Min',1,'1995-10-15','356 Pham Van Dong TPHCM','09012345679','admin','Enabled',GETDATE()),
-	  ('user1@gmail.com','123456','Huy Dep Trai',1,'1992-12-05','374 Ap Bac My Dinh','09023332223','user','Enabled',GETDATE()),
-	  ('user2@gmail.com','1234567','Dong Dep Trai',1,'1992-12-05','374 Ap Bac My Dinh','09023332223','user','Enabled',GETDATE()),
-	  ('user3@gmail.com','1234568','Phuoc Dep Trai',1,'1992-12-05','374 Ap Bac My Dinh','09023332223','user','Enabled',GETDATE()),
-	  ('user4@gmail.com','1234562','Nam Dep Trai',1,'1992-12-05','374 Ap Bac My Dinh','09023332223','user','Enabled',GETDATE()),
-	  ('user5@gmail.com','1234562','Minh Dep Trai',1,'1992-12-05','374 Ap Bac My Dinh','09023332223','user','Enabled',GETDATE())
+values('admin@gmail.com','123','Acc Van Min',1,'1995-10-15','356 Pham Van Dong TPHCM','09012345679','',1,'admin','Enabled',GETDATE()),
+	  ('user1@gmail.com','123456','Huy Dep Trai',1,'1992-12-05','374 Ap Bac My Dinh','09023332223','',1,'user','Enabled',GETDATE()),
+	  ('user2@gmail.com','1234567','Dong Dep Trai',1,'1992-12-05','374 Ap Bac My Dinh','09023332223','',1,'user','Enabled',GETDATE()),
+	  ('user3@gmail.com','1234568','Phuoc Dep Trai',1,'1992-12-05','374 Ap Bac My Dinh','09023332223','',1,'user','Enabled',GETDATE()),
+	  ('user4@gmail.com','1234562','Nam Dep Trai',1,'1992-12-05','374 Ap Bac My Dinh','09023332223','',1,'user','Enabled',GETDATE()),
+	  ('user5@gmail.com','1234562','Minh Dep Trai',1,'1992-12-05','374 Ap Bac My Dinh','09023332223','',1,'user','Enabled',GETDATE())
 go
 
 insert into DeliveryInfo
