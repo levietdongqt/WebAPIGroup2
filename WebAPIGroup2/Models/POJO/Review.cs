@@ -21,6 +21,8 @@ public partial class Review
 
     public double? Rating { get; set; }
 
+    public bool? isImportant { get; set; }
+
     [Column(TypeName = "datetime")]
     public DateTime? ReviewDate { get; set; }
 

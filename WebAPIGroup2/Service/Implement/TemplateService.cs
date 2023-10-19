@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.IdentityModel.Tokens;
+using System.Globalization;
+using System.Text.RegularExpressions;
 using WebAPIGroup2.Models.DTO;
 using WebAPIGroup2.Models.POJO;
 using WebAPIGroup2.Respository.Inteface;
@@ -71,8 +73,12 @@ namespace WebAPIGroup2.Service.Implement
 
         public async Task<TemplateDTO> CreateAsync(AddTemplateDTO addTemplateDTO)
         {
+            CultureInfo culture = new CultureInfo("en-US");
             var templateDomain = mapper.Map<Template>(addTemplateDTO);
             templateDomain.CreateDate = DateTime.Now;
+            double output;
+            double.TryParse(addTemplateDTO.PricePlusPerOne, NumberStyles.Any, culture, out output);
+            templateDomain.PricePlusPerOne = output;
             var result = await templateRepo.InsertAsync(templateDomain);
             if (!result)
             {
@@ -201,13 +207,17 @@ namespace WebAPIGroup2.Service.Implement
 
         public async Task<TemplateDTO> UpdateAsync(int id,AddTemplateDTO updateTemplateDTO)
         {
+            CultureInfo culture = new CultureInfo("en-US");
+
             var updatedTemplate = await templateRepo.GetByIDAsync(id);
             if (updatedTemplate == null)
             {
                 return null;
             }
             updatedTemplate.Name = updateTemplateDTO.Name;
-            updatedTemplate.PricePlusPerOne = double.Parse(updateTemplateDTO.PricePlusPerOne);
+            double output;
+            double.TryParse(updateTemplateDTO.PricePlusPerOne, NumberStyles.Any, culture, out output);
+            updatedTemplate.PricePlusPerOne = output;
             var result = await templateRepo.UpdateAsync(updatedTemplate);
             var result2 = await UpdateDescriptionByTemplateIdAsync(id, updateTemplateDTO.DescriptionTemplates);
             if (!result && result2 == null)

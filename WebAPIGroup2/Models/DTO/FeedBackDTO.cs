@@ -13,6 +13,8 @@ namespace WebAPIGroup2.Models.DTO
 
         public string? Email { get; set; }
 
+        public bool? isImportant { get; set; }
+
         public DateTime? FeedBackDate { get; set; }
     }
 }

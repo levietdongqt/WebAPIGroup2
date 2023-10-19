@@ -123,7 +123,8 @@ create table Review(
 	UserId int null,
 	Content ntext null,
 	Rating float null,
-	ReviewDate datetime
+	ReviewDate datetime,
+	isImportant bit default(0)
 
 	constraint PK_Review primary key (Id)
 )
@@ -156,7 +157,8 @@ create table FeedBack(
 	Content ntext null,
 	UserId int null,
 	[Email] [nvarchar](256) NULL,
-	FeedBackDate datetime null
+	FeedBackDate datetime null,
+	isImportant bit default(0)
 
 	constraint PK_FeedBack primary key (Id)
 )
@@ -632,54 +634,54 @@ values(1,'Send mail to Buy','Confirm Bill','Sale')
 go
 
 insert into Review
-values(1,2,'Good page',4,GETDATE())
+values(1,2,'Good page',4,GETDATE(),0)
 go
 
 insert into Review
-values(1,2,'Bad',2.5,GETDATE())
+values(1,2,'Bad',2.5,GETDATE(),0)
 go
 
 insert into Review
-values(1,2,'Web is good',4.7,GETDATE())
+values(1,2,'Web is good',4.7,GETDATE(),0)
 go
 
 insert into Review
-values(2,2,'Excelent',5,GETDATE())
+values(2,2,'Excelent',5,GETDATE(),0)
 go
 
 insert into Review
-values(2,2,'Web is good',4.2,GETDATE())
+values(2,2,'Web is good',4.2,GETDATE(),0)
 go
 
 insert into Review
-values(3,3,'Excelent',5,GETDATE())
+values(3,3,'Excelent',5,GETDATE(),0)
 go
 
 insert into Review
-values(3,2,'Web is good',3.5,GETDATE())
+values(3,2,'Web is good',3.5,GETDATE(),0)
 go
 
 insert into Review
-values(1,2,'Bad',2.5,GETDATE())
+values(1,2,'Bad',2.5,GETDATE(),0)
 go
 
 insert into Review
-values(1,2,'Web is good',4.7,GETDATE())
+values(1,2,'Web is good',4.7,GETDATE(),0)
 go
 
 insert into Review
-values(2,2,'Excelent',5,GETDATE())
+values(2,2,'Excelent',5,GETDATE(),0)
 go
 
 insert into Review
-values(2,2,'Web is good',4.2,GETDATE())
+values(2,2,'Web is good',4.2,GETDATE(),0)
 go
 
 
 insert into Review
-values(3,3,'Excelent',5,GETDATE())
+values(3,3,'Excelent',5,GETDATE(),0)
 go
 
 insert into Review
-values(3,2,'Web is good',3.5,GETDATE())
+values(3,2,'Web is good',3.5,GETDATE(),0)
 go
