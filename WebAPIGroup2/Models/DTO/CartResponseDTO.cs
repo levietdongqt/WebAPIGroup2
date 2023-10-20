@@ -2,7 +2,7 @@
 {
     public class CartResponseDTO
     {
-        public string image { get; set; }
+        public List<string> images { get; set; }
         public string templateName { get; set; }
 
         public int? quantity { get; set; }
