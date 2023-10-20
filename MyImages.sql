@@ -202,6 +202,7 @@ create table MyImages(
 	Id int identity(1,1) not null,
 	TemplateId int null,
 	PurchaseOrderId int null,
+	CreateDate datetime null,
 	Status bit default(1)
 
 	constraint PK_MyImages primary key (Id)
