@@ -7,5 +7,6 @@
         public int TemplateId { get; set; }
 
         public int PrintSizeId { get; set; }
+
     }
 }

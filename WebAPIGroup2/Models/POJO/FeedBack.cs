@@ -17,6 +17,8 @@ public partial class FeedBack
 
     public int? UserId { get; set; }
 
+    public bool? isImportant { get; set; }
+
     [StringLength(256)]
     public string? Email { get; set; }
 
