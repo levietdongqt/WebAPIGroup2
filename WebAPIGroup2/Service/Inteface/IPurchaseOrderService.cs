@@ -2,5 +2,7 @@
 {
     public interface IPurchaseOrderService
     {
+        Task<dynamic> GetPurchaseOrderByMonth();
+
     }
 }

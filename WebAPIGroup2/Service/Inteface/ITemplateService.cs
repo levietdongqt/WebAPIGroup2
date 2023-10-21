@@ -25,5 +25,7 @@ namespace WebAPIGroup2.Service.Inteface
         
         Task<PaginationDTO<TemplateDTO>> GetByNameAsync(string? name,int page =1 ,int limit =1 );
 
+        Task<dynamic> GetReportForAdmin();
+
     }
 }
