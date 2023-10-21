@@ -317,6 +317,8 @@ namespace WebAPIGroup2.Controllers.UserModule
             var response = new ResponseDTO<DeliveryInfoDTO>(HttpStatusCode.Created, "Created Successfully", null, deliveryDTO);
             return new JsonResult(response);
         }
+
+        
     }
 
 

@@ -5,5 +5,9 @@ namespace WebAPIGroup2.Respository.Inteface
     public interface IPurchaseOrderRepo : IBaseRepository<PurchaseOrder, int>
     {
         Task<PurchaseOrder> getPurchaseOrder(int userID, string status);
+
+        Task<dynamic> GetSumPriceTotalByMonth();
+
+        public Task<int> CountPurchaseInWeek();
     }
 }

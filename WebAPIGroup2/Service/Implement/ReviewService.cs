@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.IdentityModel.Tokens;
 using WebAPIGroup2.Models.DTO;
 using WebAPIGroup2.Models.POJO;
 using WebAPIGroup2.Respository.Inteface;
@@ -9,11 +10,13 @@ namespace WebAPIGroup2.Service.Implement
     public class ReviewService : IReviewService
     {
         public readonly IReviewRepo _reviewRepo;
+        public readonly IUserRepo _userRepo;
         public readonly IMapper _mapper;
 
-        public ReviewService(IReviewRepo reviewRepo,IMapper mapper)
+        public ReviewService(IReviewRepo reviewRepo,IMapper mapper,IUserRepo userRepo)
         {
             _reviewRepo = reviewRepo;
+            _userRepo = userRepo;
             _mapper = mapper;
         }
 
@@ -41,6 +44,19 @@ namespace WebAPIGroup2.Service.Implement
                 return null;
             }
             return _mapper.Map<ReviewDTO>(review);
+        }
+
+        public async Task<List<ReviewDTO>> GetReviewsByStatus(int userId,bool isImportant)
+        {
+            var user = await _userRepo.GetByIDAsync(userId);
+            if(user == null && user.Reviews.IsNullOrEmpty())
+            {
+                return null;
+            }
+            var isImportantReviews = user.Reviews.Where(x=>x.isImportant == isImportant).ToList();
+            var reviewsDTO = _mapper.Map<List<ReviewDTO>>(isImportantReviews);
+            return reviewsDTO;
+            
         }
 
         public async Task<List<ReviewDTO>> UpdateAllAsync(List<ReviewDTO> updateReviewsDTO)
