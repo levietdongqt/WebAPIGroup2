@@ -69,8 +69,8 @@ namespace WebAPIGroup2.Service.Implement
                 float imagesNumber = (float)myImage.Images.Count;
                 decimal price = (decimal)(priceOne * imagesNumber);
 
-                var sameProduct =await _productDetailsRepo.GetByMyImageId(orderDTO);
-                if(sameProduct == null)
+                var sameProduct = await _productDetailsRepo.GetByMyImageId(orderDTO);
+                if (sameProduct == null)
                 {
                     ProductDetail productDetail = new ProductDetail()
                     {
@@ -93,34 +93,80 @@ namespace WebAPIGroup2.Service.Implement
 
         public async Task<List<CartResponseDTO>> LoadCart(int userID)
         {
-           List<MyImage> list =  await _myImageRepo.loadInCart(userID);
+            List<MyImage> list = await _myImageRepo.loadInCart(userID);
             List<CartResponseDTO> result = new List<CartResponseDTO>();
             foreach (MyImage item in list)
             {
-               var product= item.ProductDetails.Select(x => new CartResponseDTO()
+                var product = item.ProductDetails.Select(x => new CartResponseDTO()
                 {
                     length = x.TemplateSize.PrintSize.Length,
                     width = x.TemplateSize.PrintSize.Width,
-                    image = item.Images.First().ImageUrl,
-                    quantity= x.Quantity,
+                    images = item.Images.Select(x => x.ImageUrl).ToList(),
+                    quantity = x.Quantity,
                     materialPage = x.MaterialPage.Name,
-                    templateName = item.Template.Id != 1? item.Template.Name : "None",
+                    templateName = item.Template.Id != 1 ? item.Template.Name : "None",
                     price = x.Price
                 }
-                ).ToList();
+                 ).ToList();
                 result.AddRange(product);
             }
             return result;
         }
 
-        public async Task<List<MyImage>> LoadMyImages(int userID)
+        public async Task<List<MyImagesResponseDTO>> LoadMyImages(int userID)
         {
             List<MyImage> listProduct = await _myImageRepo.getByUserId(userID);
             if (listProduct == null)
             {
                 return null;
             }
-            return listProduct;
+            List<MyImagesResponseDTO> list = listProduct.Where(t => t.Template.Id != 1).Select(x => new MyImagesResponseDTO()
+            {
+                createDate = x.CreateDate,
+                Id = x.Id,
+                images = x.Images.Select(x => x.ImageUrl).ToList(),
+                printSizes = x.Template.TemplateSizes.Select(x => new PrintSizeDTO()
+                {
+                    Id = x.PrintSize.Id,
+                    Length = x.PrintSize.Length,
+                    Width = x.PrintSize.Width,
+                    templateSizeID = x.Id,
+
+                }).ToList(),
+                templateName = x.Template.Name,
+                templateId = x.TemplateId,
+
+            }).ToList();
+            MyImagesResponseDTO myImagesResponseDTO = new MyImagesResponseDTO();
+            bool checkTrue = false;
+            foreach (var item in listProduct)
+            {
+                if(item.Template.Id == 1)
+                {
+                    if(!checkTrue)
+                    {
+                        myImagesResponseDTO.Id = item.Id;
+                        myImagesResponseDTO.createDate = item.CreateDate;
+                        myImagesResponseDTO.templateName = "None";
+                        myImagesResponseDTO.templateId = 1;
+                        myImagesResponseDTO.printSizes = item.Template.TemplateSizes.Select(x => new PrintSizeDTO()
+                        {
+                            Id = x.PrintSize.Id,
+                            Length = x.PrintSize.Length,
+                            Width = x.PrintSize.Width,
+                            templateSizeID = x.Id,
+
+                        }).ToList();
+                    }
+                        myImagesResponseDTO.images.AddRange(item.Images.Select(x => x.ImageUrl).ToList());
+                    checkTrue = true;
+                }
+            }
+            if (checkTrue)
+            {
+                list.Add(myImagesResponseDTO);
+            }
+            return list;
         }
 
         public async Task<List<string>> SaveImages(string folderName, int? templateID, IFormFile[] files)
@@ -169,6 +215,7 @@ namespace WebAPIGroup2.Service.Implement
                 PurchaseOrderId = temPurchaseOrder.Id,
                 Status = true,
                 TemplateId = upLoadDTO.templateID,
+                CreateDate = DateTime.Now,
             };
             if (!await _myImageRepo.InsertAsync(myImage))
             {
@@ -244,15 +291,15 @@ namespace WebAPIGroup2.Service.Implement
             return myImageIDs;
         }
 
-        public async Task<bool> UpdateCart(int productDetailID,int quantity)
+        public async Task<bool> UpdateCart(int productDetailID, int quantity)
         {
-            var oldProduct =await _productDetailsRepo.GetByIDAsync(productDetailID);
+            var oldProduct = await _productDetailsRepo.GetByIDAsync(productDetailID);
             if (oldProduct == null)
             {
                 return false;
             }
             oldProduct.Quantity = quantity;
-           await _productDetailsRepo.UpdateAsync(oldProduct);
+            await _productDetailsRepo.UpdateAsync(oldProduct);
             return true;
         }
 

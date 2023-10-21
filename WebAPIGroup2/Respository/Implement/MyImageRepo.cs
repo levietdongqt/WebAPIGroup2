@@ -43,12 +43,12 @@ namespace WebAPIGroup2.Respository.Implement
                 {
                     return null;
                 }
-                int[] purchaseIDs = new int[listPurchase.Count];
+                List<int> purchaseIDs = new List<int>();
                 listPurchase.ForEach(purchase =>
                 {
-                    purchaseIDs[0] = purchase.Id;
+                    purchaseIDs.Add(purchase.Id);
                 });
-                List<MyImage> list = await _context.MyImages.Include(t=> t.Images).Include(t=> t.Template).ThenInclude(t=> t.TemplateSizes).ThenInclude(t=> t.PrintSize).Where(t=> purchaseIDs.Contains(t.Id)).ToListAsync();
+                List<MyImage> list = await _context.MyImages.Include(t=> t.Images).Include(t=> t.Template).ThenInclude(t=> t.TemplateSizes).ThenInclude(t=> t.PrintSize).Where(t=> purchaseIDs.Contains(t.PurchaseOrderId.Value)).OrderByDescending(t => t.CreateDate).ToListAsync();
                 if(list.Count == 0)
                 {
                     return null;
