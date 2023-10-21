@@ -292,6 +292,7 @@ namespace WebAPIGroup2.Controllers.UserModule
             return Ok(response);
         }
 
+
         [HttpGet]
         [Route("{userId:int}/deliveryInfos")]
         public async Task<JsonResult> GetDeliveryInfoByUserId([FromRoute] int userId)
@@ -303,6 +304,19 @@ namespace WebAPIGroup2.Controllers.UserModule
             }
             var response = new ResponseDTO<List<DeliveryInfoDTO>>(HttpStatusCode.OK, "Get All Successfully", null, deliveryInfoDTOs);
             return new JsonResult(response);
+        }
+
+        [HttpGet("DeliveryById")]
+        public async Task<IActionResult> GetDeliveryInfoById(int id)
+        {
+            var delivery = await _userService.GetDeliveryInfoByIDAsync(id);
+            if (delivery == null)
+            {
+                var errorResponse = new ResponseDTO<string>(HttpStatusCode.NotFound, "Purchase Order Not Found", "No purchase order with the specified ID was found.", null);
+                return NotFound(errorResponse);
+            }
+            var response = new ResponseDTO<DeliveryInfoDTO>(HttpStatusCode.OK, "Success", null, delivery);
+            return Ok(response);
         }
 
 

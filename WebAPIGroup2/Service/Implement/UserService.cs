@@ -70,7 +70,6 @@ namespace WebAPIGroup2.Service.Implement
             return _mapper.Map<DeliveryInfoDTO>(deliveryInfo);
         }
         
-
         public async Task<UserDTO> CreateUser(UserDTO userDTO)
         {
             var avatar = "Avatar/avatardf.jpg";
@@ -267,6 +266,17 @@ namespace WebAPIGroup2.Service.Implement
             }
             var userDTO = _mapper.Map<UserDTO>(user);
             return userDTO;
+        }
+
+        public async Task<DeliveryInfoDTO> GetDeliveryInfoByIDAsync(int id)
+        {
+            var user = await _deliveryInfoRepo.GetByIDAsync(id);
+            if (user == null)
+            {
+                return null;
+            }
+            return _mapper.Map<DeliveryInfoDTO>(user);
+
         }
     }
 
