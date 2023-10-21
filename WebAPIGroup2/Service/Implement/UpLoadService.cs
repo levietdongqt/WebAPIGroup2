@@ -182,7 +182,7 @@ namespace WebAPIGroup2.Service.Implement
                     {
                         myImagesResponseDTO.Id = item.Id;
                         myImagesResponseDTO.createDate = item.CreateDate;
-                        myImagesResponseDTO.templateName = "Simple Prints";
+                        myImagesResponseDTO.templateName = "Simple Prints (No Template)";
                         myImagesResponseDTO.templateId = 1;
                         myImagesResponseDTO.printSizes = item.Template.TemplateSizes.Select(x => new PrintSizeDTO()
                         {
