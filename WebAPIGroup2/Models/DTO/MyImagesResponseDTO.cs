@@ -9,6 +9,8 @@ namespace WebAPIGroup2.Models.DTO
 
         public string templateName { get; set; }
 
+        public double? pricePlusPerOne { get; set; }
+
         public int? templateId { get; set; }
 
 

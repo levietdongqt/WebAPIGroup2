@@ -87,6 +87,19 @@ namespace WebAPIGroup2.Controllers.UserModule
             var response2 = new ResponseDTO<List<MyImagesResponseDTO>>(HttpStatusCode.OK, "Request Successfull", null, myImages);
             return new JsonResult(response2);
         }
+        [HttpGet]
+        [Route("LoadNoTemplate")]
+        public async Task<JsonResult> LoadNoTemplate([FromQuery] int userID)
+        {
+            var myImages = await _upLoadService.LoadNoTemplate(userID);
+            if (myImages == null)
+            {
+                var response = new ResponseDTO<String>(HttpStatusCode.NoContent, "NoTemplate is empty", null, null);
+                return new JsonResult(response);
+            }
+            var response2 = new ResponseDTO<List<MyImagesResponseDTO>>(HttpStatusCode.OK, "Request Successfull", null, myImages);
+            return new JsonResult(response2);
+        }
         [HttpPost]
         [Route("AddToCart")]
         public async Task<JsonResult> AddToCart([FromForm] OrderDTO orderDTO)
