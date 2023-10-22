@@ -9,6 +9,7 @@ namespace WebAPIGroup2.Service.Inteface
         Task<PurchaseOrderDTO> GetPurchaseOrdersByIDAsync(int id);
         Task<PurchaseOrderDTO> UpdatePurchaseOrder(PurchaseOrderDTO purchaseOrderDTO);
 
+        Task<dynamic> GetPurchaseOrderByMonth();
 
     }
 }

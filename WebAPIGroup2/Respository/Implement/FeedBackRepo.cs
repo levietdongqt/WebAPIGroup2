@@ -15,5 +15,22 @@ namespace WebAPIGroup2.Respository.Implement
         {
             return await _context.FeedBacks.FirstOrDefaultAsync(x=>x.Id == id);
         }
+
+        public async Task<dynamic> GetFeedBackTake5News()
+        {
+            var query = from fb in _context.FeedBacks
+                        join user in _context.Users
+                        on fb.UserId equals user.Id
+                        orderby fb.FeedBackDate descending
+                        select new
+                        {
+                            name = $"{user.FullName}-{user.Email}",
+                            image = user.Avatar,
+                            createDate = fb.FeedBackDate,
+                            content = fb.Content
+                        };
+            return await query.Take(5).ToListAsync();
+
+        }
     }
 }

@@ -49,5 +49,18 @@ namespace WebAPIGroup2.Controllers.HomeModule
             var response = new ResponseDTO<List<ReviewDTO>>(HttpStatusCode.OK, "Update successfully", null, updateDTO);
             return new JsonResult(response);
         }
+
+        [HttpGet]
+        [Route("GetByIsImportant")]
+        public async Task<JsonResult> GetReviewsByStatus(int userId,bool isImportant)
+        {
+            var reviewsDTO = await _reviewService.GetReviewsByStatus(userId, isImportant);
+            if(reviewsDTO == null)
+            {
+                return new JsonResult(new ResponseDTO<ReviewDTO>(HttpStatusCode.NotFound, "Not Found", null, null));
+            }
+            var response = new ResponseDTO<List<ReviewDTO>>(HttpStatusCode.OK, "Get successfully", null, reviewsDTO);
+            return new JsonResult(response);
+        }
     }
 }

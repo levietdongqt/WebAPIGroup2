@@ -14,7 +14,7 @@ namespace WebAPIGroup2.Service.Implement
         private readonly IMapper _mapper;
 
 
-        public PurchaseOrderService(IPurchaseOrderRepo purchaseOrderRepo , IMapper mapper , MyImageContext context)
+        public PurchaseOrderService(IPurchaseOrderRepo purchaseOrderRepo, IMapper mapper, MyImageContext context)
         {
             _purchaseOrderRepo = purchaseOrderRepo;
             _mapper = mapper;
@@ -25,7 +25,7 @@ namespace WebAPIGroup2.Service.Implement
         {
             List<PurchaseOrderDTO?> list = new List<PurchaseOrderDTO?>();
             var purs = await _purchaseOrderRepo.GetAllAsync();
-            if(purs == null)
+            if (purs == null)
             {
                 return null;
             }
@@ -38,16 +38,16 @@ namespace WebAPIGroup2.Service.Implement
                 }
                 else if (!string.IsNullOrEmpty(st))
                 {
-                    purs = purs.Where(p=> p.Status == st);
+                    purs = purs.Where(p => p.Status == st);
                 }
                 else if (!string.IsNullOrEmpty(search))
                 {
-                    purs = purs.Where(p=>p.UserId.Equals(search));  
+                    purs = purs.Where(p => p.UserId.Equals(search));
                 }
 
-                purs = purs.Skip((page-1)* pageSize). Take(pageSize);
+                purs = purs.Skip((page - 1) * pageSize).Take(pageSize);
 
-                list = _mapper.Map<List<PurchaseOrderDTO>>(purs); 
+                list = _mapper.Map<List<PurchaseOrderDTO>>(purs);
             }
 
             return list;
@@ -57,7 +57,7 @@ namespace WebAPIGroup2.Service.Implement
         {
             var pur = await _purchaseOrderRepo.GetByIDAsync(id);
             if (pur == null) return null;
-            var purchaseOrderDTO  = _mapper.Map<PurchaseOrderDTO>(pur); 
+            var purchaseOrderDTO = _mapper.Map<PurchaseOrderDTO>(pur);
             return purchaseOrderDTO;
         }
 
@@ -83,8 +83,8 @@ namespace WebAPIGroup2.Service.Implement
 
         public async Task<PurchaseOrderDTO> UpdatePurchaseOrder(PurchaseOrderDTO purchaseOrderDTO)
         {
-            var pur =  await _context.PurchaseOrders.SingleOrDefaultAsync(p => p.Id == purchaseOrderDTO.Id);
-            if(pur != null)
+            var pur = await _context.PurchaseOrders.SingleOrDefaultAsync(p => p.Id == purchaseOrderDTO.Id);
+            if (pur != null)
             {
                 pur.Status = purchaseOrderDTO.Status;
                 var update = await _purchaseOrderRepo.UpdateAsync(pur);
@@ -92,7 +92,18 @@ namespace WebAPIGroup2.Service.Implement
             }
             var purDTO = _mapper.Map<PurchaseOrderDTO>(pur);
             return purDTO;
-           
         }
+
+
+        public async Task<dynamic> GetPurchaseOrderByMonth()
+        {
+            var po = await _purchaseOrderRepo.GetSumPriceTotalByMonth();
+            if (po == null)
+            {
+                return null;
+            }
+            return po;
+        }
+
     }
 }

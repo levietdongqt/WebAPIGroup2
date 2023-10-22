@@ -170,7 +170,8 @@ create table DeliveryInfo(
 	UserId int null,
 	[Email] [nvarchar](256) NULL,
 	DeliveryAddress ntext null,
-	[Phone] [nvarchar](max) NULL
+	[Phone] [nvarchar](max) NULL,
+	CustomName varchar(100) null
 
 	constraint PK_DeliveryInfo primary key (Id)
 )

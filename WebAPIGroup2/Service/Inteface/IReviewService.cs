@@ -9,5 +9,7 @@ namespace WebAPIGroup2.Service.Inteface
         Task<ReviewDTO> DeleteAsync(int id);
 
         Task<List<ReviewDTO>> UpdateAllAsync(List<ReviewDTO> updateReviewsDTO);
+
+        Task<List<ReviewDTO>> GetReviewsByStatus(int userId,bool isImportant);
     }
 }

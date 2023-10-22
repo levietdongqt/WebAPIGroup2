@@ -63,5 +63,37 @@ namespace WebAPIGroup2.Respository.Implement
         }
 
  
+        public  async Task<dynamic> GetSumPriceTotalByMonth()
+        {
+            List<int> Months = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
+            var yearNow = DateTime.Now.Year;
+            var query = from month in Months
+                        join po in _context.PurchaseOrders
+                        on month equals po.CreateDate.Value.Month into gj
+                        from subPo in gj.DefaultIfEmpty()
+                        where (subPo==null || (subPo != null && subPo.CreateDate.Value.Year == yearNow && subPo.Status == "Received"))
+                        group subPo by new { Month = month } into g
+                        select new
+                        {
+                            month = g.Key.Month,
+                            sum = g.Sum(x => (x != null) ? x?.PriceTotal?? 0 : 0),
+                            status = g.Count(x => (x != null && x.Status == "Received"))
+                        };
+            return query.ToList();
+
+        }
+
+        public async Task<int> CountPurchaseInWeek()
+        {
+            DateTime now = DateTime.Now.Date;
+            int currentDayOfWeek = (int) now.DayOfWeek;
+            DateTime startWeek = now.AddDays(-currentDayOfWeek); // lay duoc ngay dau tuan
+            DateTime endWeek = startWeek.AddDays(6);
+
+            var count = _context.PurchaseOrders
+                        .Where(po => po.CreateDate >= startWeek && po.CreateDate <= endWeek)
+                        .CountAsync();
+            return await count;
+        }
     }
 }
