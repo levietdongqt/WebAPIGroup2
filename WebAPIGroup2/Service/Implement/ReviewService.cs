@@ -20,12 +20,20 @@ namespace WebAPIGroup2.Service.Implement
         public async Task<ReviewDTO> CreateAsync(AddReviewDTO addReviewDTO)
         {
             var review = _mapper.Map<Review>(addReviewDTO);
+            review.ReviewDate = DateTime.Now;
             var result = await _reviewRepo.InsertAsync(review);
             if (!result)
             {
                 return null;
             }
             return _mapper.Map<ReviewDTO>(review);
+        }
+
+        public async Task<ReviewDTO> GetByIDAsync(int id)
+        {
+            var review = await _reviewRepo.GetByIDAsync(id);
+            var resultDto = _mapper.Map<ReviewDTO>(review);
+            return resultDto;   
         }
     }
 }

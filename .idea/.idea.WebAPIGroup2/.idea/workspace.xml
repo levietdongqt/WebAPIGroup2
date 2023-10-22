@@ -9,28 +9,32 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7cd16388-67af-4601-a58e-e3e6823391f9" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/WebAPIGroup2/Models/DTO/PaginationDTO.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebAPIGroup2/Models/DTO/ReviewTempDTO.cs" afterDir="false" />
+    <list default="true" id="7cd16388-67af-4601-a58e-e3e6823391f9" name="Changes" comment="update User">
+      <change afterPath="$PROJECT_DIR$/WebAPIGroup2/Models/DTO/ImageDTO.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebAPIGroup2/Models/DTO/MyImageDTO.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebAPIGroup2/Models/DTO/ProductDetailDTO.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebAPIGroup2/Models/DTO/PurchaseOrderDTO.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.WebAPIGroup2/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.WebAPIGroup2/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Controllers/AdminModule/CategoryController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Controllers/AdminModule/CategoryController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Controllers/AdminModule/TemplateController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Controllers/AdminModule/TemplateController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Controllers/AdminModule/CollectionController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Controllers/AdminModule/CollectionController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Controllers/AdminModule/ReviewController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Controllers/AdminModule/ReviewController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Controllers/UserModule/UserController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Controllers/UserModule/UserController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Models/AutoMapperProfile.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Models/AutoMapperProfile.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Models/DTO/CategoryDTO.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Models/DTO/CategoryDTO.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Models/DTO/CollectionDTO.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Models/DTO/CollectionDTO.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Models/DTO/UserDTO.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Models/DTO/UserDTO.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Respository/Implement/CollectionRepo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Respository/Implement/CollectionRepo.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Respository/Implement/ContentEmailRepo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Respository/Implement/ContentEmailRepo.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Respository/Implement/DeliveryInfoRepo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Respository/Implement/DeliveryInfoRepo.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Respository/Implement/FeedBackRepo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Respository/Implement/FeedBackRepo.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Respository/Implement/ReviewRepo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Respository/Implement/ReviewRepo.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Respository/Implement/TemplateRepo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Respository/Implement/TemplateRepo.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Respository/Implement/PurchaseOrderRepo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Respository/Implement/PurchaseOrderRepo.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Respository/Implement/UserRepo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Respository/Implement/UserRepo.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Respository/Inteface/ITemplateRepo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Respository/Inteface/ITemplateRepo.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Respository/Inteface/ICollectionRepo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Respository/Inteface/ICollectionRepo.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Respository/Inteface/IPurchaseOrderRepo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Respository/Inteface/IPurchaseOrderRepo.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Respository/Inteface/IUserRepo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Respository/Inteface/IUserRepo.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Service/Implement/TemplateService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Service/Implement/TemplateService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Service/Implement/CollectionService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Service/Implement/CollectionService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Service/Implement/PurchaseOrderService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Service/Implement/PurchaseOrderService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Service/Implement/ReviewService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Service/Implement/ReviewService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Service/Implement/UserService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Service/Implement/UserService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Service/Inteface/ITemplateService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Service/Inteface/ITemplateService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Service/Inteface/ICollectionService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Service/Inteface/ICollectionService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Service/Inteface/IPurchaseOrderService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Service/Inteface/IPurchaseOrderService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Service/Inteface/IReviewService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Service/Inteface/IReviewService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Service/Inteface/IUserService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Service/Inteface/IUserService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -66,10 +70,11 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/d856066ffe4c59543feec5c19d3d3c8934b5eec93f8cf1358aedcb555825/Boolean.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/e74356f198b598e97eaeea83e8b7b1f2bfe27c0a39fedf86bb7dc44827fbda/ActionMethodExecutor.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/f9daeeaab8409865442b5e80e634dc64dae9a14892fe81e0f17b46f51b2c48f8/DbSet.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Models/AutoMapperProfile.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
-  <component name="KubernetesApiProvider"><![CDATA[{
-  "isMigrated": true
-}]]></component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -171,7 +176,8 @@
       <workItem from="1696955049520" duration="2971000" />
       <workItem from="1697091707753" duration="25432000" />
       <workItem from="1697390790304" duration="116000" />
-      <workItem from="1697391098616" duration="22584000" />
+      <workItem from="1697391098616" duration="36585000" />
+      <workItem from="1697656655934" duration="32699000" />
     </task>
     <task id="LOCAL-00001" summary="category">
       <option name="closed" value="true" />
@@ -237,7 +243,15 @@
       <option name="project" value="LOCAL" />
       <updated>1696947150771</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="update User">
+      <option name="closed" value="true" />
+      <created>1697533118926</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1697533118926</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -277,7 +291,8 @@
     <MESSAGE value="Nam" />
     <MESSAGE value="add more context" />
     <MESSAGE value="add MyImage" />
-    <option name="LAST_COMMIT_MESSAGE" value="add MyImage" />
+    <MESSAGE value="update User" />
+    <option name="LAST_COMMIT_MESSAGE" value="update User" />
   </component>
   <component name="XDebuggerManager">
     <pin-to-top-manager>

@@ -22,10 +22,8 @@ namespace WebAPIGroup2.Models
 
             //DescriptionTemplate
             CreateMap<DescriptionTemplate,DescriptionTemplateDTO>().ReverseMap();
-
             //Template Image
             CreateMap<TemplateImage,TemplateImageDTO>().ReverseMap();
-            
             CreateMap<CollectionTemplate, CollectionTemplateDTO>().ReverseMap();
             CreateMap<PrintSize, SizeDTO>().ReverseMap();
             CreateMap<TemplateSize,TemplateSizeDTO>().ReverseMap();
@@ -38,7 +36,11 @@ namespace WebAPIGroup2.Models
             CreateMap<Collection,CollectionDTO>().ReverseMap(); 
             CreateMap<Category, CategoryDTO>().ReverseMap();
             CreateMap<PaginationDTO<Template>, PaginationDTO<TemplateDTO>>().ReverseMap();
-           
+            CreateMap<PurchaseOrder,PurchaseOrderDTO>().ReverseMap();
+            CreateMap<MyImage, MyImageDTO>().ReverseMap();
+            CreateMap<Image, ImageDTO>().ReverseMap();
+            CreateMap<FeedBack, FeedBackDTO>().ReverseMap();
+
         }
     }
 }

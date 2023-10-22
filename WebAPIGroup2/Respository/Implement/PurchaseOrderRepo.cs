@@ -13,7 +13,7 @@ namespace WebAPIGroup2.Respository.Implement
 
         public Task<PurchaseOrder?> GetByIDAsync(int id)
         {
-            throw new NotImplementedException();
+            return _context.PurchaseOrders.FirstOrDefaultAsync(t => t.Id == id);
         }
 
         public async Task<PurchaseOrder> getPurchaseOrder(int userID, string status)
@@ -34,7 +34,7 @@ namespace WebAPIGroup2.Respository.Implement
                 {
                     throw new Exception("Purchare is not exist!");
                 }
-                 return purchase2;
+                return purchase2;
             }
             catch (Exception e)
             {
