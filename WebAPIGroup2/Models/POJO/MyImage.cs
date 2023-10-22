@@ -15,6 +15,9 @@ public partial class MyImage
 
     public int? PurchaseOrderId { get; set; }
 
+    [Column(TypeName = "datetime")]
+    public DateTime? CreateDate { get; set; }
+
     public bool? Status { get; set; }
 
     [InverseProperty("MyImages")]

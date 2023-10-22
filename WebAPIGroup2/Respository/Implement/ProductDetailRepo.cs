@@ -41,6 +41,19 @@ namespace WebAPIGroup2.Respository.Implement
             }
         }
 
-        
+        public async Task<int?> SumItemInWeek()
+        {
+            DateTime now = DateTime.Now.Date;
+            int currentDayOfWeek = (int)now.DayOfWeek;
+            DateTime startWeek = now.AddDays(-currentDayOfWeek); // lay duoc ngay dau tuan
+            DateTime endWeek = startWeek.AddDays(6);
+
+
+            var sum = _context.ProductDetails
+                         .Where(pd => pd.CreateDate >= startWeek && pd.CreateDate <= endWeek)
+                         .Sum(pd => pd.Quantity);
+
+            return sum;
+        }
     }
 }

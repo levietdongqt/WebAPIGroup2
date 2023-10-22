@@ -166,17 +166,7 @@ namespace WebAPIGroup2.Controllers.UserModule
             }
         }
 
-        private string GenerateRandomCode()
-        {
-            const string characters = "0123456789";
-            var random = new Random();
-            var result = new string(Enumerable.Repeat(characters, 6)
-                .Select(s => s[random.Next(s.Length)]).ToArray());
-            return result;
-        }
-
-
-
+    
         [HttpPost("SendMailPR")]
         public async Task<IActionResult> SendMailPassReco(string email)
         {
@@ -190,9 +180,9 @@ namespace WebAPIGroup2.Controllers.UserModule
                     return BadRequest(new ResponseDTO<string>(HttpStatusCode.BadRequest, "Email does not exist", null, "Failed"));
                 }
 
-                var confirmationCode = GenerateRandomCode();
+                var callbackUrl = $"http://localhost:3000/login/passwordrecovery?userId={existingUserDTO.Id}";
 
-                var mailContent = new MailContent(email, "Confirm your email", $"Your confirmation code is: {confirmationCode}", "Confirmation");
+                var mailContent = new MailContent(email, "Confirm your email", $"Click on the link to update the password: {callbackUrl}", "Confirmation");
 
                 var mailContented = await _utilService.SendEmailAsync(mailContent);
 
@@ -336,6 +326,8 @@ namespace WebAPIGroup2.Controllers.UserModule
             var response = new ResponseDTO<DeliveryInfoDTO>(HttpStatusCode.Created, "Created Successfully", null, deliveryDTO);
             return new JsonResult(response);
         }
+
+        
     }
 
 

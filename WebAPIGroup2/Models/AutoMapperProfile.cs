@@ -36,10 +36,10 @@ namespace WebAPIGroup2.Models
             CreateMap<Collection,CollectionDTO>().ReverseMap(); 
             CreateMap<Category, CategoryDTO>().ReverseMap();
             CreateMap<PaginationDTO<Template>, PaginationDTO<TemplateDTO>>().ReverseMap();
+            CreateMap<FeedBack, FeedBackDTO>().ReverseMap();
             CreateMap<PurchaseOrder,PurchaseOrderDTO>().ReverseMap();
             CreateMap<MyImage, MyImageDTO>().ReverseMap();
             CreateMap<Image, ImageDTO>().ReverseMap();
-            CreateMap<FeedBack, FeedBackDTO>().ReverseMap();
 
         }
     }

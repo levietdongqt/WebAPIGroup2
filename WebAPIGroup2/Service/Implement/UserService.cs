@@ -313,6 +313,12 @@ namespace WebAPIGroup2.Service.Implement
             var userDTO = _mapper.Map<UserDTO>(user);
             return userDTO;
         }
+
+        public async Task<dynamic> GetTotalUserByMonth()
+        {
+            var user = await _useRepo.GetTotalUsersByMonth();
+            return user;
+        }
     }
 
 

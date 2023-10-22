@@ -53,6 +53,7 @@ namespace WebAPIGroup2.Controllers.UserModule
         {
             if (upLoadDTO.templateID == 1 || upLoadDTO.templateID == null)
             {
+                upLoadDTO.templateID = 1;
                 var emailName = _upLoadService.ValidateRequestData(upLoadDTO);
                 var isValidImages = _upLoadService.ValidateFiles(upLoadDTO.files);
                 await Task.WhenAll(isValidImages, emailName);
@@ -74,7 +75,7 @@ namespace WebAPIGroup2.Controllers.UserModule
 
         }
         [HttpGet]
-        [Route("LoadMyImage")]
+        [Route("LoadMyImages")]
         public async Task<JsonResult> LoadMyImage([FromQuery] int userID)
         {
             var myImages = await _upLoadService.LoadMyImages(userID);
@@ -83,7 +84,20 @@ namespace WebAPIGroup2.Controllers.UserModule
                 var response = new ResponseDTO<String>(HttpStatusCode.NoContent, "MyImages is empty", null, null);
                 return new JsonResult(response);
             }
-            var response2 = new ResponseDTO<List<MyImage>>(HttpStatusCode.OK, "Request Successfull", null, myImages);
+            var response2 = new ResponseDTO<List<MyImagesResponseDTO>>(HttpStatusCode.OK, "Request Successfull", null, myImages);
+            return new JsonResult(response2);
+        }
+        [HttpGet]
+        [Route("LoadNoTemplate")]
+        public async Task<JsonResult> LoadNoTemplate([FromQuery] int userID)
+        {
+            var myImages = await _upLoadService.LoadNoTemplate(userID);
+            if (myImages == null)
+            {
+                var response = new ResponseDTO<String>(HttpStatusCode.NoContent, "NoTemplate is empty", null, null);
+                return new JsonResult(response);
+            }
+            var response2 = new ResponseDTO<List<MyImagesResponseDTO>>(HttpStatusCode.OK, "Request Successfull", null, myImages);
             return new JsonResult(response2);
         }
         [HttpPost]

@@ -16,7 +16,15 @@ namespace WebAPIGroup2.Service.Implement
             _purchaseOrderRepo = purchaseOrderRepo;
             _mapper = mapper;
         }
-
+        public async Task<dynamic> GetPurchaseOrderByMonth()
+        {
+            var po = await _purchaseOrderRepo.GetSumPriceTotalByMonth();
+            if(po == null)
+            {
+                return null;
+            }
+            return po;
+        }
         public async Task<IEnumerable<PurchaseOrderDTO>> GetPurchaseOrderAll()
         {
             var purchaseOrders = await _purchaseOrderRepo.GetAllAsync();

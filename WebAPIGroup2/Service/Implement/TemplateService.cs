@@ -1,5 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.IdentityModel.Tokens;
+using System.Dynamic;
+using System.Globalization;
+using System.Text.RegularExpressions;
 using WebAPIGroup2.Models.DTO;
 using WebAPIGroup2.Models.POJO;
 using WebAPIGroup2.Respository.Inteface;
@@ -17,8 +20,12 @@ namespace WebAPIGroup2.Service.Implement
         private readonly ISizeRepo sizeRepo;
         private readonly ITemplateSizeRepo templateSizeRepo;
         private readonly ICollectionTemplateRepo collectionTemplateRepo;
+        private readonly IProductDetailsRepo productDetailsRepo;
+        private readonly IMyImageRepo myImageRepo;
+        private readonly IPurchaseOrderRepo purchaseOrderRepo;
+        private readonly IUserRepo userRepo;
         private readonly IMapper mapper;
-        public TemplateService(ITemplateRepo templateRepo, IMapper mapper, IDescriptionTemplateRepo descriptionTemplateRepo, ITemplateImageRepo imageRepo, IUtilService utilService, ICollectionRepo collectionRepo, ISizeRepo sizeRepo, ICollectionTemplateRepo collectionTemplateRepo, ITemplateSizeRepo templateSizeRepo)
+        public TemplateService(ITemplateRepo templateRepo, IMapper mapper, IDescriptionTemplateRepo descriptionTemplateRepo, ITemplateImageRepo imageRepo, IUtilService utilService, ICollectionRepo collectionRepo, ISizeRepo sizeRepo, ICollectionTemplateRepo collectionTemplateRepo, ITemplateSizeRepo templateSizeRepo, IProductDetailsRepo productDetailsRepo, IMyImageRepo myImageRepo, IPurchaseOrderRepo purchaseOrderRepo,IUserRepo userRepo)
         {
             this.templateRepo = templateRepo;
             this.mapper = mapper;
@@ -29,6 +36,10 @@ namespace WebAPIGroup2.Service.Implement
             this.sizeRepo = sizeRepo;
             this.templateSizeRepo = templateSizeRepo;
             this.collectionTemplateRepo = collectionTemplateRepo;
+            this.productDetailsRepo = productDetailsRepo;
+            this.myImageRepo = myImageRepo;
+            this.purchaseOrderRepo = purchaseOrderRepo;
+            this.userRepo = userRepo;
         }
         public async  Task<TemplateDTO> AddDescriptionByTemplateIdAsync(int templateId, List<DescriptionTemplateDTO> descriptionTemplateDTOs)
         {
@@ -71,8 +82,12 @@ namespace WebAPIGroup2.Service.Implement
 
         public async Task<TemplateDTO> CreateAsync(AddTemplateDTO addTemplateDTO)
         {
+            CultureInfo culture = new CultureInfo("en-US");
             var templateDomain = mapper.Map<Template>(addTemplateDTO);
             templateDomain.CreateDate = DateTime.Now;
+            double output;
+            double.TryParse(addTemplateDTO.PricePlusPerOne, NumberStyles.Any, culture, out output);
+            templateDomain.PricePlusPerOne = output;
             var result = await templateRepo.InsertAsync(templateDomain);
             if (!result)
             {
@@ -201,13 +216,17 @@ namespace WebAPIGroup2.Service.Implement
 
         public async Task<TemplateDTO> UpdateAsync(int id,AddTemplateDTO updateTemplateDTO)
         {
+            CultureInfo culture = new CultureInfo("en-US");
+
             var updatedTemplate = await templateRepo.GetByIDAsync(id);
             if (updatedTemplate == null)
             {
                 return null;
             }
             updatedTemplate.Name = updateTemplateDTO.Name;
-            updatedTemplate.PricePlusPerOne = double.Parse(updateTemplateDTO.PricePlusPerOne);
+            double output;
+            double.TryParse(updateTemplateDTO.PricePlusPerOne, NumberStyles.Any, culture, out output);
+            updatedTemplate.PricePlusPerOne = output;
             var result = await templateRepo.UpdateAsync(updatedTemplate);
             var result2 = await UpdateDescriptionByTemplateIdAsync(id, updateTemplateDTO.DescriptionTemplates);
             if (!result && result2 == null)
@@ -285,6 +304,28 @@ namespace WebAPIGroup2.Service.Implement
                 return null;
             }
             return mapper.Map<TemplateDTO>(template);
+        }
+
+        public async  Task<dynamic> GetReportForAdmin()
+        {
+            
+            var countPoInWeek = await purchaseOrderRepo.CountPurchaseInWeek();
+            var sumPdInWeek = await productDetailsRepo.SumItemInWeek();
+            var users = await userRepo.GetAllAsync();
+            var myImage = await myImageRepo.GetAllAsync();
+            var countUsersNormal = await userRepo.CountUserNormal();
+            var countUsersGG = await userRepo.CountUserGoogle();
+            dynamic report = new ExpandoObject();
+            report.po = countPoInWeek;
+            report.pd = sumPdInWeek;
+            report.myImage = myImage.Count();
+            report.countUsers = users.Count();
+            report.normal = countUsersNormal;
+            report.google = countUsersGG;
+
+            return report;
+
+
         }
     }
 }

@@ -6,5 +6,7 @@ namespace WebAPIGroup2.Service.Inteface
     {
         public Task<IEnumerable<PurchaseOrderDTO>> GetPurchaseOrderAll();
         public  Task<PurchaseOrderDTO?>  GetPurchaseOrderByUserId(int userId,string status);
+        Task<dynamic> GetPurchaseOrderByMonth();
+
     }
 }
