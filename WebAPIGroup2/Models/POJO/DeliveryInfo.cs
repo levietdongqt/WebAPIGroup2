@@ -17,10 +17,15 @@ public partial class DeliveryInfo
     [StringLength(256)]
     public string? Email { get; set; }
 
-    [Column(TypeName = "ntext")]
+    [Unicode(true)]
     public string? DeliveryAddress { get; set; }
 
     public string? Phone { get; set; }
+
+    [StringLength(100)]
+    [Unicode(true)]
+    public string? CustomName { get; set; }
+
 
     [InverseProperty("DeliveryInfo")]
     public virtual ICollection<ContentEmail> ContentEmails { get; set; } = new List<ContentEmail>();

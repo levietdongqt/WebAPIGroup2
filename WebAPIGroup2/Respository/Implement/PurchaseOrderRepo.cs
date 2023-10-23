@@ -11,10 +11,12 @@ namespace WebAPIGroup2.Respository.Implement
         {
         }
 
-        public Task<PurchaseOrder?> GetByIDAsync(int id)
+        public async Task<PurchaseOrder?> GetByIDAsync(int id)
         {
-            throw new NotImplementedException();
+            var pur = await _context.PurchaseOrders.FirstOrDefaultAsync(x => x.Id == id);
+            return pur; // Trả về kết quả tìm thấy hoặc null nếu không tìm thấy
         }
+
 
         public async Task<PurchaseOrder> getPurchaseOrder(int userID, string status)
         {
@@ -43,6 +45,24 @@ namespace WebAPIGroup2.Respository.Implement
             }
         }
 
+        public async Task<IEnumerable<PurchaseOrder>> GetPurchaseOrdersByStatus(int userID, List<string> statuses)
+        {
+            try
+            {
+                var purchases = await _context.PurchaseOrders
+                    .Where(po => po.UserId == userID && statuses.Contains(po.Status))
+                    .ToListAsync();
+
+                return purchases;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
+        }
+
+ 
         public  async Task<dynamic> GetSumPriceTotalByMonth()
         {
             List<int> Months = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };

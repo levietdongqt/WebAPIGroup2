@@ -32,90 +32,6 @@ namespace WebAPIGroup2.Service.Implement
             _myImageRepo = myImageRepo;
         }
 
-        public async Task<bool> AddToCart(OrderDTO orderDTO)
-        {
-            using (var context = new MyImageContext())
-            {
-                var materialPage = context.MaterialPages.FirstOrDefaultAsync(t => t.Id == orderDTO.materialPageId);
-                var purchaseOrder = await _purchaseOrderRepo.getPurchaseOrder(orderDTO.userID, PurchaseStatus.InCart);
-                if (purchaseOrder == null)
-                {
-                    purchaseOrder = new PurchaseOrder()
-                    {
-                        CreateDate = DateTime.Now,
-                        Status = PurchaseStatus.InCart,
-                        UserId = orderDTO.userID
-                    };
-                    if (!await _purchaseOrderRepo.InsertAsync(purchaseOrder))
-                    {
-                        return false;
-                    };
-                }
-
-                await Task.WhenAll(materialPage);
-                if (materialPage.Result == null)
-                {
-                    return false;
-                }
-                var myImage = await _myImageRepo.GetByIDAsync(orderDTO.myImageID);
-                if (myImage == null)
-                {
-                    return false;
-                }
-                myImage.PurchaseOrderId = purchaseOrder.Id;
-                await _myImageRepo.UpdateAsync(myImage);
-
-                float priceOne = orderDTO.imageArea.Value * (float)(materialPage.Result.PricePerInch) + (float)myImage.Template.PricePlusPerOne;
-                float imagesNumber = (float)myImage.Images.Count;
-                decimal price = (decimal)(priceOne * imagesNumber);
-
-                var sameProduct = await _productDetailsRepo.GetByMyImageId(orderDTO);
-                if (sameProduct == null)
-                {
-                    ProductDetail productDetail = new ProductDetail()
-                    {
-                        MyImageId = myImage.Id,
-                        TemplateSizeId = orderDTO.temlateSizeId,
-                        MaterialPageId = materialPage.Result.Id,
-                        CreateDate = DateTime.Now,
-                        Price = price,
-                        Quantity = orderDTO.quantity
-                    };
-                    await _productDetailsRepo.InsertAsync(productDetail);
-                    return true;
-                }
-                sameProduct.Quantity += orderDTO.quantity;
-                await _productDetailsRepo.UpdateAsync(sameProduct);
-                return true;
-            }
-
-        }
-
-        public async Task<List<CartResponseDTO>> LoadCart(int userID)
-        {
-            List<MyImage> list = await _myImageRepo.loadInCart(userID);
-            if (list == null)
-            {
-                return null;
-            }
-            List<CartResponseDTO> result = new List<CartResponseDTO>();
-            foreach (MyImage item in list)
-            {
-                var product = item.ProductDetails.Select(x => new CartResponseDTO()
-                {
-                    length = x.TemplateSize.PrintSize.Length,
-                    width = x.TemplateSize.PrintSize.Width,
-                    images = item.Images.Select(x => x.ImageUrl).ToList(),
-                    quantity = x.Quantity,
-                    materialPage = x.MaterialPage.Name,
-                    templateName = item.Template.Id != 1 ? item.Template.Name : "None",
-                    price = x.Price
-                }
-                 ).ToList();
-                result.AddRange(product);
-            }
-            return result;
-        }
         public async Task<List<MyImagesResponseDTO>> LoadNoTemplate(int userID)
         {
             List<MyImage> listProduct = await _myImageRepo.getByUserId(userID);
@@ -326,19 +242,6 @@ namespace WebAPIGroup2.Service.Implement
             };
             return myImageIDs;
         }
-
-        public async Task<bool> UpdateCart(int productDetailID, int quantity)
-        {
-            var oldProduct = await _productDetailsRepo.GetByIDAsync(productDetailID);
-            if (oldProduct == null)
-            {
-                return false;
-            }
-            oldProduct.Quantity = quantity;
-            await _productDetailsRepo.UpdateAsync(oldProduct);
-            return true;
-        }
-
         public async Task<bool> ValidateFiles(IFormFile[] files)
         {
             List<string> allowExtensions = new List<string>()

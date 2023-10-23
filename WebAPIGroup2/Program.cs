@@ -94,6 +94,8 @@ builder.Services.AddTransient<IProductDetailsRepo, ProductDetailRepo>();
 builder.Services.AddTransient<IImageRepo, ImageRepo>();
 builder.Services.AddTransient<ICategoryRepo, CategoryRepo>();
 builder.Services.AddScoped<IMyImageRepo, MyImageRepo>();
+builder.Services.AddScoped<IMonthlySpendingRepo, MonthlySpendingRepo>();
+
 
 //DI Service
 builder.Services.AddTransient<ILoginService, LoginService>();
@@ -110,6 +112,7 @@ builder.Services.AddTransient<ICategoryService, CategoryService>();
 builder.Services.AddTransient<IOrderService, OrderService>();
 builder.Services.AddTransient<IUpLoadService, UpLoadService>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();
+builder.Services.AddScoped<ICartService, CartService>();
 
 
 var app = builder.Build();
