@@ -100,37 +100,6 @@ namespace WebAPIGroup2.Controllers.UserModule
             var response2 = new ResponseDTO<List<MyImagesResponseDTO>>(HttpStatusCode.OK, "Request Successfull", null, myImages);
             return new JsonResult(response2);
         }
-        [HttpPost]
-        [Route("AddToCart")]
-        public async Task<JsonResult> AddToCart([FromForm] OrderDTO orderDTO)
-        {
-            bool isSucess = await _upLoadService.AddToCart(orderDTO);
-            if (isSucess)
-            {
-                return new JsonResult(new ResponseDTO<List<ProductDetail>>(HttpStatusCode.OK, "Request Successfull", null, null));
-            }
-            return new JsonResult(new ResponseDTO<List<ProductDetail>>(HttpStatusCode.BadRequest, "Request is invalid", null, null));
-        }
-        [HttpPut]
-        [Route("UpdateCart")]
-        public async Task<JsonResult> UpdateCart([FromQuery] int productDetailID, [FromQuery] int quantity)
-        {
-            bool isSucess = await _upLoadService.UpdateCart(productDetailID, quantity);
-            var response = new ResponseDTO<List<ProductDetail>>(HttpStatusCode.OK, "Request Successfull", null, null);
-            return new JsonResult(response);
-        }
-        [HttpGet]
-        [Route("LoadCart")]
-        public async Task<JsonResult> LoadCart([FromQuery] int userID)
-        {
-            List<CartResponseDTO> myImages = await _upLoadService.LoadCart(userID);
-            if (myImages == null)
-            {
-                var response = new ResponseDTO<String>(HttpStatusCode.NoContent, "Cart is empty", null, null);
-                return new JsonResult(response);
-            }
-            var response2 = new ResponseDTO<List<CartResponseDTO>>(HttpStatusCode.OK, "Request Successfull", null, myImages);
-            return new JsonResult(response2);
-        }
+        
     }
 }
