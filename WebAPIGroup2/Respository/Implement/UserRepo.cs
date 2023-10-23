@@ -60,6 +60,12 @@ namespace WebAPIGroup2.Respository.Implement
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.Email.Equals(userEmail));
         }
+
+        public async Task<User?> GetOrderByUserId(int id)
+        {
+            return await _context.Users.Include(x=>x.Reviews).Include(u => u.PurchaseOrders).ThenInclude(u => u.MyImages)
+                .FirstOrDefaultAsync(u => u.Id.Equals(id));
+        }
         
     }
 }

@@ -21,11 +21,10 @@ namespace WebAPIGroup2.Service.Implement
         private readonly IFeedBackRepo _feedBackRepo;
         private readonly IUtilService _utilService;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IPurchaseOrderRepo _purchaseOrderRepo;
+        private readonly IMyImageRepo _myImageRepo;
 
-
-
-
-        public UserService(MyImageContext context, IUserRepo userRepo, IDeliveryInfoRepo deliveryInfoRepo, IMapper mapper, IUtilService utilService, IWebHostEnvironment webHostEnvironment, IReviewRepo reviewRepo, IFeedBackRepo feedBackRepo)
+        public UserService(MyImageContext context, IUserRepo userRepo, IDeliveryInfoRepo deliveryInfoRepo, IMapper mapper, IUtilService utilService, IWebHostEnvironment webHostEnvironment, IReviewRepo reviewRepo, IFeedBackRepo feedBackRepo, IPurchaseOrderRepo purchaseOrderRepo, IMyImageRepo myImageRepo)
         {
             _context = context;
             _deliveryInfoRepo = deliveryInfoRepo;
@@ -35,6 +34,8 @@ namespace WebAPIGroup2.Service.Implement
             _feedBackRepo = feedBackRepo;
             _utilService = utilService;
             _webHostEnvironment = webHostEnvironment;
+            _purchaseOrderRepo = purchaseOrderRepo;
+            _myImageRepo = myImageRepo;
         }
 
         public async Task<UserDTO> ChangePassword(AddUserDTO addUserDTO)
@@ -52,6 +53,7 @@ namespace WebAPIGroup2.Service.Implement
 
             return userDTO;
         }
+        
 
         public async Task<DeliveryInfoDTO> CreateDeliveryInfoOfUser(int userId, DeliveryInfoDTO deliveryInfoDTO)
         {
@@ -68,6 +70,38 @@ namespace WebAPIGroup2.Service.Implement
                 return null;
             }
             return _mapper.Map<DeliveryInfoDTO>(deliveryInfo);
+        }
+
+        public async Task<UserDTO?> GetOrderByUserId(int id)
+        {
+            var user = await _useRepo.GetOrderByUserId(id);
+            if (user == null) return null;
+            var Orders = _mapper.Map<UserDTO>(user);
+            var tempReviews = new List<ReviewTempDTO>();
+            foreach (var item in Orders.Reviews)
+            {
+                var review = await _reviewRepo.GetByIDAsync(item.Id);
+                var reviewDto = _mapper.Map<ReviewTempDTO>(review);
+                tempReviews.Add(reviewDto);
+            }
+            var tempOrders = new List<PurchaseOrderDTO>();
+            foreach (var item in Orders.PurchaseOrders)
+            {
+                var purchaseOrder = await _purchaseOrderRepo.GetByIDAsync(item.Id);
+                var purchaseOrderDTO = _mapper.Map<PurchaseOrderDTO>(purchaseOrder);
+                tempOrders.Add(purchaseOrderDTO);
+                var tempMyImages = new List<MyImageDTO>();
+                foreach (var image in purchaseOrderDTO.MyImages)
+                {
+                    var myImage = await _myImageRepo.GetByIDAsync(image.Id);
+                    var myImageDTO = _mapper.Map<MyImageDTO>(myImage);
+                    tempMyImages.Add(myImageDTO);
+                }
+                purchaseOrderDTO.MyImages = tempMyImages;
+            }
+            Orders.PurchaseOrders = tempOrders;
+            Orders.Reviews = tempReviews;
+            return Orders;
         }
         
         public async Task<UserDTO> CreateUser(UserDTO userDTO)

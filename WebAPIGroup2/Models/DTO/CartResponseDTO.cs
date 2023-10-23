@@ -13,6 +13,8 @@
         public double? length { get; set; }
 
         public string materialPage { get; set; }
+        
+        public int productId { get; set; }
 
     }
 }
