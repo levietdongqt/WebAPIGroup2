@@ -20,15 +20,6 @@ namespace WebAPIGroup2.Controllers.AdminModule
         {
             _orderService = orderService;
         }
-        // GET: api/Order
-        [HttpGet]
-        public async Task<JsonResult> Get()
-        {
-            var order = await _orderService.GetPurchaseOrderAll();
-            var response = new ResponseDTO<IEnumerable<PurchaseOrderDTO>>(HttpStatusCode.OK, "Success", null, order);
-            return new JsonResult(response);
-        }
-
         // GET: api/Order/5
         [HttpGet("{id:int}", Name = "Get")]
         public async Task<JsonResult> Get(int id,[FromQuery] string status)
