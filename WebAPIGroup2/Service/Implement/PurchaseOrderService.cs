@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using MimeKit.Cryptography;
 using WebAPIGroup2.Models;
 using WebAPIGroup2.Models.DTO;
+using WebAPIGroup2.Models.POJO;
 using WebAPIGroup2.Respository.Inteface;
 using WebAPIGroup2.Service.Inteface;
 
@@ -12,18 +14,26 @@ namespace WebAPIGroup2.Service.Implement
         private readonly IPurchaseOrderRepo _purchaseOrderRepo;
         private readonly MyImageContext _context;
         private readonly IMapper _mapper;
+        private readonly IUserRepo _userRepo;
+        private readonly IDeliveryInfoRepo _deliveryInfoRepo;
+        private readonly IUserService _userService;
 
 
-        public PurchaseOrderService(IPurchaseOrderRepo purchaseOrderRepo, IMapper mapper, MyImageContext context)
+        public PurchaseOrderService(IPurchaseOrderRepo purchaseOrderRepo, IMapper mapper, MyImageContext context , IUserRepo userRepo, IDeliveryInfoRepo deliveryInfoRepo, IUserService userService)
         {
             _purchaseOrderRepo = purchaseOrderRepo;
             _mapper = mapper;
             _context = context;
+            _userRepo = userRepo;
+            _deliveryInfoRepo = deliveryInfoRepo;
+            _userService = userService;
+            
         }
 
         public async Task<IEnumerable<PurchaseOrderDTO>?> GetAllAsync(string? search, string? st, int page, int pageSize)
         {
             List<PurchaseOrderDTO?> list = new List<PurchaseOrderDTO?>();
+
             var purs = await _purchaseOrderRepo.GetAllAsync();
             if (purs == null)
             {
@@ -34,7 +44,7 @@ namespace WebAPIGroup2.Service.Implement
                 if (!string.IsNullOrEmpty(search) && !string.IsNullOrEmpty(st))
                 {
                     search = search.ToLower();
-                    purs = purs.Where(p => (p.Status == st) && (p.UserId.Equals(search)));
+                    purs = purs.Where(p => (p.Status == st) && (p.User.Email.Contains(search)));
                 }
                 else if (!string.IsNullOrEmpty(st))
                 {
@@ -42,16 +52,45 @@ namespace WebAPIGroup2.Service.Implement
                 }
                 else if (!string.IsNullOrEmpty(search))
                 {
-                    purs = purs.Where(p => p.UserId.Equals(search));
+                    purs = purs.Where(p => p.User.Email.Contains(search));
                 }
 
                 purs = purs.Skip((page - 1) * pageSize).Take(pageSize);
 
-                list = _mapper.Map<List<PurchaseOrderDTO>>(purs);
             }
+            list = _mapper.Map<List<PurchaseOrderDTO>>(purs);
+
+            foreach (var pur in list)
+            {
+                // Check if UserId is not null
+                if (pur.UserId.HasValue)
+                {
+                    var user = await _userRepo.GetByIDAsync(pur.UserId.Value);
+                    if (user != null)
+                    {
+                        var userDTO = new UserDTO { FullName = user.FullName , Email = user.Email };
+                        pur.User = userDTO;
+
+                    }
+                }
+
+                // Check if DeliveryInfoId is not null
+                if (pur.DeliveryInfoId.HasValue)
+                {
+                    var delivery = await _deliveryInfoRepo.GetByIDAsync(pur.DeliveryInfoId.Value);
+                    if (delivery != null)
+                    {
+                        var deliveryDTO = _mapper.Map<DeliveryInfoDTO>(delivery);
+                        pur.Delivery = deliveryDTO;
+                    }
+                }
+            }
+
+
 
             return list;
         }
+
 
         public async Task<PurchaseOrderDTO> GetPurchaseOrdersByIDAsync(int id)
         {

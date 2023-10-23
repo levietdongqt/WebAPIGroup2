@@ -21,6 +21,13 @@ namespace WebAPIGroup2.Models.DTO
 
         public DateTime? CreateDate { get; set; }
 
+        //public virtual ICollection<UserDTO> User { get; set; } = new List<UserDTO>();
+        public virtual UserDTO User { get; set; } =  new UserDTO();
+        public virtual DeliveryInfoDTO Delivery { get; set; } = new DeliveryInfoDTO();
+
+
+        //public virtual ICollection<DeliveryInfoDTO> Deliverys { get; set; } = new List<DeliveryInfoDTO>();
+
 
     }
 }
