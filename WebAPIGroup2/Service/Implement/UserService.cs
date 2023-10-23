@@ -70,7 +70,6 @@ namespace WebAPIGroup2.Service.Implement
             return _mapper.Map<DeliveryInfoDTO>(deliveryInfo);
         }
         
-
         public async Task<UserDTO> CreateUser(UserDTO userDTO)
         {
             var avatar = "Avatar/avatardf.jpg";
@@ -244,26 +243,16 @@ namespace WebAPIGroup2.Service.Implement
 
         public async Task<UserDTO> PasswordRecovery(AddUserDTO addUserDTO)
         {
-            var existingUser = await _context.Users.SingleOrDefaultAsync(u => u.Email == addUserDTO.Email);
+            var existingUser = await _context.Users.SingleOrDefaultAsync(u => u.Id == addUserDTO.Id);
 
             if (existingUser != null)
             {
                 existingUser.Password = addUserDTO.Password;
              
-                if (addUserDTO.formFile != null)
-                {
-                    var avatar = await SaveUploadedFile(addUserDTO.formFile);
-                    existingUser.Avatar = avatar;
-                }
-
-                var update = await _useRepo.UpdateAsync(existingUser);
-                if (!update)
-                {
-                    return null;
-                }
             }
-
+            var update = await _useRepo.UpdateAsync(existingUser);
             var userDTO = _mapper.Map<UserDTO>(existingUser);
+
             return userDTO;
         }
 
@@ -279,11 +268,23 @@ namespace WebAPIGroup2.Service.Implement
             return userDTO;
         }
 
+        public async Task<DeliveryInfoDTO> GetDeliveryInfoByIDAsync(int id)
+        {
+            var user = await _deliveryInfoRepo.GetByIDAsync(id);
+            if (user == null)
+            {
+                return null;
+            }
+            return _mapper.Map<DeliveryInfoDTO>(user);
+        }
+
         public async Task<dynamic> GetTotalUserByMonth()
         {
             var user = await _useRepo.GetTotalUsersByMonth();
             return user;
         }
+
+      
     }
 
 

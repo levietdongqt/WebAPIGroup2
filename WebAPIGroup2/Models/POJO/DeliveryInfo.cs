@@ -22,6 +22,8 @@ public partial class DeliveryInfo
 
     public string? Phone { get; set; }
 
+    public string? CustomName { get; set; } 
+
     [InverseProperty("DeliveryInfo")]
     public virtual ICollection<ContentEmail> ContentEmails { get; set; } = new List<ContentEmail>();
 
