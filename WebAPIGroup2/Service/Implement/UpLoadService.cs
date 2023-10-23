@@ -94,6 +94,10 @@ namespace WebAPIGroup2.Service.Implement
         public async Task<List<CartResponseDTO>> LoadCart(int userID)
         {
             List<MyImage> list = await _myImageRepo.loadInCart(userID);
+            if (list == null)
+            {
+                return null;
+            }
             List<CartResponseDTO> result = new List<CartResponseDTO>();
             foreach (MyImage item in list)
             {
@@ -112,7 +116,37 @@ namespace WebAPIGroup2.Service.Implement
             }
             return result;
         }
+        public async Task<List<MyImagesResponseDTO>> LoadNoTemplate(int userID)
+        {
+            List<MyImage> listProduct = await _myImageRepo.getByUserId(userID);
+            if (listProduct == null)
+            {
+                return null;
+            }
+            List<MyImagesResponseDTO> list = listProduct.Where(t => t.Template.Id == 1).Select(x => new MyImagesResponseDTO()
+            {
+                createDate = x.CreateDate,
+                Id = x.Id,
+                images = x.Images.Select(x => x.ImageUrl).ToList(),
+                printSizes = x.Template.TemplateSizes.Select(x => new PrintSizeDTO()
+                {
+                    Id = x.PrintSize.Id,
+                    Length = x.PrintSize.Length,
+                    Width = x.PrintSize.Width,
+                    templateSizeID = x.Id,
 
+                }).ToList(),
+                templateName = x.Template.Name,
+                templateId = x.TemplateId,
+                pricePlusPerOne = x.Template.PricePlusPerOne
+
+            }).ToList();
+            if (list.Count < 1)
+            {
+                return null;
+            }
+            return list;
+        }
         public async Task<List<MyImagesResponseDTO>> LoadMyImages(int userID)
         {
             List<MyImage> listProduct = await _myImageRepo.getByUserId(userID);
@@ -135,19 +169,20 @@ namespace WebAPIGroup2.Service.Implement
                 }).ToList(),
                 templateName = x.Template.Name,
                 templateId = x.TemplateId,
+                pricePlusPerOne = x.Template.PricePlusPerOne
 
             }).ToList();
             MyImagesResponseDTO myImagesResponseDTO = new MyImagesResponseDTO();
             bool checkTrue = false;
             foreach (var item in listProduct)
             {
-                if(item.Template.Id == 1)
+                if (item.Template.Id == 1)
                 {
-                    if(!checkTrue)
+                    if (!checkTrue)
                     {
                         myImagesResponseDTO.Id = item.Id;
                         myImagesResponseDTO.createDate = item.CreateDate;
-                        myImagesResponseDTO.templateName = "None";
+                        myImagesResponseDTO.templateName = "Simple Prints (No Template)";
                         myImagesResponseDTO.templateId = 1;
                         myImagesResponseDTO.printSizes = item.Template.TemplateSizes.Select(x => new PrintSizeDTO()
                         {
@@ -158,7 +193,7 @@ namespace WebAPIGroup2.Service.Implement
 
                         }).ToList();
                     }
-                        myImagesResponseDTO.images.AddRange(item.Images.Select(x => x.ImageUrl).ToList());
+                    myImagesResponseDTO.images.AddRange(item.Images.Select(x => x.ImageUrl).ToList());
                     checkTrue = true;
                 }
             }
@@ -166,7 +201,7 @@ namespace WebAPIGroup2.Service.Implement
             {
                 list.Add(myImagesResponseDTO);
             }
-            return list;
+            return list.OrderByDescending(t=> -t.templateId).ToList();
         }
 
         public async Task<List<string>> SaveImages(string folderName, int? templateID, IFormFile[] files)
@@ -270,6 +305,7 @@ namespace WebAPIGroup2.Service.Implement
                     PurchaseOrderId = temPurchaseOrder.Id,
                     Status = true,
                     TemplateId = upLoadDTO.templateID,
+                    CreateDate = DateTime.Now,
                 };
                 if (!await _myImageRepo.InsertAsync(myImage))
                 {
