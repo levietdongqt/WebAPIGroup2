@@ -297,7 +297,14 @@ namespace WebAPIGroup2.Service.Implement
             {
                 return null;
             }
-            template.Status = false;
+            if(template.Status == true)
+            {
+                template.Status = false;
+            }
+            else
+            {
+                template.Status = true;
+            }         
             var result = await templateRepo.UpdateAsync(template);
             if(!result)
             {
@@ -326,6 +333,53 @@ namespace WebAPIGroup2.Service.Implement
             return report;
 
 
+        }
+
+        public async Task<List<SizeDTO>> AddSizeByTemplateIdAsync(int templateId, List<SizeDTO> sizeDTOs)
+        {
+            var sizes = mapper.Map<List<SizeDTO>>(sizeDTOs);
+            var template = await templateRepo.GetByIDAsync(templateId);
+            if(template == null)
+            {
+                return null;
+            }
+            var sizesToRemove = new List<TemplateSize>(); // Tạo danh sách trung gian để lưu trữ các phần tử cần xóa
+
+            foreach (var templateSize in template.TemplateSizes.ToList()) // Sử dụng ToList để tạo một bản sao của danh sách
+            {
+                if (!sizes.Any(size => size.Id == templateSize.Id))
+                {
+                    var result = await templateSizeRepo.DeleteAsync(templateSize);
+                    if (!result)
+                    {
+                        return null;
+                    }
+                    sizesToRemove.Add(templateSize); // Thêm phần tử cần xóa vào danh sách trung gian
+                }
+            }
+
+            // Xóa các phần tử cần xóa từ tập hợp chính
+            foreach (var sizeToRemove in sizesToRemove)
+            {
+                template.TemplateSizes.Remove(sizeToRemove);
+            }
+            foreach (var size in sizes)
+            {
+                if (template.TemplateSizes.All(templateSize => templateSize.Id != size.Id))
+                {
+                    var sizeCreated = new TemplateSize
+                    {
+                        PrintSizeId = size.Id,
+                        TemplateId = template.Id,
+                    };
+                    var result = await templateSizeRepo.InsertAsync(sizeCreated);
+                    if (!result)
+                    {
+                        return null;
+                    }
+                }
+            }
+            return sizeDTOs;
         }
     }
 }
