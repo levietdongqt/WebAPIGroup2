@@ -118,7 +118,7 @@ create table PurchaseOrder(
 
 
 	constraint PK_PurchaseOrder primary key (Id),
-	constraint CK_StatusOrder check ([Status] in ('Order Placed','Order Paid','ToShip','Temporary','Received'))
+	constraint CK_StatusOrder check ([Status] in ('Order Placed','Order Paid','ToShip','Temporary','Received','Canceled'))
 )
 go
 create table Review(

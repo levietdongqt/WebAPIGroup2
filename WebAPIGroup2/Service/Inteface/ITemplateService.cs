@@ -27,5 +27,7 @@ namespace WebAPIGroup2.Service.Inteface
 
         Task<dynamic> GetReportForAdmin();
 
+        Task<List<SizeDTO>> AddSizeByTemplateIdAsync(int templateId,List<SizeDTO> sizeDTOs);
+
     }
 }
