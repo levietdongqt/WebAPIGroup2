@@ -21,11 +21,11 @@ namespace WebAPIGroup2.Controllers.TemplateModule
             this.templateService = templateService;
             this.utilService = utilService;
         }
-    
+
         [HttpGet]
         public async Task<JsonResult> GetAll([FromQuery] string? filterOn, [FromQuery] string? filterQuery, [FromQuery] string? sortBy, [FromQuery] bool? isAscending, [FromQuery] bool? status, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 1000)
         {
-            var templateDTO = await templateService.GetAllAsync(filterOn, filterQuery, sortBy, isAscending ?? true,status ?? true,pageNumber, pageSize);
+            var templateDTO = await templateService.GetAllAsync(filterOn, filterQuery, sortBy, isAscending ?? true, status ?? true, pageNumber, pageSize);
 
             var response = new ResponseDTO<List<TemplateDTO>>(HttpStatusCode.OK, "Success", null, templateDTO);
             return new JsonResult(response);
@@ -39,12 +39,12 @@ namespace WebAPIGroup2.Controllers.TemplateModule
             return new JsonResult(response);
         }
         [HttpGet("GetTemplateByName")]
-        public async Task<JsonResult> Get([FromQuery] string? name,[FromQuery]int page = 1, [FromQuery]int limit = 1)
+        public async Task<JsonResult> Get([FromQuery] string? name, [FromQuery] int page = 1, [FromQuery] int limit = 1)
         {
-            var templateDto = await templateService.GetByNameAsync(name,page,limit);
+            var templateDto = await templateService.GetByNameAsync(name, page, limit);
             var response = new ResponseDTO<PaginationDTO<TemplateDTO>>(HttpStatusCode.OK, "Success", null, templateDto);
             return new JsonResult(response);
-        }   
+        }
         [HttpGet]
         [Route("{id:int}")]
         public async Task<JsonResult> GetById(int id)
@@ -55,7 +55,7 @@ namespace WebAPIGroup2.Controllers.TemplateModule
         }
 
         [HttpPost]
-        public async Task<JsonResult> Create([FromForm] AddTemplateDTO addTemplateDTO)          
+        public async Task<JsonResult> Create([FromForm] AddTemplateDTO addTemplateDTO)
         {
             var response = new ResponseDTO<TemplateDTO>();
             try
@@ -66,8 +66,8 @@ namespace WebAPIGroup2.Controllers.TemplateModule
             }
             catch (Exception ex)
             {
-                response = new ResponseDTO<TemplateDTO>(HttpStatusCode.BadRequest,ex.Message, null,null);
-            }          
+                response = new ResponseDTO<TemplateDTO>(HttpStatusCode.BadRequest, ex.Message, null, null);
+            }
             return new JsonResult(response);
         }
         [HttpPost]
@@ -98,10 +98,10 @@ namespace WebAPIGroup2.Controllers.TemplateModule
                 }
                 response = new ResponseDTO<TemplateDTO>(HttpStatusCode.Created, "Add Image successful", null, templateDTO);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 response = new ResponseDTO<TemplateDTO>(HttpStatusCode.BadRequest, ex.Message, null, null);
-            }           
+            }
             return new JsonResult(response);
         }
 
@@ -153,6 +153,19 @@ namespace WebAPIGroup2.Controllers.TemplateModule
                 return new JsonResult(new ResponseDTO<TemplateDTO>(HttpStatusCode.NotFound, "Template is null", null, null));
             }
             var response = new ResponseDTO<TemplateDTO>(HttpStatusCode.Created, "Update Description successful", null, templateDTO);
+            return new JsonResult(response);
+        }
+
+        [HttpPost]
+        [Route("{id:int}/AddSize")]
+        public async Task<JsonResult> Test(int id,[FromBody] List<SizeDTO> sizeDTOs)
+        {
+            var r = await templateService.AddSizeByTemplateIdAsync(id,sizeDTOs);
+            if(r == null)
+            {
+                return new JsonResult(new ResponseDTO<TemplateDTO>(HttpStatusCode.NotFound, "Created fail", null, null));
+            }
+            var response = new ResponseDTO<List<SizeDTO>>(HttpStatusCode.Created, "Add print successful", null, r);
             return new JsonResult(response);
         }
     }

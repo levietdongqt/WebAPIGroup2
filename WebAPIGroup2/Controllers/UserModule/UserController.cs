@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Net;
@@ -7,6 +8,7 @@ using System.Text.Encodings.Web;
 using WebAPIGroup2.Models;
 using WebAPIGroup2.Models.DTO;
 using WebAPIGroup2.Models.POJO;
+using WebAPIGroup2.Service.Implement;
 using WebAPIGroup2.Service.Inteface;
 using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
 
@@ -20,13 +22,15 @@ namespace WebAPIGroup2.Controllers.UserModule
         private readonly IUserService _userService;
         private readonly IUtilService _utilService;
         private readonly ILoginService _loginService;
+        private readonly IPurchaseOrderService _purchaseOrderService;
 
-        public UserController(MyImageContext context, IUserService userService, IUtilService utilService, ILoginService loginService)
+        public UserController(MyImageContext context, IUserService userService, IUtilService utilService, ILoginService loginService , IPurchaseOrderService purchaseOrderService)
         {
             _context = context;
             _userService = userService;
             _utilService = utilService;
             _loginService = loginService;
+            _purchaseOrderService = purchaseOrderService;
         }
 
         [HttpGet]
@@ -166,13 +170,11 @@ namespace WebAPIGroup2.Controllers.UserModule
             }
         }
 
-    
-        [HttpPost("SendMailPR")]
+        [HttpGet("SendMailPR")]
         public async Task<IActionResult> SendMailPassReco(string email)
         {
             try
             {
-
                 var existingUserDTO = await _userService.GetUserByEmailAsync(email);
 
                 if (existingUserDTO == null)
@@ -180,9 +182,15 @@ namespace WebAPIGroup2.Controllers.UserModule
                     return BadRequest(new ResponseDTO<string>(HttpStatusCode.BadRequest, "Email does not exist", null, "Failed"));
                 }
 
-                var callbackUrl = $"http://localhost:3000/login/passwordrecovery?userId={existingUserDTO.Id}";
+                // Tạo thời gian hết hạn là 30 phút sau thời gian hiện tại
+                var expirationTime = DateTime.Now.AddMinutes(5);
 
-                var mailContent = new MailContent(email, "Confirm your email", $"Click on the link to update the password: {callbackUrl}", "Confirmation");
+                // Chuyển đổi thời gian hết hạn thành một chuỗi dạng Unix timestamp
+                var expirationTimeUnix = ((int)(expirationTime.Subtract(new DateTime(1970, 1, 1))).TotalSeconds).ToString();
+
+                var callbackUrl = $"http://localhost:3000/login/passwordrecovery?userId={existingUserDTO.Id}&expiration={expirationTimeUnix}";
+
+                var mailContent = new MailContent(email, "Confirm your email", $"Click on the link to update the password: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>", "Confirmation");
 
                 var mailContented = await _utilService.SendEmailAsync(mailContent);
 
@@ -191,20 +199,17 @@ namespace WebAPIGroup2.Controllers.UserModule
                     return BadRequest(new ResponseDTO<string>(HttpStatusCode.BadRequest, "Failed to Send Mail To User", null, "Failed"));
                 }
 
-
                 return Ok(new ResponseDTO<string>(HttpStatusCode.OK, "Confirmation successful", null, "Success"));
             }
             catch (Exception e)
             {
+                // Ghi lại lỗi ra một tệp log hoặc console
                 Console.Error.WriteLine("Error sending email or processing request: " + e.Message);
+
+                // Trả về một lỗi chung cho client
                 return BadRequest(new ResponseDTO<string>(HttpStatusCode.BadRequest, e.Message, null, "Failed"));
             }
         }
-
-
-
-
-
 
         [HttpPut("PassReco")]
         public async Task<IActionResult> PasswordRecovery( AddUserDTO addUserDTO)
@@ -214,11 +219,11 @@ namespace WebAPIGroup2.Controllers.UserModule
                 var userDTO = await _userService.PasswordRecovery(addUserDTO);
                 if (userDTO != null)
                 {
-                    return Ok(new ResponseDTO<UserDTO>(HttpStatusCode.OK, "PasswordRecovery ok", null, userDTO));
+                    return Ok(new ResponseDTO<UserDTO>(HttpStatusCode.OK, "Reset password successfully ", null, userDTO));
                 }
                 else
                 {
-                    return BadRequest(new ResponseDTO<string>(HttpStatusCode.BadRequest, "Failed to Password Recovery", null, "Failed"));
+                    return BadRequest(new ResponseDTO<string>(HttpStatusCode.BadRequest, "Failed to Reset password", null, "Failed"));
                 }
             }
             catch (Exception e)
@@ -227,8 +232,6 @@ namespace WebAPIGroup2.Controllers.UserModule
                 return BadRequest(new ResponseDTO<string>(HttpStatusCode.BadRequest, e.Message, null, "Failed"));
             }
         }
-
-       
 
         [HttpPut("ChangePass")]
         public async Task<IActionResult> ChangePassWord([FromBody] AddUserDTO addUserDTO)
@@ -243,6 +246,7 @@ namespace WebAPIGroup2.Controllers.UserModule
                 return BadRequest(new ResponseDTO<string>(HttpStatusCode.BadRequest, "Failed to changepassword", null, "Failed"));
             }
         }
+
         [HttpGet("ConfirmEmail")]
         public async Task<IActionResult> ConfirmEmail(int userId, string code)
         {
@@ -314,6 +318,20 @@ namespace WebAPIGroup2.Controllers.UserModule
             return new JsonResult(response);
         }
 
+        [HttpGet("DeliveryById")]
+        public async Task<IActionResult> GetDeliveryInfoById(int id)
+        {
+            var delivery = await _userService.GetDeliveryInfoByIDAsync(id);
+            if (delivery == null)
+            {
+                var errorResponse = new ResponseDTO<string>(HttpStatusCode.NotFound, "Purchase Order Not Found", "No purchase order with the specified ID was found.", null);
+                return NotFound(errorResponse);
+            }
+            var response = new ResponseDTO<DeliveryInfoDTO>(HttpStatusCode.OK, "Success", null, delivery);
+            return Ok(response);
+        }
+
+
         [HttpPost]
         [Route("{userId:int}/deliveryInfos")]
         public async Task<JsonResult> AddDeliveryInfoByUser([FromRoute] int userId, [FromBody] DeliveryInfoDTO deliveryInfoDTO)
@@ -327,7 +345,91 @@ namespace WebAPIGroup2.Controllers.UserModule
             return new JsonResult(response);
         }
 
-        
+        [HttpGet("GetAllPurchase")]
+        public async Task<IActionResult> GetAllPurchaseOrder(string? search, string? st, int page, int pageSize)
+        {
+            var purs = await _purchaseOrderService.GetAllAsync(search, st, page, pageSize);
+
+            if (purs != null)
+            {
+                // Chúng ta sử dụng danh sách người dùng (users) trong ResponseDTO
+                var response = new ResponseDTO<IEnumerable<PurchaseOrderDTO>>(
+                    HttpStatusCode.OK,
+                    "Getall ok",
+                    null,
+                    purs
+                );
+
+                return Ok(response);
+            }
+            else
+            {
+                return new NotFoundObjectResult(new ResponseDTO<IEnumerable<PurchaseOrderDTO>>(
+                    HttpStatusCode.NotFound,
+                    "No users found",
+                    null, // Token (nếu cần)
+                    null  // Không có dữ liệu
+                ));
+            }
+        }
+
+        [HttpGet("GetPurchaseById")]
+        public async Task<IActionResult> GetPurchaseOrdersByIDAsync(int id)
+        {
+            var purchaseOrder = await _purchaseOrderService.GetPurchaseOrdersByIDAsync(id);
+
+            if (purchaseOrder == null)
+            {
+                var errorResponse = new ResponseDTO<string>(HttpStatusCode.NotFound, "Purchase Order Not Found", "No purchase order with the specified ID was found.", null);
+                return NotFound(errorResponse);
+            }
+
+            var response = new ResponseDTO<PurchaseOrderDTO>(HttpStatusCode.OK, "Success", null, purchaseOrder);
+
+            return Ok(response);
+        }
+
+
+        [HttpGet("GetPurchaseBySt")]
+        public async Task<IActionResult> GetPurchaseOderByStatus(int userID, [FromQuery] List<string> statuses)
+        {
+            var purDTOs = await _purchaseOrderService.GetPurchaseOrdersByStatus(userID, statuses);
+
+            if (purDTOs == null )
+            {
+                var errorResponse = new ResponseDTO<string>(HttpStatusCode.NotFound, "No Purchase Orders Found", "No purchase orders match the specified criteria.", null);
+                return NotFound(errorResponse);
+            }
+
+            var response = new ResponseDTO<IEnumerable<PurchaseOrderDTO>>(HttpStatusCode.OK, "Success", null, purDTOs);
+            return Ok(response);
+        }
+
+
+        [HttpPut("EditPurChase")]
+        public async Task<IActionResult> UpdatePurchaseOrder(PurchaseOrderDTO purchaseOrderDTO)
+        {
+            try
+            {
+               
+                var purDTO = await _purchaseOrderService.UpdatePurchaseOrder(purchaseOrderDTO);
+                if (purDTO != null)
+                {
+                    return Ok(new ResponseDTO<PurchaseOrderDTO>(HttpStatusCode.OK, "Edit ok", null, purDTO));
+                }
+                else
+                {
+                    return BadRequest(new ResponseDTO<string>(HttpStatusCode.BadRequest, "Failed to update PurchaseOrder", null, "Failed"));
+                }
+            }
+            catch (Exception e)
+            {
+                Console.Error.WriteLine("Error updating information: " + e.Message);
+                return BadRequest(new ResponseDTO<string>(HttpStatusCode.BadRequest, e.Message, null, "Failed"));
+            }
+        }
+
+
     }
 
 

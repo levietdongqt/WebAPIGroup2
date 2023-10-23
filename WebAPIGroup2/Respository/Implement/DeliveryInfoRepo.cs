@@ -11,6 +11,12 @@ namespace WebAPIGroup2.Respository.Implement
         {
         }
 
+        public async Task<DeliveryInfo?> getByAdress(int userID, string address)
+        {
+            var deliveryInfo = await _context.DeliveryInfos.Where(t => t.DeliveryAddress.Equals(address) && t.UserId == userID).FirstOrDefaultAsync();
+            return deliveryInfo;
+        }
+
         public async Task<DeliveryInfo?> GetByIDAsync(int id)
         {
             return await _context.DeliveryInfos.FirstOrDefaultAsync(X=>X.Id == id);

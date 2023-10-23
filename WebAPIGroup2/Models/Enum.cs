@@ -26,6 +26,7 @@
         public const string OrderPaid = "Order Paid";
         public const string ToShip = "To Ship";
         public const string Received = "Received";
+        public const string Canceled = "Canceled";
     }
 
     

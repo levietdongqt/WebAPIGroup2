@@ -16,6 +16,9 @@ namespace WebAPIGroup2.Models.DTO
 
         public string? Phone { get; set; }
 
+        public string? CustomName { get; set; }
+
+
         public virtual ICollection<ContentEmailDTO>? ContentEmails { get; set; } = new List<ContentEmailDTO>();
     }
 }
