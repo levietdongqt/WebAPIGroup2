@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.Net;
@@ -33,7 +34,7 @@ namespace WebAPIGroup2.Controllers.TemplateModule
         [HttpGet("bestSeller")]
         public async Task<JsonResult> Get([FromQuery] bool? status)
         {
-            var templateDto = await templateService.GetBestSeller(status ?? true);
+            var templateDto = await templateService.GetBestSeller(status ?? true).ConfigureAwait(false);
             var response = new ResponseDTO<List<TemplateDTO>>(HttpStatusCode.OK, "Success", null, templateDto);
             return new JsonResult(response);
         }

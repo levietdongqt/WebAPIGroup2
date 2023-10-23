@@ -9,33 +9,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7cd16388-67af-4601-a58e-e3e6823391f9" name="Changes" comment="update User">
-      <change afterPath="$PROJECT_DIR$/WebAPIGroup2/Models/DTO/ImageDTO.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebAPIGroup2/Models/DTO/MyImageDTO.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebAPIGroup2/Models/DTO/ProductDetailDTO.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebAPIGroup2/Models/DTO/PurchaseOrderDTO.cs" afterDir="false" />
+    <list default="true" id="7cd16388-67af-4601-a58e-e3e6823391f9" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.WebAPIGroup2/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.WebAPIGroup2/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Controllers/AdminModule/CollectionController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Controllers/AdminModule/CollectionController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Controllers/AdminModule/ReviewController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Controllers/AdminModule/ReviewController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Controllers/UserModule/UserController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Controllers/UserModule/UserController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Models/AutoMapperProfile.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Models/AutoMapperProfile.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Models/DTO/CategoryDTO.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Models/DTO/CategoryDTO.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Models/DTO/CollectionDTO.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Models/DTO/CollectionDTO.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Models/DTO/UserDTO.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Models/DTO/UserDTO.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Respository/Implement/CollectionRepo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Respository/Implement/CollectionRepo.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Respository/Implement/PurchaseOrderRepo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Respository/Implement/PurchaseOrderRepo.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Respository/Implement/UserRepo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Respository/Implement/UserRepo.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Respository/Inteface/ICollectionRepo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Respository/Inteface/ICollectionRepo.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Respository/Inteface/IPurchaseOrderRepo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Respository/Inteface/IPurchaseOrderRepo.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Respository/Inteface/IUserRepo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Respository/Inteface/IUserRepo.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Service/Implement/CollectionService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Service/Implement/CollectionService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Service/Implement/PurchaseOrderService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Service/Implement/PurchaseOrderService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Service/Implement/ReviewService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Service/Implement/ReviewService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Service/Implement/UserService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Service/Implement/UserService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Service/Inteface/ICollectionService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Service/Inteface/ICollectionService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Service/Inteface/IPurchaseOrderService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Service/Inteface/IPurchaseOrderService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Service/Inteface/IReviewService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Service/Inteface/IReviewService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Service/Inteface/IUserService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Service/Inteface/IUserService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Controllers/AdminModule/TemplateController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Controllers/AdminModule/TemplateController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Respository/Implement/TemplateRepo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Respository/Implement/TemplateRepo.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,6 +48,22 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/e74356f198b598e97eaeea83e8b7b1f2bfe27c0a39fedf86bb7dc44827fbda/ActionMethodExecutor.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/f9daeeaab8409865442b5e80e634dc64dae9a14892fe81e0f17b46f51b2c48f8/DbSet.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Models/AutoMapperProfile.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Models/AutoMapperProfile.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Models/AutoMapperProfile.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Respository/Inteface/IPurchaseOrderRepo.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Respository/Inteface/IPurchaseOrderRepo.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Respository/Inteface/IUserRepo.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Respository/Inteface/IUserRepo.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Service/Implement/PurchaseOrderService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Service/Implement/PurchaseOrderService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Service/Implement/ReviewService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Service/Implement/ReviewService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Service/Inteface/IPurchaseOrderService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Service/Inteface/IPurchaseOrderService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Service/Inteface/IReviewService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Service/Inteface/IReviewService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Service/Inteface/IUserService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Service/Inteface/IUserService.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="KubernetesApiProvider">{
   &quot;isMigrated&quot;: true
@@ -177,7 +170,8 @@
       <workItem from="1697091707753" duration="25432000" />
       <workItem from="1697390790304" duration="116000" />
       <workItem from="1697391098616" duration="36585000" />
-      <workItem from="1697656655934" duration="32699000" />
+      <workItem from="1697656655934" duration="38425000" />
+      <workItem from="1698057822859" duration="718000" />
     </task>
     <task id="LOCAL-00001" summary="category">
       <option name="closed" value="true" />
@@ -251,7 +245,23 @@
       <option name="project" value="LOCAL" />
       <updated>1697533118926</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Nam">
+      <option name="closed" value="true" />
+      <created>1697967264663</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1697967264663</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Nam">
+      <option name="closed" value="true" />
+      <created>1697967391018</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1697967391018</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -269,7 +279,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="origin/Nam" />
+                        <option value="origin/master" />
                       </list>
                     </value>
                   </entry>
@@ -288,13 +298,43 @@
     <MESSAGE value="add some iamge" />
     <MESSAGE value="add more" />
     <MESSAGE value="SQl" />
-    <MESSAGE value="Nam" />
     <MESSAGE value="add more context" />
     <MESSAGE value="add MyImage" />
     <MESSAGE value="update User" />
-    <option name="LAST_COMMIT_MESSAGE" value="update User" />
+    <MESSAGE value="Nam" />
+    <option name="LAST_COMMIT_MESSAGE" value="Nam" />
   </component>
   <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/WebAPIGroup2/Service/Implement/TemplateService.cs</url>
+          <line>144</line>
+          <properties documentPath="D:\Project\MyImage\WebAPIGroup2\WebAPIGroup2\Service\Implement\TemplateService.cs" initialLine="144" containingFunctionPresentation="Method 'GetBestSeller'">
+            <startOffsets>
+              <option value="6517" />
+            </startOffsets>
+            <endOffsets>
+              <option value="6582" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/WebAPIGroup2/Respository/Implement/TemplateRepo.cs</url>
+          <line>101</line>
+          <properties documentPath="D:\Project\MyImage\WebAPIGroup2\WebAPIGroup2\Respository\Implement\TemplateRepo.cs" initialLine="84" containingFunctionPresentation="Method 'GetTemplateByNameAsync'">
+            <startOffsets>
+              <option value="4421" />
+            </startOffsets>
+            <endOffsets>
+              <option value="4422" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
     <pin-to-top-manager>
       <pinned-members>
         <PinnedItemInfo parentTag="Type#WebAPIGroup2.Models.POJO.User" memberName="Phone" />
