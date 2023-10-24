@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
@@ -33,7 +34,7 @@ builder.Services.AddCors(options =>
     {
         builder.WithOrigins(new[] { "http://localhost:3000" })
                .AllowAnyHeader()
-               .AllowAnyMethod();   
+               .AllowAnyMethod();               
     });
 });
 builder.Services.AddDbContext<MyImageContext>();
