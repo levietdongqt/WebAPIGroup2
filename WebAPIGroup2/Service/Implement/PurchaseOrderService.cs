@@ -123,5 +123,9 @@ namespace WebAPIGroup2.Service.Implement
             return po;
         }
 
+        public Task<PurchaseOrderDTO?> GetPurchaseOrderByUserId(int userId, string status)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
