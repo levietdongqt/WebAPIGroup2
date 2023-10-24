@@ -111,7 +111,7 @@ create table PurchaseOrder(
 	UserId int null,
 	DeliveryInfoId int null,
 	CreditCard varchar(max) null,
-	PriceTotal decimal null,
+	PriceTotal decimal(18,2) null,
 	Status varchar(40) default('Pending') not null,
 	CreateDate datetime null,
 	Note NVARCHAR(255) null
