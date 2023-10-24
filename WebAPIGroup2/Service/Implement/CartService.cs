@@ -141,6 +141,20 @@ namespace WebAPIGroup2.Service.Implement
 
         }
 
+        public async Task<bool> deleteAllCart(List<int> productIdList)
+        {
+            List<ProductDetail> list = _productDetailsRepo.getByIdList(productIdList);
+            if(list == null)
+            {
+                return false;
+            }
+            if(await _productDetailsRepo.DeleteAllAsync(list))
+            {
+                return true;
+            }
+            return false;
+        }
+
         public async Task<bool> deleteFolder(int purchaseID)
         {
             var myImages = await _myImageRepo.getByOrder(purchaseID);

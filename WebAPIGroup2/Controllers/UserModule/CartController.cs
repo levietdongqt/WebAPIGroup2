@@ -29,6 +29,10 @@ namespace WebAPIGroup2.Controllers.UserModule
 
             public string? note { get; set; }
         }
+        public class DeleteDTO
+        {
+           public List<int> productIdList { get; set; }
+        }
         private readonly ICartService _cartService;
 
         public CartController(ICartService cartService)
@@ -103,9 +107,23 @@ namespace WebAPIGroup2.Controllers.UserModule
         }
         [HttpDelete]
         [Route("deleteItem")]
-        public async Task<JsonResult> deleteItem([FromQuery] int productDetailID)
+        public async Task<JsonResult> DeleteItem([FromQuery] int productDetailID)
         {
             bool isSucces2 = await _cartService.deleteProductDetail(productDetailID);
+
+            if (!isSucces2)
+            {
+                var response = new ResponseDTO<String>(HttpStatusCode.NoContent, "Fail to delete this item", null, null);
+                return new JsonResult(response);
+            }
+            var response2 = new ResponseDTO<List<CartResponseDTO>>(HttpStatusCode.OK, "Request Successfull", null, null);
+            return new JsonResult(response2);
+        }
+        [HttpPut]
+        [Route("deleteAll")]
+        public async Task<JsonResult> DeleteAll([FromBody] int[] productIdList)
+        {
+            bool isSucces2 = await _cartService.deleteAllCart(productIdList.ToList());
 
             if (!isSucces2)
             {

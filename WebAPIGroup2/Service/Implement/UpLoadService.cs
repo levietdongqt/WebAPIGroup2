@@ -98,7 +98,7 @@ namespace WebAPIGroup2.Service.Implement
                     {
                         myImagesResponseDTO.Id = item.Id;
                         myImagesResponseDTO.createDate = item.CreateDate;
-                        myImagesResponseDTO.templateName = "Simple Prints (No Template)";
+                        myImagesResponseDTO.templateName = "No Template";
                         myImagesResponseDTO.templateId = 1;
                         myImagesResponseDTO.printSizes = item.Template.TemplateSizes.Select(x => new PrintSizeDTO()
                         {
@@ -285,6 +285,22 @@ namespace WebAPIGroup2.Service.Implement
                 }
                 return null;
             }
+        }
+
+        public async Task<bool> deleteMyImage(int myImagesId)
+        {
+            var myImage = await _myImageRepo.GetByIDAsync(myImagesId);
+            if(myImage == null)
+            {
+                return false;
+            }
+            var images = myImage.Images.ToList();
+            await _imageRepo.DeleteAllAsync(images);
+            if (await _myImageRepo.DeleteAsync(myImage))
+            {
+                return true;
+            }
+            return false;
         }
     }
 }
