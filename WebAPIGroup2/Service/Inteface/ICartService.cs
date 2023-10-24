@@ -10,8 +10,9 @@ namespace WebAPIGroup2.Service.Inteface
     {
         Task<bool> AddToCart(OrderDTO orderDTO);
         Task<DeliveryInfo> createDeliveryInfo(CartController.PurchaseDTO purchaseDTO);
-        Task<PurchaseOrder> createOrder(CartController.PurchaseDTO purchaseDTO, DeliveryInfo deliveryInfo);
+        Task<PurchaseOrder> createOrder(CartController.PurchaseDTO purchaseDTO, DeliveryInfo deliveryInfo,string status);
         Task<bool> deleteFolder(int purchaseID);
+        Task<bool> deleteProductDetail(int productDetailID);
         Task<List<CartResponseDTO>> LoadCart(int userID);
         Task<bool> sendMail(CartController.PurchaseDTO purchaseDTO, DeliveryInfo deliveryInfo);
         Task<bool> UpdateCart(int productDetailID, int quantity);

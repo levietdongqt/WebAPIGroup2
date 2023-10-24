@@ -117,14 +117,14 @@ namespace WebAPIGroup2.Service.Implement
             return newDelivery;
         }
 
-        public async Task<PurchaseOrder> createOrder(CartController.PurchaseDTO purchaseDTO, DeliveryInfo deliveryInfo)
+        public async Task<PurchaseOrder> createOrder(CartController.PurchaseDTO purchaseDTO, DeliveryInfo deliveryInfo, String status)
         {
             var purchaseOrder = await _purchaseOrderRepo.getPurchaseOrder(purchaseDTO.userId, PurchaseStatus.InCart);
             if (purchaseOrder == null)
             {
                 return null;
             }
-            purchaseOrder.Status = PurchaseStatus.OrderPlaced;
+            purchaseOrder.Status = status;
             purchaseOrder.PriceTotal = purchaseDTO.totalPrice;
             purchaseOrder.CreateDate = DateTime.Now;
             purchaseOrder.Note = purchaseDTO.note;
@@ -171,8 +171,23 @@ namespace WebAPIGroup2.Service.Implement
                     Console.WriteLine("Xoá thư mục thành công.");
                 }
             }
-                await _imageRepo.DeleteAllAsync(images);
+            await _imageRepo.DeleteAllAsync(images);
             return true;
+        }
+
+        public async Task<bool> deleteProductDetail(int productDetailID)
+        {
+            var product = await _productDetailsRepo.GetByIDAsync(productDetailID);
+            if (product == null)
+            {
+                return false;
+            }
+            if (await _productDetailsRepo.DeleteAsync(product))
+            {
+                return true;
+            };
+            return false;
+
         }
 
         public async Task<List<CartResponseDTO>> LoadCart(int userID)

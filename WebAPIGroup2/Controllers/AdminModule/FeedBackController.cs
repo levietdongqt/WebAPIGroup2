@@ -58,6 +58,6 @@ namespace WebAPIGroup2.Controllers.AdminModule
             }
             var response = new ResponseDTO<MailContent>(HttpStatusCode.Created, "Send Mail successfully", null, mailContentSended);
             return new JsonResult(response);
-        }
+        }   
     }
 }
