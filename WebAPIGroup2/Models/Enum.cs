@@ -24,7 +24,7 @@
         public const string InCart = "In Cart";
         public const string OrderPlaced = "Order Placed";
         public const string OrderPaid = "Order Paid";
-        public const string ToShip = "To Ship";
+        public const string ToShip = "ToShip";
         public const string Received = "Received";
         public const string Canceled = "Canceled";
     }
