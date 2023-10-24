@@ -8,7 +8,7 @@
         public int? materialPageId { get; set; }
 
         public int temlateSizeId { get; set; }
-        public float? imageArea { get; set; }
+        public string? imageArea { get; set; }
 
         public int quantity { get; set; }
 

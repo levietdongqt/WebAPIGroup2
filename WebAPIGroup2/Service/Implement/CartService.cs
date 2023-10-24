@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 using System.Net;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -41,6 +42,7 @@ namespace WebAPIGroup2.Service.Implement
         }
         public async Task<bool> AddToCart(OrderDTO orderDTO)
         {
+            CultureInfo culture = new CultureInfo("en-US");
             using (var context = new MyImageContext())
             {
                 var materialPage = context.MaterialPages.FirstOrDefaultAsync(t => t.Id == orderDTO.materialPageId);
@@ -71,8 +73,9 @@ namespace WebAPIGroup2.Service.Implement
                 }
                 myImage.PurchaseOrderId = purchaseOrder.Id;
                 await _myImageRepo.UpdateAsync(myImage);
-
-                float priceOne = orderDTO.imageArea.Value * (float)(materialPage.Result.PricePerInch) + (float)myImage.Template.PricePlusPerOne;
+                float output;
+                float.TryParse(orderDTO.imageArea, NumberStyles.Any, culture, out output);
+                float priceOne = output * (float)(materialPage.Result.PricePerInch) + (float)myImage.Template.PricePlusPerOne;
                 float imagesNumber = (float)myImage.Images.Count;
                 decimal price = (decimal)(priceOne * imagesNumber);
 
