@@ -23,6 +23,7 @@ namespace WebAPIGroup2.Service.Inteface
         Task<DeliveryInfoDTO> GetDeliveryInfoByIDAsync(int id);
 
         Task<DeliveryInfoDTO> CreateDeliveryInfoOfUser(int userId,DeliveryInfoDTO deliveryInfoDTO);
+        Task<UserDTO?> GetOrderByUserId(int id);
 
         Task<dynamic> GetTotalUserByMonth();
 

@@ -8,7 +8,7 @@ namespace WebAPIGroup2.Service.Inteface
         Task<IEnumerable<PurchaseOrderDTO>?> GetPurchaseOrdersByStatus(int userID, List<string> statuses);
         Task<PurchaseOrderDTO> GetPurchaseOrdersByIDAsync(int id);
         Task<PurchaseOrderDTO> UpdatePurchaseOrder(PurchaseOrderDTO purchaseOrderDTO);
-
+         Task<PurchaseOrderDTO?>  GetPurchaseOrderByUserId(int userId,string status);
         Task<dynamic> GetPurchaseOrderByMonth();
 
     }

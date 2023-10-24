@@ -143,6 +143,25 @@ namespace WebAPIGroup2.Service.Implement
             }
             return po;
         }
-
+        public async Task<PurchaseOrderDTO?> GetPurchaseOrderByUserId(int userId, string status)
+        {
+            PurchaseOrderDTO? result = null;
+    
+            switch (status)
+            {
+                case PurchaseStatus.Temporary:
+                case PurchaseStatus.InCart:
+                case PurchaseStatus.Received:
+                case PurchaseStatus.ToShip:
+                case PurchaseStatus.OrderPaid:
+                    var purchaseOrder = await _purchaseOrderRepo.getPurchaseOrder(userId, status);
+                    if (purchaseOrder != null)
+                    {
+                        result = _mapper.Map<PurchaseOrderDTO>(purchaseOrder);
+                    }
+                    break;
+            }
+            return result;
+        }
     }
 }
