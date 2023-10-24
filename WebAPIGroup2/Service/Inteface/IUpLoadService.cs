@@ -15,5 +15,6 @@ namespace WebAPIGroup2.Service.Inteface
         Task<bool> ValidateFiles(IFormFile[] files);
         Task<string> ValidateRequestData(UpLoadDTO upLoadDTO);
         Task<bool> deleteMyImage(int myImagesId);
+        Task<bool> deleteFiles(List<Image> images);
     }
 }
