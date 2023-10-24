@@ -85,6 +85,16 @@ namespace WebAPIGroup2.Controllers.UserModule
             }
         }
 
+        [HttpGet]
+        [Route("Orders/{id:int}")]
+        public async Task<JsonResult> GetOrderByUserId(int id)
+        {
+            var order = await _userService.GetOrderByUserId(id);
+            var response = new ResponseDTO<UserDTO?>(HttpStatusCode.OK, "Get ok", null, order);
+            return new JsonResult(response);
+        }
+        
+
         [HttpPost("Create")]
         public async Task<IActionResult> Create(UserDTO userDTO)
         {
@@ -291,6 +301,8 @@ namespace WebAPIGroup2.Controllers.UserModule
             var response = new ResponseDTO<UserDTO>(HttpStatusCode.OK, "Success", null, userDTO);
             return Ok(response);
         }
+
+
 
 
         [HttpGet]

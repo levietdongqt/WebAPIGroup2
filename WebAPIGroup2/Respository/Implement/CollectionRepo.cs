@@ -23,26 +23,36 @@ public class CollectionRepo : GenericRepository<Collection> , ICollectionRepo
         return collection;
     }
 
-    public async Task<CollectionWithTemplateDTO?> GetCollectionWithTemplate(int id)
+    public async Task<PaginationDTO<CollectionWithTemplateDTO?>> GetCollectionWithTemplate(int id, int page =1 , int limit = 1)
     {
-        var collection = await _context.Collections.Where(s => s.Id == id)
-            .Select(s => new CollectionWithTemplateDTO()
+        var collection = _context.Collections.AsQueryable();
+        if (id != 0)
+        {
+            collection = collection.Where(x => x.Id.Equals(id));
+        }
+        int totalRows = await collection.CountAsync();
+        var item = await collection.Select(s=> new CollectionWithTemplateDTO
+        {
+            Id = s.Id,
+            Name = s.Name,
+            TemplateNames = s.CollectionTemplates.Select( c=> new TemplateDTO()
             {
-                Id = s.Id,
-                Name = s.Name,
-                TemplateNames = s.CollectionTemplates.Select(c => new TemplateDTO()
-                {
-                    Id = c.Template.Id,
-                    Name = c.Template.Name,
-                    PricePlusPerOne = c.Template.PricePlusPerOne,
-                    Status = c.Template.Status,
-                    QuantitySold = c.Template.QuantitySold,
-                    
-                }).ToList()
-            }).FirstOrDefaultAsync();
-        return collection;
+                Id = c.Template.Id,
+                Name = c.Template.Name,
+                PricePlusPerOne = c.Template.PricePlusPerOne,
+                Status = c.Template.Status,
+                QuantitySold = c.Template.QuantitySold,
+            }).ToList()
+        }).Skip((page - 1) * limit).Take(limit).ToListAsync();
+        var paginations = new PaginationDTO<CollectionWithTemplateDTO>()
+        {
+            limit = limit,
+            Page = page,
+            totalRows = totalRows,
+            Items = item
+        };
+        return paginations;
     }
-
     
     
 }

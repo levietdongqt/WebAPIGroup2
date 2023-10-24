@@ -70,9 +70,14 @@ namespace WebAPIGroup2.Respository.Implement
 
         public async Task<List<Template>> GetBestSellerTemplateAsync(bool status = true)
         {
-            var list = _context.Templates.Include(c=>c.TemplateImages).OrderByDescending(t => t.QuantitySold).Take(8).AsQueryable();
-            list = list.Where(x => x.Status == status);
-            return await list.ToListAsync();
+            var templates = _context.Templates
+                .Include(t => t.TemplateImages);
+
+            return await templates
+                .Where(x => x.Status == status)
+                .OrderByDescending(t => t.QuantitySold)
+                .Take(8)
+                .ToListAsync();
         }
 
         public async Task<PaginationDTO<Template>> GetTemplateByNameAsync(string? name, int page = 1, int limit = 1)

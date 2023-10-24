@@ -70,13 +70,18 @@ namespace WebAPIGroup2.Respository.Implement
         public async Task<User?>  GetUser(LoginRequestDTO loginRequest)
         {
             string role = loginRequest.isClient ? "user" : "admin";
-            var user = await _context.Users.FirstOrDefaultAsync(t => t.Email.Equals(loginRequest.email) && t.Password
-            .Equals(loginRequest.password) && t.Role.Equals(role));
+            var user = await _context.Users.FirstOrDefaultAsync(t => t.Email.Equals(loginRequest.email) && t.Role.Equals(role) && t.Status.Equals(UserStatus.Enabled));
             return user;
         }
         public async Task<User> GetUserByEmail(string? userEmail)
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.Email.Equals(userEmail));
+        }
+
+        public async Task<User?> GetOrderByUserId(int id)
+        {
+            return await _context.Users.Include(x=>x.Reviews).Include(u => u.PurchaseOrders).ThenInclude(u => u.MyImages)
+                .FirstOrDefaultAsync(u => u.Id.Equals(id));
         }
         
     }

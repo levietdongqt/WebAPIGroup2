@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
+using BCrypt.Net;
 using System.Security.Claims;
 using System.Text;
 using WebAPIGroup2.Models;
@@ -40,11 +41,14 @@ namespace WebAPIGroup2.Service.Implement
 
         public async Task<UserDTO> checkUser(LoginRequestDTO loginRequest)
         {
-            //var passwordHash = BCrypt.Net.BCrypt.HashPassword(loginRequest.password);
-            //loginRequest.password = passwordHash;
             var user = await _userRepo.GetUser(loginRequest);
             if(user != null)
             {
+                var isValid = BCrypt.Net.BCrypt.Verify(loginRequest.password, user.Password);
+                if(!isValid)
+                {
+                    return null;
+                }
                 return _mapper.Map<UserDTO>(user);
             }
             return null;

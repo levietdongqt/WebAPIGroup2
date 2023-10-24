@@ -32,7 +32,7 @@ namespace WebAPIGroup2.Models.DTO
   
         public virtual ICollection<ReviewTempDTO> Reviews { get; set; } = new List<ReviewTempDTO>();
         public bool? Gender { get; set; }
-
+        public virtual ICollection<PurchaseOrderDTO> PurchaseOrders { get; set; } = new List<PurchaseOrderDTO>();
     }
 
 

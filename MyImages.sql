@@ -113,7 +113,9 @@ create table PurchaseOrder(
 	CreditCard varchar(max) null,
 	PriceTotal decimal null,
 	Status varchar(40) default('Pending') not null,
-	CreateDate datetime null
+	CreateDate datetime null,
+	Note NVARCHAR(255) null
+
 
 	constraint PK_PurchaseOrder primary key (Id),
 	constraint CK_StatusOrder check ([Status] in ('Order Placed','Order Paid','ToShip','Temporary','Received','Canceled'))
@@ -169,9 +171,9 @@ create table DeliveryInfo(
 	Id int identity(1,1) not null,
 	UserId int null,
 	[Email] [nvarchar](256) NULL,
-	DeliveryAddress ntext null,
+	DeliveryAddress nvarchar(max) null,
 	[Phone] [nvarchar](max) NULL,
-	CustomName varchar(100) null
+	CustomName nvarchar(100) null
 
 	constraint PK_DeliveryInfo primary key (Id)
 )

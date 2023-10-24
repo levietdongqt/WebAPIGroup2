@@ -9,6 +9,7 @@ namespace WebAPIGroup2.Respository.Inteface
 
         Task<IEnumerable<PurchaseOrder>> GetAllPurchaseOrders();
 
+
         Task<dynamic> GetSumPriceTotalByMonth();
 
         public Task<int> CountPurchaseInWeek();
