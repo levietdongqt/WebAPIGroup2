@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using WebAPIGroup2.Models.POJO;
@@ -24,7 +24,7 @@ namespace WebAPIGroup2.Models.DTO
         //public virtual ICollection<UserDTO> User { get; set; } = new List<UserDTO>();
         public virtual UserDTO User { get; set; } =  new UserDTO();
         public virtual DeliveryInfoDTO Delivery { get; set; } = new DeliveryInfoDTO();
-
+        public virtual ICollection<MyImageDTO>? MyImages { get; set; } = new List<MyImageDTO>();
 
         //public virtual ICollection<DeliveryInfoDTO> Deliverys { get; set; } = new List<DeliveryInfoDTO>();
 

@@ -14,4 +14,13 @@ namespace WebAPIGroup2.Models.DTO
 
         public virtual ICollection<CollectionDTO> Collections { get; set; } = new List<CollectionDTO>();
     }
+
+    public class CategoryTempDTO
+    {
+        public int Id { get; set; }
+
+        public string? Name { get; set; }
+
+        public string? ImageUrl { get; set; }
+    }
 }

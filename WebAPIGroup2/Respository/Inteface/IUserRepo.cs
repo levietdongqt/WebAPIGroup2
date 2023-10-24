@@ -9,6 +9,7 @@ namespace WebAPIGroup2.Respository.Inteface
         public Task<User> GetUserByEmail(string? userEmail);
         
         public Task<dynamic> GetTotalUsersByMonth();
+        public Task<User?> GetOrderByUserId(int id);
 
         public Task<int> CountUserNormal();
 

@@ -196,7 +196,8 @@ namespace WebAPIGroup2.Service.Implement
                     quantity = x.Quantity,
                     materialPage = x.MaterialPage.Name,
                     templateName = item.Template.Id != 1 ? item.Template.Name : "Simple Prints",
-                    price = x.Price
+                    price = x.Price,
+                    productId = x.Id,
                 }
                  ).ToList();
                 result.AddRange(product);

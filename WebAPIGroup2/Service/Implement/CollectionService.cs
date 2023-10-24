@@ -12,12 +12,14 @@ public class CollectionService : ICollectionService
 {
     private readonly IMapper _mapper;
     private readonly ICollectionRepo _collectionRepo;
+    private readonly ICategoryRepo _categoryRepo;
     private readonly MyImageContext _context;
-    public CollectionService( IMapper mapper, ICollectionRepo collectionRepo, MyImageContext context)
+    public CollectionService( IMapper mapper, ICollectionRepo collectionRepo, MyImageContext context,ICategoryRepo categoryRepo)
     {
         _mapper = mapper;
         _collectionRepo = collectionRepo;
         _context = context;
+        _categoryRepo = categoryRepo;
     }
     public async Task<IEnumerable<CollectionDTO>?> GetAllasync()
     {
@@ -33,10 +35,10 @@ public class CollectionService : ICollectionService
         return mappedCollection;
     }
 
-    public async Task<CollectionWithTemplateDTO> GetCollectionWithTemplate(int id)
+    public async Task<PaginationDTO<CollectionWithTemplateDTO>> GetCollectionWithTemplate(int id,int page = 1,int limit = 1)
     {
-        var collection = await _collectionRepo.GetCollectionWithTemplate(id);
-        return _mapper.Map<CollectionWithTemplateDTO>(collection);
+        var collection = await _collectionRepo.GetCollectionWithTemplate(id,page,limit);
+        return _mapper.Map<PaginationDTO<CollectionWithTemplateDTO>>(collection);
     }
 
     public async Task<bool> UpdateCollection(CollectionDTO collection)

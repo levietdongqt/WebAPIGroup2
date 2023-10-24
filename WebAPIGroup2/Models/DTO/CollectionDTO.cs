@@ -10,6 +10,8 @@ public class CollectionDTO
 
     public string? ImageUrl { get; set; }
     
+    public int CategoryId { get; set; }
+    
     public virtual ICollection<CollectionTemplateDTO> CollectionTemplates { get; set; } = new List<CollectionTemplateDTO>();
     public virtual List<TemplateDTO> TemplateDTO { get; set; } = new List<TemplateDTO>();
 }

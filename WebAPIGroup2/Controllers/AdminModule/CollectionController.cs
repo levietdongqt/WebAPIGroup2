@@ -53,17 +53,17 @@ namespace WebAPIGroup2.Controllers.HomeModule
         }
 
         [HttpGet("Template/{id}")]
-        public async Task<IActionResult> GetTemplate(int id)
+        public async Task<IActionResult> GetTemplate(int id,[FromQuery]int page = 1,[FromQuery]int limit = 1)
         {
-            var collectionTemplate = await _collectionService.GetCollectionWithTemplate(id);
+            var collectionTemplate = await _collectionService.GetCollectionWithTemplate(id,page,limit);
             if (collectionTemplate != null)
             {
-                var response = new ResponseDTO<CollectionWithTemplateDTO>(HttpStatusCode.OK, "Get successfully", null, collectionTemplate);
+                var response = new ResponseDTO<PaginationDTO<CollectionWithTemplateDTO>>(HttpStatusCode.OK, "Get successfully", null, collectionTemplate);
                 return Ok(response);
             }
             else
             {
-                var response = new ResponseDTO<CollectionWithTemplateDTO?>(HttpStatusCode.BadRequest, "Get successfully", null, null);
+                var response = new ResponseDTO<PaginationDTO<CollectionWithTemplateDTO>>(HttpStatusCode.BadRequest, "Get successfully", null, null);
                 return BadRequest(response);
             }
         }
