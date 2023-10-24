@@ -34,6 +34,23 @@ namespace WebAPIGroup2.Respository.Implement
             return user;
         }
 
+        public async Task<List<User>> getPurchaseList(string? search, string? st)
+        {
+           var list =await  _context.Users.Include(t => t.PurchaseOrders).Where(t => t.FullName.ToLower() == search.ToLower()).ToListAsync();
+           
+            foreach (var item in list)
+            {
+                
+            }
+            if (list.Count > 0)
+            {
+                return list;
+            }
+
+            return null;
+
+        }
+
         public async Task<dynamic> GetTotalUsersByMonth()
         {
             var yearNow = DateTime.Now.Year;

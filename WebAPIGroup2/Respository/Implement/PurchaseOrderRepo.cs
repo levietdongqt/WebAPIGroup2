@@ -95,5 +95,14 @@ namespace WebAPIGroup2.Respository.Implement
                         .CountAsync();
             return await count;
         }
+
+        public async Task<IEnumerable<PurchaseOrder>> GetAllPurchaseOrders()
+        {
+            var data = await _context.PurchaseOrders
+        .Include(p => p.User) // Kết hợp thông tin về người dùng
+        .ToListAsync();
+
+            return data;
+        }
     }
 }
