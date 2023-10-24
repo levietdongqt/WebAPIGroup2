@@ -101,6 +101,12 @@ namespace WebAPIGroup2.Service.Implement
 
         }
 
+        public async Task<bool> AddToCartAllSimple(OrderDTO orderDTO)
+        {
+            var myImageList =await _myImageRepo.getByUserId(orderDTO.userID);
+            throw new NotImplementedException();
+        }
+
         public async Task<DeliveryInfo> createDeliveryInfo(CartController.PurchaseDTO purchaseDTO)
         {
             var deliveryInfo = await _deliveryInfoRepo.getByAdress(purchaseDTO.userId, purchaseDTO.address);

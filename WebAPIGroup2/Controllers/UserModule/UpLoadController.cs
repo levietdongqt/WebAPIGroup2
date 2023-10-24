@@ -113,6 +113,19 @@ namespace WebAPIGroup2.Controllers.UserModule
             var response2 = new ResponseDTO<List<string>>(HttpStatusCode.OK, "Request Successfull", null, null);
             return new JsonResult(response2);
         }
+        [HttpPost]
+        [Route("deleteMyImage")]
+        public async Task<JsonResult> DeleteImages([FromQuery] List<int> list)
+        {
+            //var isSucces = await _upLoadService.deleteMyImage(myImmageId);
+            //if (!isSucces)
+            //{
+            //    var response = new ResponseDTO<String>(HttpStatusCode.NoContent, "Delete Fail", null, null);
+            //    return new JsonResult(response);
+            //}
+            var response2 = new ResponseDTO<List<string>>(HttpStatusCode.OK, "Request Successfull", null, null);
+            return new JsonResult(response2);
+        }
 
     }
 }

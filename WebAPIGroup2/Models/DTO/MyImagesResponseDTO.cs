@@ -5,7 +5,7 @@ namespace WebAPIGroup2.Models.DTO
     public class MyImagesResponseDTO
     {
         public int Id { get; set; }
-        public List<string> images { get; set; } = new List<string>();
+        public List<Image> images { get; set; } = new List<Image>();
 
         public string templateName { get; set; }
 

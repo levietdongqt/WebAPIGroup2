@@ -9,6 +9,7 @@ namespace WebAPIGroup2.Service.Inteface
     public interface ICartService
     {
         Task<bool> AddToCart(OrderDTO orderDTO);
+        Task<bool> AddToCartAllSimple(OrderDTO orderDTO);
         Task<DeliveryInfo> createDeliveryInfo(CartController.PurchaseDTO purchaseDTO);
         Task<PurchaseOrder> createOrder(CartController.PurchaseDTO purchaseDTO, DeliveryInfo deliveryInfo,string status);
         Task<bool> deleteAllCart(List<int> productIdList);

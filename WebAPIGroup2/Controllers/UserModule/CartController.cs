@@ -1,4 +1,5 @@
 ﻿using Azure;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -45,6 +46,17 @@ namespace WebAPIGroup2.Controllers.UserModule
         public async Task<JsonResult> AddToCart([FromForm] OrderDTO orderDTO)
         {
             bool isSucess = await _cartService.AddToCart(orderDTO);
+            if (isSucess)
+            {
+                return new JsonResult(new ResponseDTO<List<ProductDetail>>(HttpStatusCode.OK, "Request Successfull", null, null));
+            }
+            return new JsonResult(new ResponseDTO<List<ProductDetail>>(HttpStatusCode.BadRequest, "Request is invalid", null, null));
+        }
+        [HttpPost]
+        [Route("AddToCartAll")]
+        public async Task<JsonResult> AddToCartAll([FromForm] OrderDTO orderDTO)
+        {
+            bool isSucess = await _cartService.AddToCartAllSimple(orderDTO);
             if (isSucess)
             {
                 return new JsonResult(new ResponseDTO<List<ProductDetail>>(HttpStatusCode.OK, "Request Successfull", null, null));
