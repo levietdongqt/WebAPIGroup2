@@ -109,7 +109,6 @@ builder.Services.AddTransient<IPurchaseOrderService, PurchaseOrderService>();
 builder.Services.AddTransient<IReviewService, ReviewService>();
 builder.Services.AddTransient<IFeedBackService, FeedBackService>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();
-builder.Services.AddTransient<IOrderService, OrderService>();
 builder.Services.AddTransient<IUpLoadService, UpLoadService>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ICartService, CartService>();
