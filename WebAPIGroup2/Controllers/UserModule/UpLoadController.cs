@@ -100,6 +100,19 @@ namespace WebAPIGroup2.Controllers.UserModule
             return new JsonResult(response2);
         }
         [HttpGet]
+        [Route("LoadMyImagesByTemplateId")]
+        public async Task<JsonResult> LoadMyImagesByTemplateId([FromQuery] int templateId, [FromQuery] int userId)
+        {
+            var myImages = await _upLoadService.LoadMyImages(userId);
+            if (myImages == null)
+            {
+                var response = new ResponseDTO<String>(HttpStatusCode.NoContent, "MyImages is empty", null, null);
+                return new JsonResult(response);
+            }
+            var response2 = new ResponseDTO<List<MyImagesResponseDTO>>(HttpStatusCode.OK, "Request Successfull", null, myImages.Where(t => t.templateId == templateId).ToList());
+            return new JsonResult(response2);
+        }
+        [HttpGet]
         [Route("LoadNoTemplate")]
         public async Task<JsonResult> LoadNoTemplate([FromQuery] int userID)
         {
