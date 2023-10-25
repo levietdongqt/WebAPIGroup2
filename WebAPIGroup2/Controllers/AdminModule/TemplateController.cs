@@ -13,7 +13,6 @@ namespace WebAPIGroup2.Controllers.TemplateModule
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class TemplateController : ControllerBase
     {
         private readonly ITemplateService templateService;
