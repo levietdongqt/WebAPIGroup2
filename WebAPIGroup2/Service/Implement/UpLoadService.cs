@@ -191,7 +191,11 @@ namespace WebAPIGroup2.Service.Implement
             if (!isNew)
             {
                 var list = await _myImageRepo.getByUserId(upLoadDTO.userID);
-                var oldMyImage = list.FirstOrDefault(t => t.TemplateId == upLoadDTO.templateID);
+                MyImage oldMyImage = null;
+                if (list != null)
+                {
+                    list.FirstOrDefault(t => t.TemplateId == upLoadDTO.templateID);
+                }
                 if (oldMyImage == null)
                 {
                     myImage = new MyImage()
