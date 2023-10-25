@@ -25,7 +25,7 @@ namespace WebAPIGroup2.Service.Implement
         {
             throw new NotImplementedException();
         }
-
+        
         public async Task<List<FeedBackDTO>> GetFeedBackByStatus(int userId, bool isImportant)
         {
             var user = await _userRepo.GetByIDAsync(userId);
@@ -74,6 +74,19 @@ namespace WebAPIGroup2.Service.Implement
             }
             return feebbacks;
             
+        }
+
+        public async Task<FeedBackDTO> CreateAsync(FeedBackDTO feedBackDTO)
+        {
+            var feedback = _mapper.Map<FeedBack>(feedBackDTO);
+            feedback.FeedBackDate = DateTime.Now;
+            feedback.isImportant = false;
+            var result = await _feedBackRepo.InsertAsync(feedback);
+            if (result) 
+            {
+                return _mapper.Map<FeedBackDTO>(feedback);
+            }
+            return null;
         }
     }
 }

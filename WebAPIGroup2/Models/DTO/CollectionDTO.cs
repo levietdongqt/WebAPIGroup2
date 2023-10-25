@@ -12,6 +12,8 @@ public class CollectionDTO
     
     public int CategoryId { get; set; }
     
+    public virtual CategoryTempDTO Category { get; set; }
+    
     public virtual ICollection<CollectionTemplateDTO> CollectionTemplates { get; set; } = new List<CollectionTemplateDTO>();
     public virtual List<TemplateDTO> TemplateDTO { get; set; } = new List<TemplateDTO>();
 }
