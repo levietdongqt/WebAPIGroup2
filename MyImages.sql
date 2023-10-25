@@ -624,16 +624,22 @@ values('High',0,0.5,1,'Best material page for print images'),
 go
 
 insert into [dbo].[User]
-values('admin@gmail.com','123','Acc Van Min',1,'1995-10-15','356 Pham Van Dong TPHCM','09012345679','',1,'admin','Enabled',GETDATE()),
-	  ('user1@gmail.com','123456','Huy Dep Trai',1,'1992-12-05','374 Ap Bac My Dinh','09023332223','',1,'user','Enabled',GETDATE()),
-	  ('user2@gmail.com','1234567','Dong Dep Trai',1,'1992-12-05','374 Ap Bac My Dinh','09023332223','',1,'user','Enabled',GETDATE()),
-	  ('user3@gmail.com','1234568','Phuoc Dep Trai',1,'1992-12-05','374 Ap Bac My Dinh','09023332223','',1,'user','Enabled',GETDATE()),
-	  ('user4@gmail.com','1234562','Nam Dep Trai',1,'1992-12-05','374 Ap Bac My Dinh','09023332223','',1,'user','Enabled',GETDATE()),
-	  ('user5@gmail.com','1234562','Minh Dep Trai',1,'1992-12-05','374 Ap Bac My Dinh','09023332223','',1,'user','Enabled',GETDATE())
+values('admin@gmail.com','$2a$11$yroNwc3VjhzV3S.LB0FDPemE9IIWfwMZvkS09VExf1YwFzMxbs2tm
+','Acc Van Min',1,'1995-10-15','356 Pham Van Dong TPHCM','09012345679','',1,'admin','Enabled',GETDATE()),
+	  ('user1@gmail.com','$2a$11$yroNwc3VjhzV3S.LB0FDPemE9IIWfwMZvkS09VExf1YwFzMxbs2tm
+','Huy Dep Trai',1,'1992-12-05','374 Ap Bac My Dinh','09023332223','',1,'user','Enabled',GETDATE()),
+	  ('user2@gmail.com','$2a$11$yroNwc3VjhzV3S.LB0FDPemE9IIWfwMZvkS09VExf1YwFzMxbs2tm
+','Dong Dep Trai',1,'1992-12-05','374 Ap Bac My Dinh','09023332223','',1,'user','Enabled',GETDATE()),
+	  ('user3@gmail.com','$2a$11$yroNwc3VjhzV3S.LB0FDPemE9IIWfwMZvkS09VExf1YwFzMxbs2tm
+','Phuoc Dep Trai',1,'1992-12-05','374 Ap Bac My Dinh','09023332223','',1,'user','Enabled',GETDATE()),
+	  ('user4@gmail.com','$2a$11$yroNwc3VjhzV3S.LB0FDPemE9IIWfwMZvkS09VExf1YwFzMxbs2tm
+','Nam Dep Trai',1,'1992-12-05','374 Ap Bac My Dinh','09023332223','',1,'user','Enabled',GETDATE()),
+	  ('user5@gmail.com','$2a$11$yroNwc3VjhzV3S.LB0FDPemE9IIWfwMZvkS09VExf1YwFzMxbs2tm
+','Minh Dep Trai',1,'1992-12-05','374 Ap Bac My Dinh','09023332223','',1,'user','Enabled',GETDATE())
 go
 
 insert into DeliveryInfo
-values(2,'huy.tran9510@gmail.com','374 Binh Trieu Tp.HCM','09027837465')
+values(2,'huy.tran9510@gmail.com','374 Binh Trieu Tp.HCM','09027837465','Thu Huy')
 go
 insert into ContentEmail
 values(1,'Send mail to Buy','Confirm Bill','Sale')
