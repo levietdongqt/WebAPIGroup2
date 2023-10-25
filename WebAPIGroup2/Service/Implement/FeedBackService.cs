@@ -82,7 +82,7 @@ namespace WebAPIGroup2.Service.Implement
             feedback.FeedBackDate = DateTime.Now;
             feedback.isImportant = false;
             var result = await _feedBackRepo.InsertAsync(feedback);
-            if (result) 
+            if (result)     
             {
                 return _mapper.Map<FeedBackDTO>(feedback);
             }
