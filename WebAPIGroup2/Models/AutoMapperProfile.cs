@@ -41,7 +41,7 @@ namespace WebAPIGroup2.Models
             CreateMap<PurchaseOrder,PurchaseOrderDTO>().ReverseMap();
             CreateMap<MyImage, MyImageDTO>().ReverseMap();
             CreateMap<Image, ImageDTO>().ReverseMap();
-
+            CreateMap<Category, CategoryTempDTO>().ReverseMap();
         }
     }
 }

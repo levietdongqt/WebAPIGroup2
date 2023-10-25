@@ -23,14 +23,14 @@ public class CollectionRepo : GenericRepository<Collection> , ICollectionRepo
         return collection;
     }
 
-    public async Task<PaginationDTO<CollectionWithTemplateDTO?>> GetCollectionWithTemplate(int id, int page =1 , int limit = 1)
+    public async Task<PaginationDTO<CollectionWithTemplateDTO?>> GetCollectionWithTemplate(int id, int page =1 , int limit = 1,bool status = true)
     {
         var collection = _context.Collections.AsQueryable();
         if (id != 0)
         {
             collection = collection.Where(x => x.Id.Equals(id));
         }
-        int totalRows = await collection.CountAsync();
+        
         var item = await collection.Select(s=> new CollectionWithTemplateDTO
         {
             Id = s.Id,
@@ -42,8 +42,9 @@ public class CollectionRepo : GenericRepository<Collection> , ICollectionRepo
                 PricePlusPerOne = c.Template.PricePlusPerOne,
                 Status = c.Template.Status,
                 QuantitySold = c.Template.QuantitySold,
-            }).ToList()
+            }).Where(x=>x.Status == status).ToList()
         }).Skip((page - 1) * limit).Take(limit).ToListAsync();
+        int totalRows = item.Sum(x => x.TemplateNames.Count);
         var paginations = new PaginationDTO<CollectionWithTemplateDTO>()
         {
             limit = limit,
@@ -53,6 +54,14 @@ public class CollectionRepo : GenericRepository<Collection> , ICollectionRepo
         };
         return paginations;
     }
-    
-    
+
+    public async Task<List<Collection>> getCollectionFeatures()
+    {
+        var randomFeatures = await _context.Collections.Include(x => x.Category)
+            .OrderBy(x => Guid.NewGuid()) // Randomize the order of the collections
+            .Take(4) // Retrieve 5 random collections
+            .ToListAsync();
+
+        return randomFeatures;
+    }
 }

@@ -36,6 +36,18 @@ namespace WebAPIGroup2.Controllers.AdminModule
             return new JsonResult(response);
         }
 
+        [HttpPost]
+        [Route("Create")]
+        public async Task<JsonResult> Create([FromBody] FeedBackDTO feedBackDTO)
+        {
+            var createDTO = await _feedBackService.CreateAsync(feedBackDTO);
+            if (createDTO == null)
+            {
+                return new JsonResult(new ResponseDTO<FeedBackDTO>(HttpStatusCode.NotFound, "Not Found", null, null));
+            }
+            var response = new ResponseDTO<FeedBackDTO>(HttpStatusCode.Created, "Create successfully", null, createDTO);
+            return new JsonResult(response);
+        }
         [HttpGet]
         [Route("GetByIsImportant")]
         public async Task<JsonResult> GetFeedbacksByStatus(int userId, bool isImportant)

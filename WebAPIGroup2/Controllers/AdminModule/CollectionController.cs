@@ -55,9 +55,9 @@ namespace WebAPIGroup2.Controllers.HomeModule
         }
 
         [HttpGet("Template/{id}")]
-        public async Task<IActionResult> GetTemplate(int id,[FromQuery]int page = 1,[FromQuery]int limit = 1)
+        public async Task<IActionResult> GetTemplate(int id,[FromQuery]int page = 1,[FromQuery]int limit = 1, [FromQuery]bool? status = true)
         {
-            var collectionTemplate = await _collectionService.GetCollectionWithTemplate(id,page,limit);
+            var collectionTemplate = await _collectionService.GetCollectionWithTemplate(id,page,limit,status ?? true);
             if (collectionTemplate != null)
             {
                 var response = new ResponseDTO<PaginationDTO<CollectionWithTemplateDTO>>(HttpStatusCode.OK, "Get successfully", null, collectionTemplate);
@@ -69,9 +69,25 @@ namespace WebAPIGroup2.Controllers.HomeModule
                 return BadRequest(response);
             }
         }
+
+        [HttpGet("Feature")]
+        public async Task<JsonResult> GetCollectionFeature()
+        {
+            var collectionFeature = await _collectionService.getAllfeatures();
+            if (collectionFeature != null)
+            {
+                var response = new ResponseDTO<IEnumerable<CollectionDTO>>(HttpStatusCode.OK, "Get successfully", null, collectionFeature);
+                return new JsonResult(response);
+            }
+            else
+            {
+                var response = new ResponseDTO<IEnumerable<CollectionDTO>>(HttpStatusCode.BadRequest, "Get successfully", null, null);
+                return new JsonResult(response);
+            }
+        }
         // GET: api/Category/5
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetCollection(int id)
+        public async Task<IActionResult> GetCollection(int id)
         {
             var collection = await _collectionService.GetCollectionById(id);
             if (collection != null)
