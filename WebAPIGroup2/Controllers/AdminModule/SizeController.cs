@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -9,6 +10,7 @@ namespace WebAPIGroup2.Controllers.HomeModule
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class SizeController : ControllerBase
     {
         private readonly ISizeService _sizeService;
