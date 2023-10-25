@@ -30,5 +30,9 @@ namespace WebAPIGroup2.Service.Inteface
         Task<List<SizeDTO>> AddSizeByTemplateIdAsync(int templateId,List<SizeDTO> sizeDTOs);
 
         Task<PaginationDTO<TemplateDTO>> GetAllTemplateAsync(int page = 1, int limit = 1, bool status = true);
+        Task<bool> DeleteByIdAsync(int id);
+
+        Task<bool> DeleteAllByIdAsync(int[] arrayId);
+
     }
 }
