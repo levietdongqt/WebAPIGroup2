@@ -34,6 +34,7 @@
     <Folder Include="wwwroot\CategoryImage\" />
     <Folder Include="wwwroot\CollectionImage\" />
     <Folder Include="wwwroot\MyImage\" />
+    <Folder Include="wwwroot\MyImage\2_user1\Template_4\" />
   </ItemGroup>
 
 </Project>
