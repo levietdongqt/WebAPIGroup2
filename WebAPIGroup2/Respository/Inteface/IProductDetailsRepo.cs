@@ -5,6 +5,7 @@ namespace WebAPIGroup2.Respository.Inteface
 {
     public interface IProductDetailsRepo : IBaseRepository<ProductDetail, int>
     {
+        List<ProductDetail> getByIdList(List<int> productIdList);
         Task<ProductDetail?> GetByMyImageId(OrderDTO orderDTO);
 
         Task<int?> SumItemInWeek();

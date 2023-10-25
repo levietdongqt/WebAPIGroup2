@@ -34,6 +34,11 @@ namespace WebAPIGroup2.Respository.Implement
             }
         }
 
+        public Task<MyImage> getByPurchaseTemplate(int id, int? templateID)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<List<MyImage>> getByUserId(int userID)
         {
             try

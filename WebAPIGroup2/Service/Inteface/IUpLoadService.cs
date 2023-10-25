@@ -14,5 +14,7 @@ namespace WebAPIGroup2.Service.Inteface
         Task<List<int>> SaveToDBWithNoTemplate(string folderName, UpLoadDTO upLoadDTO, List<string> imagesUrls);
         Task<bool> ValidateFiles(IFormFile[] files);
         Task<string> ValidateRequestData(UpLoadDTO upLoadDTO);
+        Task<bool> deleteMyImage(int myImagesId);
+        Task<bool> deleteFiles(List<Image> images);
     }
 }

@@ -27,6 +27,16 @@ namespace WebAPIGroup2.Respository.Implement
             }
         }
 
+        public List<ProductDetail> getByIdList(List<int> productIdList)
+        {
+            var list = _context.ProductDetails.Where(t=> productIdList.Contains(t.Id)).ToList();
+            if(list.Count > 0)
+            {
+                return list;
+            }
+            return null; 
+        }
+
         public async Task<ProductDetail?> GetByMyImageId(OrderDTO orderDTO)
         {
             try

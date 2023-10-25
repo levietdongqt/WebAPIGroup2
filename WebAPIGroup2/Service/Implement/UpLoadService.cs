@@ -43,7 +43,12 @@ namespace WebAPIGroup2.Service.Implement
             {
                 createDate = x.CreateDate,
                 Id = x.Id,
-                images = x.Images.Select(x => x.ImageUrl).ToList(),
+                images = x.Images.Select(x => new Image
+                {
+                    Id = x.Id,
+                    FolderName = x.FolderName,
+                    ImageUrl = x.ImageUrl
+                }).ToList(),
                 printSizes = x.Template.TemplateSizes.Select(x => new PrintSizeDTO()
                 {
                     Id = x.PrintSize.Id,
@@ -74,7 +79,12 @@ namespace WebAPIGroup2.Service.Implement
             {
                 createDate = x.CreateDate,
                 Id = x.Id,
-                images = x.Images.Select(x => x.ImageUrl).ToList(),
+                images = x.Images.Select(x => new Image
+                {
+                    Id = x.Id,
+                    FolderName = x.FolderName,
+                    ImageUrl = x.ImageUrl
+                }).ToList(),
                 printSizes = x.Template.TemplateSizes.Select(x => new PrintSizeDTO()
                 {
                     Id = x.PrintSize.Id,
@@ -98,7 +108,7 @@ namespace WebAPIGroup2.Service.Implement
                     {
                         myImagesResponseDTO.Id = item.Id;
                         myImagesResponseDTO.createDate = item.CreateDate;
-                        myImagesResponseDTO.templateName = "Simple Prints (No Template)";
+                        myImagesResponseDTO.templateName = "No Template";
                         myImagesResponseDTO.templateId = 1;
                         myImagesResponseDTO.printSizes = item.Template.TemplateSizes.Select(x => new PrintSizeDTO()
                         {
@@ -109,7 +119,12 @@ namespace WebAPIGroup2.Service.Implement
 
                         }).ToList();
                     }
-                    myImagesResponseDTO.images.AddRange(item.Images.Select(x => x.ImageUrl).ToList());
+                    myImagesResponseDTO.images.AddRange(item.Images.Select(x => new Image
+                    {
+                        Id = x.Id,
+                        FolderName = x.FolderName,
+                        ImageUrl = x.ImageUrl
+                    }).ToList());
                     checkTrue = true;
                 }
             }
@@ -117,7 +132,7 @@ namespace WebAPIGroup2.Service.Implement
             {
                 list.Add(myImagesResponseDTO);
             }
-            return list.OrderByDescending(t=> -t.templateId).ToList();
+            return list.OrderByDescending(t => -t.templateId).ToList();
         }
 
         public async Task<List<string>> SaveImages(string folderName, int? templateID, IFormFile[] files)
@@ -137,6 +152,8 @@ namespace WebAPIGroup2.Service.Implement
                 var stream = new FileStream(imagePath, FileMode.Create);
 
                 await file.CopyToAsync(stream);
+                stream.Close();
+
                 //Set URL Static
                 var urlFilePath = $"/MyImage/{folderName}/{templateFolder}/{fileName}";
                 imagesUrl.Add(urlFilePath);
@@ -146,10 +163,11 @@ namespace WebAPIGroup2.Service.Implement
 
         public async Task<MyImage> SaveToDBTemporary(string folderName, UpLoadDTO upLoadDTO, List<string> imagesUrls)
         {
-
+            bool isNew = false;
             var temPurchaseOrder = await _purchaseOrderRepo.getPurchaseOrder(upLoadDTO.userID, PurchaseStatus.Temporary);
             if (temPurchaseOrder == null)
             {
+                isNew = true;
                 temPurchaseOrder = new PurchaseOrder()
                 {
                     CreateDate = DateTime.Now,
@@ -161,18 +179,30 @@ namespace WebAPIGroup2.Service.Implement
                     return null;
                 };
             }
-            MyImage myImage = new MyImage()
+            MyImage myImage = new MyImage();
+            if (!isNew)
             {
-                PurchaseOrderId = temPurchaseOrder.Id,
-                Status = true,
-                TemplateId = upLoadDTO.templateID,
-                CreateDate = DateTime.Now,
-            };
-            if (!await _myImageRepo.InsertAsync(myImage))
-            {
-                return null;
-            };
-
+                var list = await _myImageRepo.getByUserId(upLoadDTO.userID);
+                var oldMyImage = list.FirstOrDefault(t => t.TemplateId == upLoadDTO.templateID);
+                if (oldMyImage == null)
+                {
+                    myImage = new MyImage()
+                    {
+                        PurchaseOrderId = temPurchaseOrder.Id,
+                        Status = true,
+                        TemplateId = upLoadDTO.templateID,
+                        CreateDate = DateTime.Now,
+                    };
+                    if (!await _myImageRepo.InsertAsync(myImage))
+                    {
+                        return null;
+                    };
+                }
+                else
+                {
+                    myImage = oldMyImage;
+                }
+            }
             List<Image> images = new List<Image>();
             string templateFolder = $"Template_{upLoadDTO.templateID}";
             imagesUrls.ForEach(imageUrl =>
@@ -285,6 +315,40 @@ namespace WebAPIGroup2.Service.Implement
                 }
                 return null;
             }
+        }
+
+        public async Task<bool> deleteMyImage(int myImagesId)
+        {
+            var myImage = await _myImageRepo.GetByIDAsync(myImagesId);
+            if (myImage == null)
+            {
+                return false;
+            }
+            var images = myImage.Images.ToList();
+            var task1 = _imageRepo.DeleteAllAsync(images);
+            var task2 = deleteFiles(images);
+            await Task.WhenAll(task1, task2);
+            if (await _myImageRepo.DeleteAsync(myImage))
+            {
+                return true;
+            }
+            return false;
+        }
+        public async Task<bool> deleteFiles(List<Image> images)
+        {
+            foreach (var image in images)
+            {
+                string filePath = image.ImageUrl.Substring(1);
+                var fileUrl = Path.Combine(_webHostEnvironment.WebRootPath, filePath);
+                if (File.Exists(fileUrl))
+                {
+                    File.Delete(fileUrl);
+                }
+
+                Console.WriteLine("Xoá File thành công.");
+
+            }
+            return true;
         }
     }
 }
