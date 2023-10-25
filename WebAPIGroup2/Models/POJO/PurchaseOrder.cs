@@ -19,7 +19,7 @@ public partial class PurchaseOrder
     [Unicode(false)]
     public string? CreditCard { get; set; }
 
-    [Column(TypeName = "decimal(18, 0)")]
+    [Column(TypeName = "decimal(18, 2)")]
     public decimal? PriceTotal { get; set; }
 
     [StringLength(40)]

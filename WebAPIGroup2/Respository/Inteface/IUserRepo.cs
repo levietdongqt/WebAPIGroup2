@@ -14,5 +14,6 @@ namespace WebAPIGroup2.Respository.Inteface
         public Task<int> CountUserNormal();
 
         public Task<int> CountUserGoogle();
+        Task<List<User>> getPurchaseList(string? search, string? st);
     }
 }

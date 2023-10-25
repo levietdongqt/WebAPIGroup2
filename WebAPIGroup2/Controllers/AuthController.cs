@@ -43,7 +43,7 @@ namespace WebAPIGroup2.Controllers
             ResponseDTO<UserDTO> response;
             if (user == null)
             {
-                response = new ResponseDTO<UserDTO>(HttpStatusCode.BadRequest, "Login Fail", null, null);
+                response = new ResponseDTO<UserDTO>(HttpStatusCode.BadRequest, "Wrong email or password!", null, null);
                 return new JsonResult(response);
             }
             var token = _loginService.GenerateToken(user);
@@ -76,12 +76,22 @@ namespace WebAPIGroup2.Controllers
                 GoogleResponse userInfo = Newtonsoft.Json.JsonConvert.DeserializeObject<GoogleResponse>(userInfoJson);
 
                 var userLogged = await _loginService.checkLoggedByGoogle(userInfo.Email);
+                if (userLogged != null)
+                {
+                    if (!userLogged.Status.Equals(UserStatus.Enabled))
+                    {
+                        response = new ResponseDTO<UserDTO>(HttpStatusCode.BadRequest, "Account have been bannded!", null, null);
+                        return response;
+                    }
+                }
                 if (userLogged == null)
                 {
                     userLogged = await _loginService.CreateUser(userInfo.Name, userInfo.Email);
                 }
                 var token = _loginService.GenerateToken(userLogged);
                 response = new ResponseDTO<UserDTO>(HttpStatusCode.OK, "Success", token, userLogged);
+
+
             }
             return response;
         }

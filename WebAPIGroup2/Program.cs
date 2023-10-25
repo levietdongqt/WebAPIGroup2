@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
@@ -31,9 +32,9 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(builder =>
     {
-        builder.WithOrigins(new[] { "http://localhost:3000" })
+        builder.WithOrigins(new[] { "http://localhost:3000", "http://localhost:4000" })
                .AllowAnyHeader()
-               .AllowAnyMethod();   
+               .AllowAnyMethod();               
     });
 });
 builder.Services.AddDbContext<MyImageContext>();
@@ -108,7 +109,6 @@ builder.Services.AddTransient<IPurchaseOrderService, PurchaseOrderService>();
 builder.Services.AddTransient<IReviewService, ReviewService>();
 builder.Services.AddTransient<IFeedBackService, FeedBackService>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();
-builder.Services.AddTransient<IOrderService, OrderService>();
 builder.Services.AddTransient<IUpLoadService, UpLoadService>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ICartService, CartService>();
