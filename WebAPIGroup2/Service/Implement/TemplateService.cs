@@ -24,8 +24,9 @@ namespace WebAPIGroup2.Service.Implement
         private readonly IMyImageRepo myImageRepo;
         private readonly IPurchaseOrderRepo purchaseOrderRepo;
         private readonly IUserRepo userRepo;
+        private readonly ITemplateImageRepo templateImageRepo;
         private readonly IMapper mapper;
-        public TemplateService(ITemplateRepo templateRepo, IMapper mapper, IDescriptionTemplateRepo descriptionTemplateRepo, ITemplateImageRepo imageRepo, IUtilService utilService, ICollectionRepo collectionRepo, ISizeRepo sizeRepo, ICollectionTemplateRepo collectionTemplateRepo, ITemplateSizeRepo templateSizeRepo, IProductDetailsRepo productDetailsRepo, IMyImageRepo myImageRepo, IPurchaseOrderRepo purchaseOrderRepo,IUserRepo userRepo)
+        public TemplateService(ITemplateRepo templateRepo, IMapper mapper, IDescriptionTemplateRepo descriptionTemplateRepo, ITemplateImageRepo imageRepo, IUtilService utilService, ICollectionRepo collectionRepo, ISizeRepo sizeRepo, ICollectionTemplateRepo collectionTemplateRepo, ITemplateSizeRepo templateSizeRepo, IProductDetailsRepo productDetailsRepo, IMyImageRepo myImageRepo, IPurchaseOrderRepo purchaseOrderRepo,IUserRepo userRepo,ITemplateImageRepo templateImageRepo)
         {
             this.templateRepo = templateRepo;
             this.mapper = mapper;
@@ -40,6 +41,7 @@ namespace WebAPIGroup2.Service.Implement
             this.myImageRepo = myImageRepo;
             this.purchaseOrderRepo = purchaseOrderRepo;
             this.userRepo = userRepo;
+            this.templateImageRepo = templateImageRepo;
         }
         public async  Task<TemplateDTO> AddDescriptionByTemplateIdAsync(int templateId, List<DescriptionTemplateDTO> descriptionTemplateDTOs)
         {
@@ -380,6 +382,41 @@ namespace WebAPIGroup2.Service.Implement
                 }
             }
             return sizeDTOs;
+        }
+
+        public async Task<bool> DeleteByIdAsync(int id)
+        {
+           var image = await templateImageRepo.GetByIDAsync(id);
+            if(image == null)
+            {
+                return false;
+            }
+            var result = await templateImageRepo.DeleteAsync(image);
+            if (!result)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public async Task<bool> DeleteAllByIdAsync(int[] arrayId)
+        {
+            var images = new List<TemplateImage>();
+            foreach (var i in arrayId)
+            {
+                var image = await templateImageRepo.GetByIDAsync(i);
+                if(image == null)
+                {
+                    return false;
+                }
+                images.Add(image);
+            }
+            var result = await templateImageRepo.DeleteAllAsync(images);
+            if (!result)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

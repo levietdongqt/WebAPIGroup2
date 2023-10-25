@@ -15,7 +15,7 @@ public partial class Image
     public int? MyImagesId { get; set; }
 
     [StringLength(500)]
-    [Unicode(false)]
+    [Unicode(true)]
     public string? ImageUrl { get; set; }
 
     [StringLength(500)]

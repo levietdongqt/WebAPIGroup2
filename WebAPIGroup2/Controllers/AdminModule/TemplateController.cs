@@ -168,5 +168,32 @@ namespace WebAPIGroup2.Controllers.TemplateModule
             var response = new ResponseDTO<List<SizeDTO>>(HttpStatusCode.Created, "Add print successful", null, r);
             return new JsonResult(response);
         }
+
+        [HttpDelete]
+        [Route("Image/{id:int}")]
+        public async Task<JsonResult> DeleteImageById([FromRoute] int id)
+        {
+            var r = await templateService.DeleteByIdAsync(id);
+            if (!r)
+            {
+                return new JsonResult(new ResponseDTO<bool>(HttpStatusCode.NotFound, "Delete fail", null, r));
+            }
+            var response = new ResponseDTO<bool>(HttpStatusCode.OK, "Delete successful", null, r);
+            return new JsonResult(response);
+        }
+        [HttpPut]
+        [Route("DeleteAllImages")]
+        public async Task<JsonResult> DeleteAllImage([FromBody] int[] id)
+        {
+            var r = await templateService.DeleteAllByIdAsync(id);
+            if (!r)
+            {
+                return new JsonResult(new ResponseDTO<bool>(HttpStatusCode.NotFound, "Delete fail", null, r));
+            }
+            var response = new ResponseDTO<bool>(HttpStatusCode.OK, "Delete successful", null, r);
+            return new JsonResult(response);
+        }
+
+
     }
 }

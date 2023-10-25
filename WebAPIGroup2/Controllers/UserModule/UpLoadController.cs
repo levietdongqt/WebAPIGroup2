@@ -10,7 +10,7 @@ namespace WebAPIGroup2.Controllers.UserModule
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles ="user")]
+    //[Authorize(Roles ="user")]
     public class UpLoadController : ControllerBase
     {
         private readonly IUpLoadService _upLoadService;
@@ -109,7 +109,13 @@ namespace WebAPIGroup2.Controllers.UserModule
                 var response = new ResponseDTO<String>(HttpStatusCode.NoContent, "MyImages is empty", null, null);
                 return new JsonResult(response);
             }
-            var response2 = new ResponseDTO<List<MyImagesResponseDTO>>(HttpStatusCode.OK, "Request Successfull", null, myImages.Where(t => t.templateId == templateId).ToList());
+            var myImage = myImages.FirstOrDefault(t => t.templateId == templateId);
+            if (myImage == null)
+            {
+                myImage = new MyImagesResponseDTO();
+                myImage.templateId = templateId;
+            }
+            var response2 = new ResponseDTO<MyImagesResponseDTO>(HttpStatusCode.OK, "Request Successfull", null, myImage);
             return new JsonResult(response2);
         }
         [HttpGet]
