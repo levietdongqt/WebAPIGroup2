@@ -7,6 +7,7 @@ using WebAPIGroup2.Models;
 using WebAPIGroup2.Models.DTO;
 using WebAPIGroup2.Service.Inteface;
 using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebAPIGroup2.Controllers.TemplateModule
 {

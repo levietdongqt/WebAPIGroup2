@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +17,7 @@ namespace WebAPIGroup2.Controllers.HomeModule
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CollectionController : ControllerBase
     {
         private readonly MyImageContext _context;
