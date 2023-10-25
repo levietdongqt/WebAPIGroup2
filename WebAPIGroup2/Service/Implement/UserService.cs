@@ -325,7 +325,19 @@ namespace WebAPIGroup2.Service.Implement
             return user;
         }
 
-      
+        public async Task<UserDTO> ChangeStatus(AddUserDTO addUserDTO)
+        {
+            var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == addUserDTO.Id);
+            if (existingUser == null)
+            {
+                return null;
+            }
+            existingUser.Status = addUserDTO.Status;
+            var update = await _useRepo.UpdateAsync(existingUser);
+            var userDTO = _mapper.Map<UserDTO>(existingUser);
+
+            return userDTO;
+        }
     }
 
 

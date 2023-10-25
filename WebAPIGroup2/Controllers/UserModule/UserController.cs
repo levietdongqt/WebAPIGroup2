@@ -247,6 +247,20 @@ namespace WebAPIGroup2.Controllers.UserModule
             }
         }
 
+        [HttpPut("ChangeStatus")]
+        public async Task<IActionResult> ChangeStatus([FromBody] AddUserDTO addUserDTO)
+        {
+            var userDTO = await _userService.ChangeStatus(addUserDTO);
+            if (userDTO != null)
+            {
+                return Ok(new ResponseDTO<UserDTO>(HttpStatusCode.OK, "ChangeStatus ok", null, userDTO));
+            }
+            else
+            {
+                return BadRequest(new ResponseDTO<string>(HttpStatusCode.BadRequest, "Failed to changestatus", null, "Failed"));
+            }
+        }
+
         [HttpGet("ConfirmEmail")]
         public async Task<IActionResult> ConfirmEmail(int userId, string code)
         {
@@ -302,9 +316,6 @@ namespace WebAPIGroup2.Controllers.UserModule
             return Ok(response);
         }
 
-
-
-
         [HttpGet]
         [Route("{userId:int}/deliveryInfos")]
         public async Task<JsonResult> GetDeliveryInfoByUserId([FromRoute] int userId)
@@ -330,7 +341,6 @@ namespace WebAPIGroup2.Controllers.UserModule
             var response = new ResponseDTO<DeliveryInfoDTO>(HttpStatusCode.OK, "Success", null, delivery);
             return Ok(response);
         }
-
 
         [HttpPost]
         [Route("{userId:int}/deliveryInfos")]
@@ -428,7 +438,6 @@ namespace WebAPIGroup2.Controllers.UserModule
                 return BadRequest(new ResponseDTO<string>(HttpStatusCode.BadRequest, e.Message, null, "Failed"));
             }
         }
-
 
     }
 

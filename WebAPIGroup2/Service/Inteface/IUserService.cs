@@ -9,8 +9,10 @@ namespace WebAPIGroup2.Service.Inteface
     {
         Task <UserDTO> CreateUser(UserDTO userDTO);   
         Task<UserDTO> UpdateUser(AddUserDTO addUserDTO);
+
         Task<IEnumerable<UserDTO>?> GetAllAsync(string? search,string? st, int page, int pageSize);
         Task<UserDTO> ChangePassword(AddUserDTO addUserDTO );
+        Task<UserDTO> ChangeStatus(AddUserDTO addUserDTO );
         Task<UserDTO> PasswordRecovery(AddUserDTO addUserDTO );
 
         Task<UserDTO> GetUserByIDAsync(int id);

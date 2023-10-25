@@ -155,7 +155,6 @@ namespace WebAPIGroup2.Controllers.UserModule
         }
         [HttpDelete]
         [Route("deleteFolder")]
-        [Authorize(Roles ="admin")]
         public async Task<JsonResult> deleteFolder([FromQuery] int purchaseID)
         {
             bool isDelete = await _cartService.deleteFolder(purchaseID);
