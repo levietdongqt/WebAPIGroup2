@@ -49,7 +49,7 @@ namespace WebAPIGroup2.Service.Implement
                 if (!string.IsNullOrEmpty(search) && !string.IsNullOrEmpty(st))
                 {
                     search = search.ToLower();
-                    purs = purs.Where(p => (p.Status == st) && (p.User.Email.Contains(search)));
+                    purs = purs.Where(p => (p.Status == st) && ( p.User.Email.Contains(search) ) || ( p.CreateDate.Value.ToString().Contains(search) ) );
 
                 }
                 else if (!string.IsNullOrEmpty(st))
@@ -58,7 +58,7 @@ namespace WebAPIGroup2.Service.Implement
                 }
                 else if (!string.IsNullOrEmpty(search))
                 {
-                    purs = purs.Where(p => p.User.Email.Contains(search) );
+                    purs = purs.Where(p => (p.User.Email.Contains(search)) || (p.CreateDate.Value.ToString().Contains(search)));
                 }
 
                 purs = purs.Skip((page - 1) * pageSize).Take(pageSize);
