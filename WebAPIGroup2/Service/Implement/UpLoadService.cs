@@ -75,7 +75,7 @@ namespace WebAPIGroup2.Service.Implement
             {
                 return null;
             }
-            List<MyImagesResponseDTO> list = listProduct.Where(t => t.Template.Id != 1).Select(x => new MyImagesResponseDTO()
+            List<MyImagesResponseDTO> list = listProduct.Where(t => t.Template.Id != 1 && !t.Images.IsNullOrEmpty()).Select(x => new MyImagesResponseDTO()
             {
                 createDate = x.CreateDate,
                 Id = x.Id,
@@ -102,7 +102,7 @@ namespace WebAPIGroup2.Service.Implement
             bool checkTrue = false;
             foreach (var item in listProduct)
             {
-                if (item.Template.Id == 1)
+                if (item.Template.Id == 1 && !item.Images.IsNullOrEmpty())
                 {
                     if (!checkTrue)
                     {
@@ -148,9 +148,17 @@ namespace WebAPIGroup2.Service.Implement
             {
                 var fileName = file.FileName;
                 var imagePath = Path.Combine(uploadsFolder, fileName);
+                if (File.Exists(imagePath))
+                {
+                    return null;
+                }
+            }
+            foreach (var file in files)
+            {
+                var fileName = file.FileName;
+                var imagePath = Path.Combine(uploadsFolder, fileName);
                 //Upload
                 var stream = new FileStream(imagePath, FileMode.Create);
-
                 await file.CopyToAsync(stream);
                 stream.Close();
 
@@ -280,9 +288,18 @@ namespace WebAPIGroup2.Service.Implement
                 ".jpeg",
                 ".png"
             };
-
+            List<string> fileNameList = new List<string>();
+            if (files.IsNullOrEmpty())
+            {
+                return false;
+            }
             foreach (var file in files)
             {
+                if (fileNameList.Contains(file.FileName))
+                {
+                    return false;
+                }
+                fileNameList.Add(file.FileName);
                 if (file == null || file.Length == 0)
                 {
                     return false;
@@ -349,6 +366,40 @@ namespace WebAPIGroup2.Service.Implement
 
             }
             return true;
+        }
+
+        public async Task<bool> deleteImages(List<int> list)
+        {
+            List<Image> images = _imageRepo.getByIdList(list);
+            if (images == null)
+            {
+                return false;
+            }
+            List<MyImage> myImages = new List<MyImage>();
+            foreach (var image in images)
+            {
+                if (image.MyImages.TemplateId == 1)
+                {
+                    if (image.MyImages.ProductDetails.IsNullOrEmpty())
+                    {
+                        myImages.Add(image.MyImages);
+                    }
+                    else
+                    {
+                        return false;
+                    }
+
+                }
+            }
+            var task1 = _imageRepo.DeleteAllAsync(images);
+            var task2 = deleteFiles(images);
+            await Task.WhenAll(task1, task2);
+            if (myImages.Count > 0)
+            {
+                await _myImageRepo.DeleteAllAsync(myImages);
+            }
+            return true;
+
         }
     }
 }

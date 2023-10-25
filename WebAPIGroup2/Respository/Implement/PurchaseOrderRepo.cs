@@ -20,29 +20,33 @@ namespace WebAPIGroup2.Respository.Implement
 
         public async Task<PurchaseOrder> getPurchaseOrder(int userID, string status)
         {
-            try
-            {   
-                if(status.Equals(PurchaseStatus.Temporary))
+            using (var context = new MyImageContext())
+            {
+                try
                 {
-                    var purchase = await _context.PurchaseOrders.FirstOrDefaultAsync(t => t.UserId == userID && (t.Status == status || t.Status == PurchaseStatus.InCart));
-                    if (purchase == null)
+                    if (status.Equals(PurchaseStatus.Temporary))
+                    {
+                        var purchase = await context.PurchaseOrders.FirstOrDefaultAsync(t => t.UserId == userID && (t.Status == status || t.Status == PurchaseStatus.InCart));
+                        if (purchase == null)
+                        {
+                            throw new Exception("Purchare is not exist!");
+                        }
+                        return purchase;
+                    }
+                    var purchase2 = await context.PurchaseOrders.FirstOrDefaultAsync(t => t.UserId == userID && t.Status == status);
+                    if (purchase2 == null)
                     {
                         throw new Exception("Purchare is not exist!");
                     }
-                    return purchase;
+                    return purchase2;
                 }
-                var purchase2 =  await _context.PurchaseOrders.FirstOrDefaultAsync(t => t.UserId == userID && t.Status == status);
-                if(purchase2 == null)
+                catch (Exception e)
                 {
-                    throw new Exception("Purchare is not exist!");
+                    Console.WriteLine(e.Message);
+                    return null;
                 }
-                 return purchase2;
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                return null;
-            }
+
         }
 
         public async Task<IEnumerable<PurchaseOrder>> GetPurchaseOrdersByStatus(int userID, List<string> statuses)
@@ -62,8 +66,8 @@ namespace WebAPIGroup2.Respository.Implement
             }
         }
 
- 
-        public  async Task<dynamic> GetSumPriceTotalByMonth()
+
+        public async Task<dynamic> GetSumPriceTotalByMonth()
         {
             List<int> Months = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
             var yearNow = DateTime.Now.Year;
@@ -71,12 +75,12 @@ namespace WebAPIGroup2.Respository.Implement
                         join po in _context.PurchaseOrders
                         on month equals po.CreateDate.Value.Month into gj
                         from subPo in gj.DefaultIfEmpty()
-                        where (subPo==null || (subPo != null && subPo.CreateDate.Value.Year == yearNow && subPo.Status == "Received"))
+                        where (subPo == null || (subPo != null && subPo.CreateDate.Value.Year == yearNow && subPo.Status == "Received"))
                         group subPo by new { Month = month } into g
                         select new
                         {
                             month = g.Key.Month,
-                            sum = g.Sum(x => (x != null) ? x?.PriceTotal?? 0 : 0),
+                            sum = g.Sum(x => (x != null) ? x?.PriceTotal ?? 0 : 0),
                             status = g.Count(x => (x != null && x.Status == "Received"))
                         };
             return query.ToList();
@@ -86,7 +90,7 @@ namespace WebAPIGroup2.Respository.Implement
         public async Task<int> CountPurchaseInWeek()
         {
             DateTime now = DateTime.Now.Date;
-            int currentDayOfWeek = (int) now.DayOfWeek;
+            int currentDayOfWeek = (int)now.DayOfWeek;
             DateTime startWeek = now.AddDays(-currentDayOfWeek); // lay duoc ngay dau tuan
             DateTime endWeek = startWeek.AddDays(6);
 

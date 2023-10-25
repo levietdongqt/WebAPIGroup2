@@ -43,6 +43,7 @@ namespace WebAPIGroup2.Controllers.UserModule
         }
         [HttpPost]
         [Route("AddToCart")]
+        [Authorize(Roles ="user")]
         public async Task<JsonResult> AddToCart([FromForm] OrderDTO orderDTO)
         {
             bool isSucess = await _cartService.AddToCart(orderDTO);
@@ -53,8 +54,9 @@ namespace WebAPIGroup2.Controllers.UserModule
             return new JsonResult(new ResponseDTO<List<ProductDetail>>(HttpStatusCode.BadRequest, "Request is invalid", null, null));
         }
         [HttpPost]
-        [Route("AddToCartAll")]
-        public async Task<JsonResult> AddToCartAll([FromForm] OrderDTO orderDTO)
+        [Route("addToCartAllSimple")]
+        [Authorize(Roles = "user")]
+        public async Task<JsonResult> AddToCartAllSimple([FromForm] OrderDTO orderDTO)
         {
             bool isSucess = await _cartService.AddToCartAllSimple(orderDTO);
             if (isSucess)
@@ -65,6 +67,7 @@ namespace WebAPIGroup2.Controllers.UserModule
         }
         [HttpPut]
         [Route("UpdateCart")]
+        [Authorize(Roles = "user")]
         public async Task<JsonResult> UpdateCart([FromQuery] int productDetailID, [FromQuery] int quantity)
         {
             bool isSucess = await _cartService.UpdateCart(productDetailID, quantity);
@@ -73,6 +76,7 @@ namespace WebAPIGroup2.Controllers.UserModule
         }
         [HttpGet]
         [Route("LoadCart")]
+        [Authorize(Roles = "user")]
         public async Task<JsonResult> LoadCart([FromQuery] int userID)
         {
             List<CartResponseDTO> myImages = await _cartService.LoadCart(userID);
@@ -86,6 +90,7 @@ namespace WebAPIGroup2.Controllers.UserModule
         }
         [HttpPost]
         [Route("directPayment")]
+        [Authorize(Roles = "user")]
         public async Task<JsonResult> DirectPayment([FromBody] PurchaseDTO purchaseDTO)
         {
             var deliveryInfo = await _cartService.createDeliveryInfo(purchaseDTO);
@@ -103,6 +108,7 @@ namespace WebAPIGroup2.Controllers.UserModule
         }
         [HttpPost]
         [Route("payPalPayment")]
+        [Authorize(Roles = "user")]
         public async Task<JsonResult> PayPalPayment([FromBody] PurchaseDTO purchaseDTO)
         {
             var deliveryInfo = await _cartService.createDeliveryInfo(purchaseDTO);
@@ -119,6 +125,7 @@ namespace WebAPIGroup2.Controllers.UserModule
         }
         [HttpDelete]
         [Route("deleteItem")]
+        [Authorize(Roles = "user")]
         public async Task<JsonResult> DeleteItem([FromQuery] int productDetailID)
         {
             bool isSucces2 = await _cartService.deleteProductDetail(productDetailID);
@@ -133,6 +140,7 @@ namespace WebAPIGroup2.Controllers.UserModule
         }
         [HttpPut]
         [Route("deleteAll")]
+        [Authorize(Roles = "user")]
         public async Task<JsonResult> DeleteAll([FromBody] int[] productIdList)
         {
             bool isSucces2 = await _cartService.deleteAllCart(productIdList.ToList());
@@ -147,6 +155,7 @@ namespace WebAPIGroup2.Controllers.UserModule
         }
         [HttpDelete]
         [Route("deleteFolder")]
+        [Authorize(Roles ="admin")]
         public async Task<JsonResult> deleteFolder([FromQuery] int purchaseID)
         {
             bool isDelete = await _cartService.deleteFolder(purchaseID);
