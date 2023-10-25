@@ -11,10 +11,12 @@ namespace WebAPIGroup2.Respository.Implement
         {
         }
 
-        public Task<TemplateImage?> GetByIDAsync(int id)
+        public  Task<TemplateImage?> GetByIDAsync(int id)
         {
             return _context.TemplateImages.Include(i => i.Template).FirstOrDefaultAsync(i => i.Id == id);
         }
+
+       
     }
 
 }
