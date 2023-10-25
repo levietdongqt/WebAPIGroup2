@@ -35,9 +35,9 @@ public class CollectionService : ICollectionService
         return mappedCollection;
     }
 
-    public async Task<PaginationDTO<CollectionWithTemplateDTO>> GetCollectionWithTemplate(int id,int page = 1,int limit = 1)
+    public async Task<PaginationDTO<CollectionWithTemplateDTO>> GetCollectionWithTemplate(int id,int page = 1,int limit = 1,bool status = true)
     {
-        var collection = await _collectionRepo.GetCollectionWithTemplate(id,page,limit);
+        var collection = await _collectionRepo.GetCollectionWithTemplate(id,page,limit,status);
         return _mapper.Map<PaginationDTO<CollectionWithTemplateDTO>>(collection);
     }
 
@@ -76,5 +76,11 @@ public class CollectionService : ICollectionService
         }
         return null;
     }
-    
+
+    public async Task<IEnumerable<CollectionDTO>?> getAllfeatures()
+    {
+        var collections = await _collectionRepo.getCollectionFeatures();
+        var mapped = _mapper.Map<List<CollectionDTO>>(collections);
+        return mapped;
+    }
 }

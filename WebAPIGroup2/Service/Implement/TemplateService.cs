@@ -151,7 +151,7 @@ namespace WebAPIGroup2.Service.Implement
                 var templateImages = new List<TemplateImageDTO>(); 
                 foreach (var x in item.TemplateImages)
                 {
-                    var image = await imageRepo.GetByIDAsync(x.TemplateId);
+                    var image = await imageRepo.GetByIDAsync(x.Id);
                     var imageDto = mapper.Map<TemplateImageDTO>(image);
                     templateImages.Add(imageDto);
                 } 
@@ -285,9 +285,9 @@ namespace WebAPIGroup2.Service.Implement
 
         }
 
-        public async Task<PaginationDTO<TemplateDTO>> GetByNameAsync(string? name,int page = 1,int limit = 1)
+        public async Task<PaginationDTO<TemplateDTO>> GetByNameAsync(string? name,int page = 1,int limit = 1, bool status = true)
         {
-            var templateDto = await templateRepo.GetTemplateByNameAsync(name,page,limit);
+            var templateDto = await templateRepo.GetTemplateByNameAsync(name,page,limit,status);
             var templateDTOs = mapper.Map<PaginationDTO<TemplateDTO>>(templateDto);
             return templateDTOs;
         }
@@ -417,6 +417,15 @@ namespace WebAPIGroup2.Service.Implement
                 return false;
             }
             return true;
+        }
+
+        public async Task<PaginationDTO<TemplateDTO>> GetAllTemplateAsync(int page = 1, int limit = 1, bool status = true)
+        {
+            
+            var templates = await templateRepo.getAlltemplateAsync2(page, limit, status);
+            if (templates == null) return null;
+            var templateDTOs = mapper.Map<PaginationDTO<TemplateDTO>>(templates);
+            return templateDTOs;
         }
     }
 }

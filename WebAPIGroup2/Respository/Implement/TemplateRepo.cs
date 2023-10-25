@@ -80,18 +80,35 @@ namespace WebAPIGroup2.Respository.Implement
                 .ToListAsync();
         }
 
-        public async Task<PaginationDTO<Template>> GetTemplateByNameAsync(string? name, int page = 1, int limit = 1)
+        public async Task<PaginationDTO<Template>> GetTemplateByNameAsync(string? name, int page = 1, int limit = 1,bool status = true)
         {
             var query = _context.Templates.AsQueryable();
             if (!string.IsNullOrEmpty(name))
             {
-                query = query.Where(x => x.Name.Contains(name));
+                query = query.Where(x => x.Name.Contains(name) && x.Status == status);
             }
 
-            int totalRows = await query.CountAsync(); 
+            int totalRows = await query.Where(x => x.Status == status).CountAsync(); 
 
             var items = await query.Skip((page - 1) * limit).Take(limit).ToListAsync();
 
+            var paginations = new PaginationDTO<Template>()
+            {
+                limit = limit,
+                Page = page,
+                totalRows = totalRows,
+                Items = items
+            };
+            return paginations;
+        }
+
+        public async Task<PaginationDTO<Template>> getAlltemplateAsync2(int page = 1, int limit = 1, bool status = true)
+        {
+            var query = _context.Templates.Include(s => s.TemplateImages).AsQueryable();
+            
+            query = query.Where(x => x.Status == status);
+            int totalRows = await query.Where(x => x.Status == status).CountAsync();
+            var items = await query.Skip((page - 1) * limit).Take(limit).ToListAsync();
             var paginations = new PaginationDTO<Template>()
             {
                 limit = limit,

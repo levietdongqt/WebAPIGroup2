@@ -11,5 +11,6 @@ namespace WebAPIGroup2.Service.Inteface
         Task<List<FeedBackDTO>> GetFeedBackByStatus(int userId, bool isImportant);
 
         Task<dynamic> GetFeedBackTake5News();
+        Task<FeedBackDTO> CreateAsync(FeedBackDTO feedBackDTO);
     }
 }
