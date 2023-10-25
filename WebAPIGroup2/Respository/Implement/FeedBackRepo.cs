@@ -20,11 +20,12 @@ namespace WebAPIGroup2.Respository.Implement
         {
             var query = from fb in _context.FeedBacks
                         join user in _context.Users
-                        on fb.UserId equals user.Id
+                        on fb.UserId equals user.Id into userJoin
+                        from user in userJoin.DefaultIfEmpty()
                         orderby fb.FeedBackDate descending
                         select new
                         {
-                            name = $"{user.FullName}-{user.Email}",
+                            name = (user.Id != null)?$"{user.FullName}-{user.Email}": fb.Email,
                             image = user.Avatar,
                             createDate = fb.FeedBackDate,
                             content = fb.Content
