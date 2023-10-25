@@ -98,7 +98,7 @@ create table ProductDetail (
 	MaterialPageId int null,
 	TemplateSizeId int null,
 	MyImageId int null,
-	Price decimal null,
+	Price decimal(18,2) null,
 	Quantity int null,
 	Status bit default(1),
 	CreateDate datetime
@@ -118,7 +118,7 @@ create table PurchaseOrder(
 
 
 	constraint PK_PurchaseOrder primary key (Id),
-	constraint CK_StatusOrder check ([Status] in ('Order Placed','Order Paid','ToShip','Temporary','Received','Canceled'))
+	constraint CK_StatusOrder check ([Status] in ('In Cart','Order Placed','Order Paid','ToShip','Temporary','Received','Canceled'))
 )
 go
 create table Review(
@@ -136,7 +136,7 @@ go
 create table MonthlySpending(
 	Id int identity(1,1) not null,
 	UserId int null,
-	Total decimal null,
+	Total decimal(18,0) null,
 	TimeDetail datetime null
 
 	constraint PK_MonthlySpending primary key (Id)
@@ -321,12 +321,24 @@ add constraint FK_MyImages_PerchaseOrder
 	foreign key (PurchaseOrderId) references PurchaseOrder(Id)
 ----------------------------------------------------------------------------------------
 insert into Category
-values('Book','/CategoryImage/Book.jpg'),('Calendar','/CategoryImage/Calender.jpg'),('Gift','/CategoryImage/Gift.jpg'),('Prints','/CategoryImage/Poster.jpg'),('Card','/CategoryImage/Card.jpg')
+values('Book','/CategoryImage/Book.jpg'),
+('Calendar','/CategoryImage/Calender.jpg'),
+('Holiday','/CategoryImage/Gift.jpg')
+,('Poster','/CategoryImage/Poster.jpg'),
+('Card','/CategoryImage/Card.jpg')
 go
 
 insert into [dbo].[Collection]
-values('Book 1','/CollectionImage/Bookmarks.jpg',1),('Book 2','/CollectionImage/Bookmarks.jpg',1),('Calendar 1','/CollectionImage/Calender1.jpg',2),('Calendar 2','/CollectionImage/Calender1.jpg',2),('Gift 1','/CollectionImage/houseGift.jpg',3)
-,('Gift 2','/CollectionImage/GiftTags.jpg',3),('Prints 1',null,4),('Prints 2',null,4),('Card 1','/CollectionImage/Holidaycards.jpg',5),('Card 2','/CollectionImage/ChristmasCard.jpg',5)
+values('Custom Cover Photo Book','/CollectionImage/Bookmarks.jpg',1),
+('Layflat Photo Books','/CollectionImage/Booklayflat.jpg',1),
+('Wall Calendar','/CollectionImage/Booklayflat.jpg',2),
+('Desktop Calendar','/CollectionImage/Calender1.jpg',2),
+('Pillows & Blankets','/CollectionImage/Holiday1.jpg',3)
+,('Same Day Pickup','/CollectionImage/Holiday2.jpg',3),
+('Adhesive Posters','/CollectionImage/poster1.jpg',4),
+('Collage Posters','/CollectionImage/poster2.jpg',4),
+('Thank You Cards','/CollectionImage/Holidaycards.jpg',5),
+('Full Photo Cards','/CollectionImage/ChristmasCard.jpg',5)
 go
 
 insert into Template
@@ -624,16 +636,16 @@ values('High',0,0.5,1,'Best material page for print images'),
 go
 
 insert into [dbo].[User]
-values('admin@gmail.com','123','Acc Van Min',1,'1995-10-15','356 Pham Van Dong TPHCM','09012345679','',1,'admin','Enabled',GETDATE()),
-	  ('user1@gmail.com','123456','Huy Dep Trai',1,'1992-12-05','374 Ap Bac My Dinh','09023332223','',1,'user','Enabled',GETDATE()),
-	  ('user2@gmail.com','1234567','Dong Dep Trai',1,'1992-12-05','374 Ap Bac My Dinh','09023332223','',1,'user','Enabled',GETDATE()),
-	  ('user3@gmail.com','1234568','Phuoc Dep Trai',1,'1992-12-05','374 Ap Bac My Dinh','09023332223','',1,'user','Enabled',GETDATE()),
-	  ('user4@gmail.com','1234562','Nam Dep Trai',1,'1992-12-05','374 Ap Bac My Dinh','09023332223','',1,'user','Enabled',GETDATE()),
-	  ('user5@gmail.com','1234562','Minh Dep Trai',1,'1992-12-05','374 Ap Bac My Dinh','09023332223','',1,'user','Enabled',GETDATE())
+values('admin@gmail.com','$2a$11$yroNwc3VjhzV3S.LB0FDPemE9IIWfwMZvkS09VExf1YwFzMxbs2tm','Acc Van Min',1,'1995-10-15','356 Pham Van Dong TPHCM','09012345679','',1,'admin','Enabled',GETDATE()),
+	  ('user1@gmail.com','$2a$11$yroNwc3VjhzV3S.LB0FDPemE9IIWfwMZvkS09VExf1YwFzMxbs2tm','Huy Dep Trai',1,'1992-12-05','374 Ap Bac My Dinh','09023332223','',1,'user','Enabled',GETDATE()),
+	  ('user2@gmail.com','$2a$11$yroNwc3VjhzV3S.LB0FDPemE9IIWfwMZvkS09VExf1YwFzMxbs2tm','Dong Dep Trai',1,'1992-12-05','374 Ap Bac My Dinh','09023332223','',1,'user','Enabled',GETDATE()),
+	  ('user3@gmail.com','$2a$11$yroNwc3VjhzV3S.LB0FDPemE9IIWfwMZvkS09VExf1YwFzMxbs2tm','Phuoc Dep Trai',1,'1992-12-05','374 Ap Bac My Dinh','09023332223','',1,'user','Enabled',GETDATE()),
+	  ('user4@gmail.com','$2a$11$yroNwc3VjhzV3S.LB0FDPemE9IIWfwMZvkS09VExf1YwFzMxbs2tm','Nam Dep Trai',1,'1992-12-05','374 Ap Bac My Dinh','09023332223','',1,'user','Enabled',GETDATE()),
+	  ('user5@gmail.com','$2a$11$yroNwc3VjhzV3S.LB0FDPemE9IIWfwMZvkS09VExf1YwFzMxbs2tm','Minh Dep Trai',1,'1992-12-05','374 Ap Bac My Dinh','09023332223','',1,'user','Enabled',GETDATE())
 go
 
 insert into DeliveryInfo
-values(2,'huy.tran9510@gmail.com','374 Binh Trieu Tp.HCM','09027837465')
+values(2,'huy.tran9510@gmail.com','374 Binh Trieu Tp.HCM','09027837465','Thu Huy')
 go
 insert into ContentEmail
 values(1,'Send mail to Buy','Confirm Bill','Sale')
