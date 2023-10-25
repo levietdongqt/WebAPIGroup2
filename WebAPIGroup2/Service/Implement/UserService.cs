@@ -46,10 +46,10 @@ namespace WebAPIGroup2.Service.Implement
                 return null;
             }
 
-            var oldpasswordHash = BCrypt.Net.BCrypt.HashPassword(addUserDTO.oldPassword);
+            //var oldpasswordHash = BCrypt.Net.BCrypt.HashPassword(addUserDTO.oldPassword);
 
-            var isValid = BCrypt.Net.BCrypt.Verify(oldpasswordHash, existingUser.Password); 
-
+            var isValid = BCrypt.Net.BCrypt.Verify(addUserDTO.oldPassword, existingUser.Password);
+            if (!isValid) return null;
             var passwordHash = BCrypt.Net.BCrypt.HashPassword(addUserDTO.Password);
             existingUser.Password = passwordHash;
             var update = await _useRepo.UpdateAsync(existingUser);
