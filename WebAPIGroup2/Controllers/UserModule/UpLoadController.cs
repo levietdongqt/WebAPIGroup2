@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using WebAPIGroup2.Models.DTO;
@@ -9,6 +10,7 @@ namespace WebAPIGroup2.Controllers.UserModule
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles ="user")]
     public class UpLoadController : ControllerBase
     {
         private readonly IUpLoadService _upLoadService;
@@ -32,11 +34,16 @@ namespace WebAPIGroup2.Controllers.UserModule
             }
             if (!isValidImages.Result)
             {
-                var response = new ResponseDTO<String>(HttpStatusCode.BadRequest, "File is invalid", null, null);
+                var response = new ResponseDTO<String>(HttpStatusCode.BadRequest, "File is invalid! Don't upload the same images", null, null);
                 return new JsonResult(response);
             }
             string folderName = $"{upLoadDTO.userID}_{emailName.Result}";
             var imagesUrls = await _upLoadService.SaveImages(folderName, upLoadDTO.templateID, upLoadDTO.files);
+            if(imagesUrls == null)
+            {
+                var response = new ResponseDTO<String>(HttpStatusCode.BadRequest, "Some images already exist in this template!", null, null);
+                return new JsonResult(response);
+            }
             if (upLoadDTO.templateID == 1)
             {
                 List<int> myImage = await _upLoadService.SaveToDBWithNoTemplate(folderName, upLoadDTO, imagesUrls);
@@ -63,10 +70,15 @@ namespace WebAPIGroup2.Controllers.UserModule
                 }
                 if (!isValidImages.Result)
                 {
-                    return new JsonResult(new ResponseDTO<String>(HttpStatusCode.BadRequest, "File is invalid", null, null));
+                    return new JsonResult(new ResponseDTO<String>(HttpStatusCode.BadRequest, "File is invalid! Don't upload the same images", null, null));
                 }
                 string folderName = $"{upLoadDTO.userID}_{emailName.Result}";
                 var imagesUrls = await _upLoadService.SaveImages(folderName, 1, upLoadDTO.files);
+                if (imagesUrls == null)
+                {
+                    var response = new ResponseDTO<String>(HttpStatusCode.BadRequest, "Some images have been uploaded before!", null, null);
+                    return new JsonResult(response);
+                }
                 List<int> myImage = await _upLoadService.SaveToDBWithNoTemplate(folderName, upLoadDTO, imagesUrls);
                 return new JsonResult(new ResponseDTO<List<int>>(HttpStatusCode.OK, "Save successfull", null, myImage));
              
@@ -114,15 +126,15 @@ namespace WebAPIGroup2.Controllers.UserModule
             return new JsonResult(response2);
         }
         [HttpPost]
-        [Route("deleteMyImage")]
-        public async Task<JsonResult> DeleteImages([FromQuery] List<int> list)
+        [Route("deleteImages")]
+        public async Task<JsonResult> DeleteImages([FromBody] List<int> imageIdList)
         {
-            //var isSucces = await _upLoadService.deleteMyImage(myImmageId);
-            //if (!isSucces)
-            //{
-            //    var response = new ResponseDTO<String>(HttpStatusCode.NoContent, "Delete Fail", null, null);
-            //    return new JsonResult(response);
-            //}
+            var isSucces = await _upLoadService.deleteImages(imageIdList.ToList());
+            if (!isSucces)
+            {
+                var response = new ResponseDTO<String>(HttpStatusCode.NoContent, "Delete fail! Some image have product in the cart ", null, null);
+                return new JsonResult(response);
+            }
             var response2 = new ResponseDTO<List<string>>(HttpStatusCode.OK, "Request Successfull", null, null);
             return new JsonResult(response2);
         }

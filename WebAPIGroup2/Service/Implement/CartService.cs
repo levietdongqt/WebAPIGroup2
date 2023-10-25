@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System.Globalization;
 using System.Net;
 using System.Text;
@@ -103,8 +104,69 @@ namespace WebAPIGroup2.Service.Implement
 
         public async Task<bool> AddToCartAllSimple(OrderDTO orderDTO)
         {
-            var myImageList =await _myImageRepo.getByUserId(orderDTO.userID);
-            throw new NotImplementedException();
+
+            CultureInfo culture = new CultureInfo("en-US");
+            using (var context = new MyImageContext())
+            {
+                var materialPage = context.MaterialPages.FirstOrDefaultAsync(t => t.Id == orderDTO.materialPageId);
+                var tempList = _myImageRepo.getByUserId(orderDTO.userID);
+                var task = _purchaseOrderRepo.getPurchaseOrder(orderDTO.userID, PurchaseStatus.InCart);
+                await Task.WhenAll(materialPage, tempList, task);
+                var purchaseOrder = task.Result;
+                if (purchaseOrder == null)
+                {
+                    purchaseOrder = new PurchaseOrder()
+                    {
+                        CreateDate = DateTime.Now,
+                        Status = PurchaseStatus.InCart,
+                        UserId = orderDTO.userID
+                    };
+                    if (!await _purchaseOrderRepo.InsertAsync(purchaseOrder))
+                    {
+                        return false;
+                    };
+                }
+
+                if (materialPage.Result == null)
+                {
+                    return false;
+                }
+                var myImageList = tempList.Result.Where(t => t.TemplateId == 1 && !t.Images.IsNullOrEmpty()).ToList();
+
+                float output;
+                float.TryParse(orderDTO.imageArea, NumberStyles.Any, culture, out output);
+                float priceOne = output * (float)(materialPage.Result.PricePerInch);
+                float imagesNumber = 1;
+                decimal price = (decimal)(priceOne * imagesNumber);
+
+                foreach (var myImage in myImageList)
+                {
+                    myImage.PurchaseOrderId = purchaseOrder.Id;
+                    orderDTO.myImageID = myImage.Id;
+                    var sameProduct = await _productDetailsRepo.GetByMyImageId(orderDTO);
+                    if (sameProduct == null)
+                    {
+                        ProductDetail productDetail = new ProductDetail()
+                        {
+                            MyImageId = myImage.Id,
+                            TemplateSizeId = orderDTO.temlateSizeId,
+                            MaterialPageId = materialPage.Result.Id,
+                            CreateDate = DateTime.Now,
+                            Price = price,
+                            Quantity = orderDTO.quantity
+                        };
+                        await _productDetailsRepo.InsertAsync(productDetail);
+                    }
+                    else
+                    {
+                        sameProduct.Quantity += orderDTO.quantity;
+                        await _productDetailsRepo.UpdateAsync(sameProduct);
+                    }
+
+                }
+                await _myImageRepo.UpdateAllAsync(myImageList);
+                return true;
+            }
         }
 
         public async Task<DeliveryInfo> createDeliveryInfo(CartController.PurchaseDTO purchaseDTO)
@@ -153,11 +215,11 @@ namespace WebAPIGroup2.Service.Implement
         public async Task<bool> deleteAllCart(List<int> productIdList)
         {
             List<ProductDetail> list = _productDetailsRepo.getByIdList(productIdList);
-            if(list == null)
+            if (list == null)
             {
                 return false;
             }
-            if(await _productDetailsRepo.DeleteAllAsync(list))
+            if (await _productDetailsRepo.DeleteAllAsync(list))
             {
                 return true;
             }
