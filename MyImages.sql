@@ -98,7 +98,7 @@ create table ProductDetail (
 	MaterialPageId int null,
 	TemplateSizeId int null,
 	MyImageId int null,
-	Price decimal null,
+	Price decimal(18,2) null,
 	Quantity int null,
 	Status bit default(1),
 	CreateDate datetime
@@ -118,7 +118,7 @@ create table PurchaseOrder(
 
 
 	constraint PK_PurchaseOrder primary key (Id),
-	constraint CK_StatusOrder check ([Status] in ('Order Placed','Order Paid','ToShip','Temporary','Received','Canceled'))
+	constraint CK_StatusOrder check ([Status] in ('In Cart','Order Placed','Order Paid','ToShip','Temporary','Received','Canceled'))
 )
 go
 create table Review(
@@ -136,7 +136,7 @@ go
 create table MonthlySpending(
 	Id int identity(1,1) not null,
 	UserId int null,
-	Total decimal null,
+	Total decimal(18,0) null,
 	TimeDetail datetime null
 
 	constraint PK_MonthlySpending primary key (Id)
