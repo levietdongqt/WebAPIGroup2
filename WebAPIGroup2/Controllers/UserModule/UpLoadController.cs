@@ -133,12 +133,12 @@ namespace WebAPIGroup2.Controllers.UserModule
         }
         [HttpDelete]
         [Route("deleteMyImage")]
-        public async Task<JsonResult> DeleteMyImage([FromQuery] int myImmageId)
+        public async Task<JsonResult> DeleteMyImage([FromQuery] int myImmageId, [FromQuery] int userId)
         {
-            var isSucces= await _upLoadService.deleteMyImage(myImmageId);
+            var isSucces= await _upLoadService.deleteMyImage(myImmageId,userId);
             if (!isSucces)
             {
-                var response = new ResponseDTO<String>(HttpStatusCode.NoContent, "Delete Fail", null, null);
+                var response = new ResponseDTO<String>(HttpStatusCode.NoContent, "Delete fail! Some image have product in the cart ", null, null);
                 return new JsonResult(response);
             }
             var response2 = new ResponseDTO<List<string>>(HttpStatusCode.OK, "Request Successfull", null, null);

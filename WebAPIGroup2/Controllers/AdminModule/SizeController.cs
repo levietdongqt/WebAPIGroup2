@@ -10,7 +10,6 @@ namespace WebAPIGroup2.Controllers.HomeModule
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class SizeController : ControllerBase
     {
         private readonly ISizeService _sizeService;

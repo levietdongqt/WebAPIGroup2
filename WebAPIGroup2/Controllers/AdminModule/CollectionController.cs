@@ -17,7 +17,6 @@ namespace WebAPIGroup2.Controllers.HomeModule
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class CollectionController : ControllerBase
     {
         private readonly MyImageContext _context;

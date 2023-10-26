@@ -194,7 +194,7 @@ namespace WebAPIGroup2.Service.Implement
                 MyImage oldMyImage = null;
                 if (list != null)
                 {
-                    oldMyImage =list.FirstOrDefault(t => t.TemplateId == upLoadDTO.templateID);
+                    oldMyImage = list.FirstOrDefault(t => t.TemplateId == upLoadDTO.templateID);
                 }
                 if (oldMyImage == null)
                 {
@@ -338,10 +338,42 @@ namespace WebAPIGroup2.Service.Implement
             }
         }
 
-        public async Task<bool> deleteMyImage(int myImagesId)
+        public async Task<bool> deleteMyImage(int myImagesId, int userID)
         {
             var myImage = await _myImageRepo.GetByIDAsync(myImagesId);
             if (myImage == null)
+            {
+                return false;
+            }
+            if (myImage.TemplateId == 1)
+            {
+                List<MyImage> tempList = await _myImageRepo.getByUserId(userID);
+                var myImagelist = tempList.Where(t => t.TemplateId == 1).ToList();
+                var checkList = myImagelist.Where(t=> !t.ProductDetails.IsNullOrEmpty()).ToList();
+                if (!checkList.IsNullOrEmpty())
+                {
+                    return false;
+                }
+                List<Image> imageList = new List<Image>();
+                foreach (var item in myImagelist)
+                {
+                    var list = item.Images.ToList();
+                    if (!list.IsNullOrEmpty())
+                    {
+                        imageList.AddRange(list);
+                    }
+
+                }
+                var task11 = _imageRepo.DeleteAllAsync(imageList);
+                var task22 = deleteFiles(imageList);
+                await Task.WhenAll(task11, task22);
+                if (await _myImageRepo.DeleteAllAsync(myImagelist))
+                {
+                    return true;
+                }
+                return false;
+            }
+            if (!myImage.ProductDetails.IsNullOrEmpty())
             {
                 return false;
             }

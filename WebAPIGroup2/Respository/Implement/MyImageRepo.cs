@@ -13,7 +13,7 @@ namespace WebAPIGroup2.Respository.Implement
 
         public async Task<MyImage?> GetByIDAsync(int id)
         {
-           return await _context.MyImages.Include(t => t.Images).Include(t => t.Template).FirstOrDefaultAsync(t => t.Id == id);
+           return await _context.MyImages.Include(t => t.Images).Include(t => t.Template).Include(t => t.ProductDetails).FirstOrDefaultAsync(t => t.Id == id);
         }
 
         public async Task<List<MyImage>> getByOrder(int purchaseOrderId)
@@ -65,6 +65,11 @@ namespace WebAPIGroup2.Respository.Implement
                 Console.WriteLine(e);
                 return null;
             }
+        }
+
+        public Task<List<MyImage>> getNoTemplate(int userID)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<List<MyImage>> loadInCart(int userID)
