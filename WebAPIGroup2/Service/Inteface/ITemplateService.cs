@@ -23,12 +23,13 @@ namespace WebAPIGroup2.Service.Inteface
 
         Task<TemplateDTO> UpdateDescriptionByTemplateIdAsync(int templateId, List<DescriptionTemplateDTO> descriptionTemplateDTOs);
         
-        Task<PaginationDTO<TemplateDTO>> GetByNameAsync(string? name,int page =1 ,int limit =1 );
+        Task<PaginationDTO<TemplateDTO>> GetByNameAsync(string? name,int page =1 ,int limit =1 , bool status = true);
 
         Task<dynamic> GetReportForAdmin();
 
         Task<List<SizeDTO>> AddSizeByTemplateIdAsync(int templateId,List<SizeDTO> sizeDTOs);
 
+        Task<PaginationDTO<TemplateDTO>> GetAllTemplateAsync(int page = 1, int limit = 1, bool status = true);
         Task<bool> DeleteByIdAsync(int id);
 
         Task<bool> DeleteAllByIdAsync(int[] arrayId);

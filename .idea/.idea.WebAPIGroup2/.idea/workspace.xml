@@ -9,11 +9,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7cd16388-67af-4601-a58e-e3e6823391f9" name="Changes" comment="">
+    <list default="true" id="7cd16388-67af-4601-a58e-e3e6823391f9" name="Changes" comment="Nam">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.WebAPIGroup2/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.WebAPIGroup2/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Controllers/AdminModule/OrderController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Controllers/AdminModule/OrderController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Models/DTO/CartResponseDTO.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Models/DTO/CartResponseDTO.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Service/Implement/CartService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Service/Implement/CartService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Models/MyImageContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Models/MyImageContext.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebAPIGroup2/Service/Implement/FeedBackService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebAPIGroup2/Service/Implement/FeedBackService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,28 +45,22 @@
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/269c61fac54e735e401542377b392b82abad42c5189a3adcb53616acde01413/TemplateInfo.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/36e740b59df23626d207e72ea77e34298e53dd99db463eee529f8c416b5664/ThrowHelper.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/bd1d5c50194fea68ff3559c160230b0ab50f5acf4ce3061bffd6d62958e2182/ExceptionDispatchInfo.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/d3b35aba78af8938342254c9ab4da7b7362a691ccc71b3decaabd322fea44/Int32.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/d856066ffe4c59543feec5c19d3d3c8934b5eec93f8cf1358aedcb555825/Boolean.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/e74356f198b598e97eaeea83e8b7b1f2bfe27c0a39fedf86bb7dc44827fbda/ActionMethodExecutor.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/f9daeeaab8409865442b5e80e634dc64dae9a14892fe81e0f17b46f51b2c48f8/DbSet.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Controllers/AdminModule/TemplateController.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Controllers/AdminModule/TemplateController.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Controllers/AdminModule/TemplateController.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Controllers/UserModule/UserController.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Controllers/UserModule/UserController.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Models/DTO/PurchaseOrderDTO.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Models/DTO/PurchaseOrderDTO.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Respository/Implement/PurchaseOrderRepo.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Respository/Implement/PurchaseOrderRepo.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Respository/Inteface/IPurchaseOrderRepo.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Respository/Inteface/IPurchaseOrderRepo.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Service/Implement/PurchaseOrderService.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Service/Implement/PurchaseOrderService.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Service/Implement/UserService.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Service/Implement/UserService.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Service/Implement/UserService.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Service/Implement/UserService.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Service/Inteface/IPurchaseOrderService.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Service/Inteface/IPurchaseOrderService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Models/AutoMapperProfile.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Models/MyImageContext.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Service/Implement/FeedBackService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Service/Implement/FeedBackService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Service/Implement/FeedBackService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Service/Implement/TemplateService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Service/Implement/TemplateService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Service/Inteface/ITemplateService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Project/MyImage/WebAPIGroup2/WebAPIGroup2/Service/Inteface/ITemplateService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://diff.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://diff.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="KubernetesApiProvider">{
   &quot;isMigrated&quot;: true
@@ -176,6 +169,8 @@
       <workItem from="1697391098616" duration="36585000" />
       <workItem from="1697656655934" duration="38425000" />
       <workItem from="1698057822859" duration="718000" />
+      <workItem from="1698191843226" duration="4364000" />
+      <workItem from="1698196980605" duration="14341000" />
     </task>
     <task id="LOCAL-00001" summary="category">
       <option name="closed" value="true" />
@@ -265,7 +260,31 @@
       <option name="project" value="LOCAL" />
       <updated>1697967391018</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="up day">
+      <option name="closed" value="true" />
+      <created>1698076905013</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1698076905013</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Update Full option">
+      <option name="closed" value="true" />
+      <created>1698240844705</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1698240844705</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Nam">
+      <option name="closed" value="true" />
+      <created>1698240943750</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1698240943750</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -283,7 +302,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="origin/Nam" />
+                        <option value="origin/master" />
                       </list>
                     </value>
                   </entry>
@@ -305,12 +324,32 @@
     <MESSAGE value="add more context" />
     <MESSAGE value="add MyImage" />
     <MESSAGE value="update User" />
-    <MESSAGE value="Nam" />
     <MESSAGE value="sdsd" />
     <MESSAGE value="Revert &quot;Nam&quot;&#10;&#10;This reverts commit 17320ce6" />
-    <option name="LAST_COMMIT_MESSAGE" value="Revert &quot;Nam&quot;&#10;&#10;This reverts commit 17320ce6" />
+    <MESSAGE value="up day" />
+    <MESSAGE value="Update Full option" />
+    <MESSAGE value="Merge remote-tracking branch 'origin/master' into Nam" />
+    <MESSAGE value="Nam" />
+    <option name="LAST_COMMIT_MESSAGE" value="Nam" />
   </component>
   <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/WebAPIGroup2/Respository/Implement/CollectionRepo.cs</url>
+          <line>27</line>
+          <properties documentPath="D:\Project\MyImage\WebAPIGroup2\WebAPIGroup2\Respository\Implement\CollectionRepo.cs" initialLine="27" containingFunctionPresentation="Method 'GetCollectionWithTemplate'">
+            <startOffsets>
+              <option value="844" />
+            </startOffsets>
+            <endOffsets>
+              <option value="896" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="15" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
     <pin-to-top-manager>
       <pinned-members>
         <PinnedItemInfo parentTag="Type#WebAPIGroup2.Models.POJO.User" memberName="Phone" />

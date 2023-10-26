@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using WebAPIGroup2.Models;
@@ -10,6 +11,7 @@ namespace WebAPIGroup2.Controllers.AdminModule
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class FeedBackController : ControllerBase
     {
         private readonly IFeedBackService _feedBackService;
@@ -34,6 +36,18 @@ namespace WebAPIGroup2.Controllers.AdminModule
             return new JsonResult(response);
         }
 
+        [HttpPost]
+        [Route("Create")]
+        public async Task<JsonResult> Create([FromBody] FeedBackDTO feedBackDTO)
+        {
+            var createDTO = await _feedBackService.CreateAsync(feedBackDTO);
+            if (createDTO == null)
+            {
+                return new JsonResult(new ResponseDTO<FeedBackDTO>(HttpStatusCode.NotFound, "Not Found", null, null));
+            }
+            var response = new ResponseDTO<FeedBackDTO>(HttpStatusCode.Created, "Create successfully", null, createDTO);
+            return new JsonResult(response);
+        }
         [HttpGet]
         [Route("GetByIsImportant")]
         public async Task<JsonResult> GetFeedbacksByStatus(int userId, bool isImportant)

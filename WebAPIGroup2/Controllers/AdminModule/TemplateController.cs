@@ -7,6 +7,7 @@ using WebAPIGroup2.Models;
 using WebAPIGroup2.Models.DTO;
 using WebAPIGroup2.Service.Inteface;
 using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebAPIGroup2.Controllers.TemplateModule
 {
@@ -31,6 +32,13 @@ namespace WebAPIGroup2.Controllers.TemplateModule
             return new JsonResult(response);
         }
 
+        [HttpGet("getAllTemplate")]
+        public async Task<JsonResult> GetAllTemplateAsync([FromQuery] int page = 1, [FromQuery] int limit = 1,[FromQuery] bool? status = true)
+        {
+            var templateDTO = await templateService.GetAllTemplateAsync(page, limit, status ?? true);
+            var response = new ResponseDTO<PaginationDTO<TemplateDTO>>(HttpStatusCode.OK, "Success", null, templateDTO);
+            return new JsonResult(response);
+        }
         [HttpGet("bestSeller")]
         public async Task<JsonResult> Get([FromQuery] bool? status)
         {
@@ -39,9 +47,9 @@ namespace WebAPIGroup2.Controllers.TemplateModule
             return new JsonResult(response);
         }
         [HttpGet("GetTemplateByName")]
-        public async Task<JsonResult> Get([FromQuery] string? name, [FromQuery] int page = 1, [FromQuery] int limit = 1)
+        public async Task<JsonResult> Get([FromQuery] string? name, [FromQuery] int page = 1, [FromQuery] int limit = 1, [FromQuery] bool? status = true)
         {
-            var templateDto = await templateService.GetByNameAsync(name, page, limit);
+            var templateDto = await templateService.GetByNameAsync(name, page, limit, status ?? true);
             var response = new ResponseDTO<PaginationDTO<TemplateDTO>>(HttpStatusCode.OK, "Success", null, templateDto);
             return new JsonResult(response);
         }

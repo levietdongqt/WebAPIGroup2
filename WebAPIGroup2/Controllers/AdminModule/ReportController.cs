@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using WebAPIGroup2.Models.DTO;
@@ -9,6 +10,7 @@ namespace WebAPIGroup2.Controllers.AdminModule
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize(Roles = "admin")]
     public class ReportController : ControllerBase
     {
         private readonly IUserService _userService;
