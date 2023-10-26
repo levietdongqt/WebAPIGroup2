@@ -38,7 +38,7 @@ namespace WebAPIGroup2.Models
             CreateMap<PaginationDTO<Template>, PaginationDTO<TemplateDTO>>().ReverseMap();
             CreateMap<PurchaseOrder, PurchaseOrderDTO>().ReverseMap();  
             CreateMap<FeedBack, FeedBackDTO>().ReverseMap();
-            CreateMap<PurchaseOrder,PurchaseOrderDTO>().ReverseMap();
+            CreateMap<ProductDetail,ProductDetailDTO>().ReverseMap();
             CreateMap<MyImage, MyImageDTO>().ReverseMap();
             CreateMap<Image, ImageDTO>().ReverseMap();
             CreateMap<Category, CategoryTempDTO>().ReverseMap();

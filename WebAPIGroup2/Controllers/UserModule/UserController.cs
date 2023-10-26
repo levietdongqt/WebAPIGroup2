@@ -16,7 +16,6 @@ namespace WebAPIGroup2.Controllers.UserModule
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class UserController : ControllerBase
     {
         private readonly MyImageContext _context;
@@ -59,6 +58,8 @@ namespace WebAPIGroup2.Controllers.UserModule
         //}
 
         [HttpGet("GetAll")]
+        [Authorize]
+
         public async Task<IActionResult> GetAll(string? search, string? st, int page, int pageSize)
         {
             var users = await _userService.GetAllAsync(search, st, page, pageSize);
@@ -97,6 +98,7 @@ namespace WebAPIGroup2.Controllers.UserModule
         
 
         [HttpPost("Create")]
+        [Authorize]
         public async Task<IActionResult> Create(UserDTO userDTO)
         {
             try
@@ -145,6 +147,7 @@ namespace WebAPIGroup2.Controllers.UserModule
         }
 
         [HttpPut("Edit")]
+        [Authorize]
         public async Task<IActionResult> Update([FromForm] AddUserDTO addUserDTO)
         {
             try
@@ -172,6 +175,7 @@ namespace WebAPIGroup2.Controllers.UserModule
         }
 
         [HttpGet("SendMailPR")]
+        [Authorize]
         public async Task<IActionResult> SendMailPassReco(string email)
         {
             try
@@ -213,6 +217,7 @@ namespace WebAPIGroup2.Controllers.UserModule
         }
 
         [HttpPut("PassReco")]
+        [Authorize]
         public async Task<IActionResult> PasswordRecovery( AddUserDTO addUserDTO)
         {
             try
@@ -234,6 +239,7 @@ namespace WebAPIGroup2.Controllers.UserModule
             }
         }
 
+        [Authorize]
         [HttpPut("ChangePass")]
         public async Task<IActionResult> ChangePassWord([FromBody] AddUserDTO addUserDTO)
         {
@@ -249,6 +255,7 @@ namespace WebAPIGroup2.Controllers.UserModule
         }
 
         [HttpGet("ConfirmEmail")]
+        [Authorize]
         public async Task<IActionResult> ConfirmEmail(int userId, string code)
         {
             if (code == null)
