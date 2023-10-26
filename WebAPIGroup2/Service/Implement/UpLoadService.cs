@@ -194,7 +194,7 @@ namespace WebAPIGroup2.Service.Implement
                 MyImage oldMyImage = null;
                 if (list != null)
                 {
-                    list.FirstOrDefault(t => t.TemplateId == upLoadDTO.templateID);
+                    oldMyImage =list.FirstOrDefault(t => t.TemplateId == upLoadDTO.templateID);
                 }
                 if (oldMyImage == null)
                 {

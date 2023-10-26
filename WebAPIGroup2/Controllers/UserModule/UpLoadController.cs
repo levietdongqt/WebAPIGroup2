@@ -10,7 +10,7 @@ namespace WebAPIGroup2.Controllers.UserModule
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(Roles ="user")]
+    [Authorize(Roles = "user")]
     public class UpLoadController : ControllerBase
     {
         private readonly IUpLoadService _upLoadService;
