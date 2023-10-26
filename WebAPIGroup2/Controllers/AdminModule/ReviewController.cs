@@ -9,7 +9,6 @@ namespace WebAPIGroup2.Controllers.HomeModule
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class ReviewController : ControllerBase
     {
         private readonly IReviewService _reviewService;
@@ -26,6 +25,7 @@ namespace WebAPIGroup2.Controllers.HomeModule
             return new JsonResult(response);
         }
         [HttpPost]
+        [Authorize]
         public async Task<JsonResult> Create([FromBody] AddReviewDTO addReviewDTO)
         {
             var createdReviewDTO = await _reviewService.CreateAsync(addReviewDTO);
@@ -43,6 +43,7 @@ namespace WebAPIGroup2.Controllers.HomeModule
 
         [HttpDelete]
         [Route("{id:int}")]
+        [Authorize]
         public async Task<JsonResult> Delete([FromRoute] int id)
         {
             var deletedDTO = await _reviewService.DeleteAsync(id);
@@ -56,6 +57,7 @@ namespace WebAPIGroup2.Controllers.HomeModule
 
         [HttpPut]
         [Route("UpdateAll")]
+        [Authorize]
         public async Task<JsonResult> Update([FromBody] List<ReviewDTO> updatedDTO)
         {
             var updateDTO = await _reviewService.UpdateAllAsync(updatedDTO);
@@ -69,6 +71,7 @@ namespace WebAPIGroup2.Controllers.HomeModule
 
         [HttpGet]
         [Route("GetByIsImportant")]
+        [Authorize]
         public async Task<JsonResult> GetReviewsByStatus(int userId,bool isImportant)
         {
             var reviewsDTO = await _reviewService.GetReviewsByStatus(userId, isImportant);

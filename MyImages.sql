@@ -145,7 +145,7 @@ go
 create table [Image](
 	Id int identity(1,1) not null,
 	MyImagesId int null,
-	ImageUrl varchar(500) null,
+	ImageUrl nvarchar(500) null,
 	FolderName nvarchar(500) null,
 	Status bit default(1) not null,
 	[Index] int null,
@@ -630,9 +630,9 @@ values(17,9),(18,10)
 go
 
 insert into MaterialPage
-values('High',0,0.5,1,'Best material page for print images'),
-	   ('Medium',0,0.3,1,'Good material page for print images'),
-	   ('Normal',0,0.1,1,'Material page for print images')
+values('High',0,0.07,1,'Best material page for print images'),
+	   ('Medium',0,0.06,1,'Good material page for print images'),
+	   ('Normal',0,0.04,1,'Material page for print images')
 go
 
 insert into [dbo].[User]
