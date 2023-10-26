@@ -62,6 +62,7 @@ namespace WebAPIGroup2.Service.Implement
             user.Email = userEmail;
             user.EmailConfirmed = true;
             user.Status = UserStatus.Enabled;
+            user.CreateDate = DateTime.Now;
             await _userRepo.InsertAsync(user);
             var userSaved = await _userRepo.GetUserByEmail(userEmail);
             return _mapper.Map<UserDTO>(userSaved);

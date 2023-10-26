@@ -11,7 +11,6 @@ namespace WebAPIGroup2.Controllers.AdminModule
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class FeedBackController : ControllerBase
     {
         private readonly IFeedBackService _feedBackService;
