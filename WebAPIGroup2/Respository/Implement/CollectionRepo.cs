@@ -57,11 +57,15 @@ public class CollectionRepo : GenericRepository<Collection> , ICollectionRepo
 
     public async Task<List<Collection>> getCollectionFeatures()
     {
-        var randomFeatures = await _context.Collections.Include(x => x.Category)
+        using (var context = new MyImageContext())
+        {
+            var randomFeatures = await context.Collections.Include(x => x.Category)
             .OrderBy(x => Guid.NewGuid()) // Randomize the order of the collections
             .Take(4) // Retrieve 5 random collections
             .ToListAsync();
 
-        return randomFeatures;
+            return randomFeatures;
+        }
+        
     }
 }

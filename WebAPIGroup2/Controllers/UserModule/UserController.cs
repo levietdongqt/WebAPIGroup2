@@ -122,7 +122,7 @@ namespace WebAPIGroup2.Controllers.UserModule
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
 
                     var callbackUrl = Url.Action(nameof(ConfirmEmail), "User", new { userId = userId, code = code }, Request.Scheme);
-                    var callbackUrl2 = $"http://localhost:3000/login/confirm?userId={userId}&code={code}";
+                    var callbackUrl2 = $"https://myimagess.azurewebsites.net/login/confirm?userId={userId}&code={code}";
                     var mailContent = new MailContent(userDTO.Email, "Confirm your email", $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl2)}'>clicking here</a>.", "Confirmation");
 
                     var mailContented = await _utilService.SendEmailAsync(mailContent);
@@ -193,7 +193,7 @@ namespace WebAPIGroup2.Controllers.UserModule
                 // Chuyển đổi thời gian hết hạn thành một chuỗi dạng Unix timestamp
                 var expirationTimeUnix = ((int)(expirationTime.Subtract(new DateTime(1970, 1, 1))).TotalSeconds).ToString();
 
-                var callbackUrl = $"http://localhost:3000/login/passwordrecovery?userId={existingUserDTO.Id}&expiration={expirationTimeUnix}";
+                var callbackUrl = $"https://myimagess.azurewebsites.net/login/passwordrecovery?userId={existingUserDTO.Id}&expiration={expirationTimeUnix}";
 
                 var mailContent = new MailContent(email, "Confirm your email", $"Click on the link to update the password: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>", "Confirmation");
 
