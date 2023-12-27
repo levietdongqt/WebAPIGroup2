@@ -32,7 +32,7 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(builder =>
     {
-        builder.WithOrigins(new[] { "http://localhost:3000", "http://localhost:4000", "https://myimagess.azurewebsites.net" })
+        builder.WithOrigins(new[] { "http://localhost:3000", "http://localhost:4000", "https://myimages.azurewebsites.net", "https://myimages-admin.azurewebsites.net" })
                .AllowAnyHeader()
                .AllowAnyMethod();               
     });

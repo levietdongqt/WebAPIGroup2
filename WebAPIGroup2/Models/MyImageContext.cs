@@ -57,8 +57,8 @@ public partial class MyImageContext : DbContext
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Server=tcp:myimages.database.windows.net,1433;Initial Catalog=MyImages;Persist Security Info=False;User ID=finsr8280-admin;Password=Tiennam123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");   
-           //=> optionsBuilder.UseSqlServer("server=MSI;Database=MyImages;User ID=sa;Password=123;Trusted_Connection=true;MultipleActiveResultSets=true;TrustServerCertificate=true");
+    //=> optionsBuilder.UseSqlServer("Server=tcp:myimageserver.database.windows.net,1433;Initial Catalog=myimagesdb;Persist Security Info=False;User ID=admin1;Password=a123456!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+    => optionsBuilder.UseSqlServer("server=MSI;Database=MyImages;User ID=sa;Password=123;Trusted_Connection=true;MultipleActiveResultSets=true;TrustServerCertificate=true");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -148,20 +148,10 @@ namespace WebAPIGroup2.Service.Implement
             {
                 var fileName = file.FileName;
                 var imagePath = Path.Combine(uploadsFolder, fileName);
-                if (File.Exists(imagePath))
-                {
-                    return null;
-                }
-            }
-            foreach (var file in files)
-            {
-                var fileName = file.FileName;
-                var imagePath = Path.Combine(uploadsFolder, fileName);
                 //Upload
                 var stream = new FileStream(imagePath, FileMode.Create);
                 await file.CopyToAsync(stream);
                 stream.Close();
-
                 //Set URL Static
                 var urlFilePath = $"/MyImage/{folderName}/{templateFolder}/{fileName}";
                 imagesUrl.Add(urlFilePath);
